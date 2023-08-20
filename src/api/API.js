@@ -1,6 +1,7 @@
 import axios from "axios"
 export const axiosClient = axios.create({
-    baseURL: "http://localhost:1991/api",
+    baseURL: "https://hieshop-backend.onrender.com/api",
+    // baseURL: "http://localhost:1991/api",
     headers: {
         'Content-Type': 'application/json',
     }
@@ -8,7 +9,7 @@ export const axiosClient = axios.create({
 
 // dành cho form data
 const axiosClientMultipart = axios.create({
-    baseURL: 'http://localhost:1991/api',
+    baseURL: 'https://hieshop-backend.onrender.com/api',
 });
 
 axiosClientMultipart.interceptors.request.use((req) => {

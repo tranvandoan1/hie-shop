@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import ClassifyAPI, { add, removes, upload } from "../API/ClassifyAPI";
+import ClassifyAPI, { add, removes, upload } from "../api/Classify";
 
 export const getAllClassifies = createAsyncThunk(
   "classifies/getAllClassifies",
