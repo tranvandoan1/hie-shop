@@ -1,0 +1,137 @@
+.comment {
+    background-color: #fff;
+    margin-top: 10px;
+    padding: 30px;
+}
+
+.comment h4 {
+    background-color: #f5f5f5;
+    text-transform: uppercase;
+    font-size: 20px;
+    padding: 10px;
+    color: #5e5e5e;
+}
+
+.comment-input {
+    display: flex;
+
+}
+
+.comment-name {
+    font-size: 17px;
+    margin: 20px 0px;
+
+}
+
+.comment-name span:nth-child(2) {
+    font-weight: 600;
+    color: #ee4d2d;
+}
+
+.comment-avatar {
+    width: 20%;
+}
+
+.comment-upload-image {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    border: 1px solid #c7c7c7;
+    border-radius: 10px;
+    margin-left: 10px;
+    color: #9a9a9a;
+    height: 80px;
+    cursor: pointer;
+}
+
+.comment-user {
+    text-transform: uppercase;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    margin-top: 70px;
+}
+
+.comment-user h5 {
+    color: #5e5e5e;
+}
+
+.list-comment-user {
+    margin: 30px 0;
+    border-top: 1px solid rgb(185, 185, 185);
+    padding-top: 10px;
+}
+
+.list-comment-user-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-comment-user-title span:nth-child(2) {
+    font-size: 16px;
+}
+
+.list-comment-user-title span:nth-child(3) {
+    font-size: 14px;
+    font-style: italic;
+    color: #979797;
+}
+
+.list-comment-user-edit {
+    color: #17ff02;
+    cursor: pointer;
+}
+
+.list-comment-user-delete {
+    margin-left: 10px;
+    color: #ee4d2d;
+    cursor: pointer;
+}
+
+.image-comment {
+    display: flex;
+}
+
+.image-comment div {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.image-comment div img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-comment-view {
+    width: 180px;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.image-comment-view img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.comment-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid rgb(185, 185, 185);
+    padding-top: 10px;
+}

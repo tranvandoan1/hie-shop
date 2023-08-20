@@ -1,0 +1,17 @@
+.header-input .ant-btn-icon {
+    color: #fff;
+}
+
+.header-input .anticon-search {
+    font-size: 20px !important;
+}
+
+.header-input .ant-input {
+    height: 45px;
+}
+
+.header-input .ant-btn {
+    height: 45px;
+    background-color: #ee4d2d;
+    width: 40px;
+}

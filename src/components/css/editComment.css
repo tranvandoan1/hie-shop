@@ -1,0 +1,56 @@
+.comfim-input{
+    display: flex;
+}
+.comfim-upload-image {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    border: 1px solid #c7c7c7;
+    border-radius: 10px;
+    margin-left: 10px;
+    color: #9a9a9a;
+    height: 80px;
+    cursor: pointer;
+}
+
+.image-comfim {
+    display: flex;
+    margin-top: 20px;
+}
+
+.image-comfim div {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.image-comfim div img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-comfim-view {
+    width: 180px;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.image-comfim-view img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

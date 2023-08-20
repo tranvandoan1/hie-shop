@@ -1,0 +1,219 @@
+.admin-product {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+  width: 80px !important;
+  height: 80px !important;
+  overflow: hidden;
+}
+
+.box-image {
+  position: relative;
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+}
+
+.box-image>img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+  background-color: #fff;
+}
+
+.add_pro {
+  overflow: auto;
+  background-color: #fff;
+  height: 100%;
+}
+
+.add_pro::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* .ant-collapse-expand-icon{
+    display: none;
+  } */
+.click {
+  animation: 0.3s ease-in ko;
+  opacity: 1;
+  transform: scale(1, 1);
+  width: 100%;
+  transition: 1s ease;
+}
+
+@keyframes ko {
+  from {
+    transform: scale(0.8, 0.8);
+    opacity: 0.4;
+    transition: 1s ease;
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1, 1);
+    transition: 1s ease;
+  }
+}
+
+.header-add-pro {
+  display: flex;
+  justify-content: space-between;
+  align-items: "center";
+}
+
+.image_title {
+  font-size: 16px;
+  margin-right: 20px;
+  text-align: left;
+}
+
+.uploadImage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 80px;
+}
+
+.close {
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  color: red;
+  cursor: pointer;
+}
+
+.pro-info-add{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+}
+
+.name-classify {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.name-classify1,
+.name-classify2 {
+  display: flex;
+  width: 100%;
+}
+
+.name-classify1>span,
+.name-classify2>span {
+  margin-bottom: 6px;
+  color: #a9a9a9;
+  font-weight: 500;
+  width: 30%;
+}
+
+
+.classify-value {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.classify-value1,
+.classify-value2 {
+  display: flex;
+  width: 100%;
+}
+
+.classify-value1>span,
+.classify-value2>span {
+  margin-bottom: 6px;
+  color: #a9a9a9;
+  font-weight: 500;
+  width: 30%;
+}
+
+.pro-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pro-data-values {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-pro-avatar {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.add-pro-avatar>span {
+  margin-right: 20px;
+  width: 30%;
+  margin-left: 20px;
+}
+
+.avatar {
+  position: relative;
+}
+
+.add-pro-avatar-close {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  color: red;
+  cursor: pointer;
+}
+
+.add-pro-box-image {
+  position: relative;
+  overflow: hidden;
+  width: 90px;
+  height: 90px;
+}
+
+.add-pro-box-image>img {
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.select-image {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-gap: 30px;
+}
+.btn{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+.admin-product-table .ant-table-cell{
+  text-align: center !important;
+}

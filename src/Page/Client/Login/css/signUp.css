@@ -1,0 +1,254 @@
+.form-item-upload-avatar {
+    margin-top: 20px;
+}
+.signup-form .ant-form-item-required {
+    color: #fff !important;
+}
+
+.signup-form .ant-input-affix-wrapper,
+.signup-form .ant-input {
+    background-color: rgba(0, 0, 0, 0);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #c0c0c0;
+    border-radius: 0;
+    width: 100% !important;
+    color: #fff;
+}
+
+.signup-form .ant-input-affix-wrapper-focused {
+    box-shadow: inset 0 -5px 5px -5px #4096ff;
+    padding: 10px;
+}
+
+.signup-form .ant-input-affix-wrapper::placeholder,
+.signup-form .ant-input::placeholder {
+    color: rgba(222, 222, 222, 0.5);
+}
+.background-signup {
+    background: url(anh1.jpg);
+    background-size: cover;
+    height: 100vh;
+
+}
+
+.signup {
+    background-color: rgba(0, 0, 0, .5);
+    height: 100vh;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: signup 0.4s ease-in;
+
+}
+
+@keyframes signup {
+    from {
+        transform: scale(0, 0);
+        transition: 0.4s ease-in inherit;
+    }
+
+    to {
+        transform: scale(1, 1);
+        transition: 0.4s ease-in inherit;
+    }
+}
+
+
+.signup-form h3 {
+    text-align: center;
+    color: #fff;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+.site-form-item-icon {
+    color: rgba(208, 208, 208, 0.5);
+    font-size: 18px;
+    padding-right: 20px;
+
+}
+
+._or {
+    background-color: #ff2361;
+    color: #fff;
+    border-radius: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit {
+    width: 100%;
+    background-color: #ff2361;
+    border-radius: 2px !important;
+    font-size: 17px;
+    height: 40px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background-image: linear-gradient(to right, transparent, #fff, transparent);
+}
+
+.text {
+    padding: 0 10px;
+    color: #fff;
+}
+
+.button-signup-google_add {
+    display: flex;
+    margin-top: 30px;
+    justify-content: space-between;
+}
+
+.button-signup-google_add button {
+    font-size: 14px;
+    background-color: #4096ff;
+    border: 0;
+    color: #fff;
+    width: 45%;
+    height: 40px;
+}
+
+.button-google_add:hover {
+    color: #ff2361 !important;
+}
+
+.signup-google {
+    display: flex;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff !important;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    color: black !important;
+}
+
+.signup-google:hover {
+    color: #4096ff !important;
+}
+
+
+.signup-google-icon {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.forgot-password {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.forgot-password-text {
+    color: #fff;
+    margin-bottom: 20px;
+    color: #c0c0c0;
+    cursor: pointer;
+    border-bottom: 1px solid #c0c0c0;
+}
+.signup-form {
+    background-color: rgba(0, 0, 0, .8);
+    width: 800px;
+    padding: 30px;
+}
+
+.box-image {
+    position: relative;
+    overflow: hidden;
+    width: 90px;
+    height: 90px;
+}
+
+.box-image>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-avatar {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.upload-avatar>span {
+    color: #c0c0c0;
+    margin-right: 20px;
+}
+
+.avatar {
+    position: relative;
+}
+
+.upload-avatar-close {
+    position: absolute;
+    top: -15px;
+    right: 0;
+    color: red;
+    cursor: pointer;
+}
+
+.signup-form .anticon.ant-input-password-icon {
+    color: #fff;
+}
+
+.signup-form label {
+    color: #fff !important;
+}
+.signup-form .ant-switch:hover {
+    background-color: aliceblue;
+
+}
+.signup-form .ant-switch {
+    background-color: aliceblue;
+}
+
+.signup-form .ant-switch-checked {
+    background-color: #1677ff;
+}
+.form-signup{
+    display: flex;
+    justify-content: space-between;
+}
+.form-signup-left{
+    width: 48%;
+}
+.form-signup-right{
+    width: 48%;
+}
+.form-signup-logo {
+    width: 200px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+}
+.form-signup-logo img{
+    position: absolute;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+.form-signup_2x{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}

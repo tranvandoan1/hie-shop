@@ -1,0 +1,160 @@
+.list_products {
+    margin-top: 80px;
+}
+
+.list_products h3 {
+    border-bottom: 1px solid black;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+.show-product {
+    width: 100%;
+    overflow: hidden;
+    transition: 0.4s ease-in;
+    position: relative;
+
+}
+
+.product-btn_left {
+    position: absolute;
+    left: 10px;
+    background-color: rgba(58, 58, 58, 0.7);
+    top: 150px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.product-btn_right {
+    position: absolute;
+    right: 10px;
+    background-color: rgba(58, 58, 58, 0.7);
+    top: 150px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.show-product1 {
+    display: flex;
+    transition: 0.4s ease-in;
+
+}
+
+.show-product::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.products {
+    border: 1px solid rgb(227, 227, 227);
+    overflow: hidden;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+    transition: .1s ease-in;
+    margin-top: 10px;
+    /* width: 250px; */
+}
+
+.products:hover {
+    box-shadow: 0 0 5px #ee4d2d;
+    transition: .1s ease-in;
+}
+
+.product-photo-box {
+    height: 240px;
+    overflow: hidden;
+    position: relative;
+}
+
+.product-photo {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    transition: 0.4s ease-in;
+    transform: scale(1, 1);
+}
+
+.product-photo1 {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    /* tran */
+    transition: 0.4s ease-in;
+    transform: scale(0, 0) translateY(0%);
+}
+
+.product-photo1 img {
+    position: absolute;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    top: 0;
+}
+
+.product-photo img {
+    top: 0;
+    position: absolute;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.products:hover .product-photo {
+    transition: 0.4s ease-in;
+    transform: scale(0, 0);
+
+}
+
+.products:hover .product-photo1 {
+    transition: 0.4s ease-in;
+    transform: scale(1, 1) translateY(-100%);
+
+}
+
+.product-sale {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: red;
+    font-weight: 600;
+    font-size: 1.3rem;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 100%;
+}
+
+.product-name {
+    font-size: 1rem;
+    color: black;
+    font-weight: 500;
+    text-transform: capitalize;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    transition: .3s;
+    overflow: hidden;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+.product-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding: 0 5px;
+}
+
+.product-price span:nth-child(1) {
+    color: #ee4d2d;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.product-price span:nth-child(2) {
+    font-size: 14px;
+}
