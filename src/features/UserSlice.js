@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { uploadInfoUser, getInfoUser, uploadPassword, uploadEmail } from "../api/Users";
+import { uploadInfoUser, getInfoUser, uploadPassword, uploadEmail } from "../api/Users.js";
 
 export const getUser = createAsyncThunk(
   "users/getUser",
