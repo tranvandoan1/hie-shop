@@ -1,6 +1,6 @@
 // @ts-ignore
 import React, { useState } from "react";
-import { Button, Modal, Checkbox, Form, Input, Upload, Spin } from "antd";
+import { Button, Modal, Form, Input, Upload, Spin } from "antd";
 import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 type Props = {
   callBack: (e: any) => void;
@@ -23,7 +23,7 @@ const AddCategori = ({ isModalOpen, callBack }: Props) => {
     form.resetFields();
   };
 
-  const onFinishFailed = (errorInfo: any) => {
+  const onFinishFailed = () => {
     // console.log('Failed:', errorInfo);
   };
   type FieldType = {

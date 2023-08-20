@@ -24,6 +24,7 @@ const Admin: React.FC = () => {
   } = theme.useToken();
   // @ts-ignore
   const key = JSON.parse(localStorage.getItem("key"));
+  // @ts-ignore
   const userLoca = JSON.parse(localStorage.getItem('user'))
   const logout = () => {
     

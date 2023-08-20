@@ -18,6 +18,7 @@ const Header: React.FC = () => {
     const sizeWindonw = Size();
     const [statusMenu, setStatusMenu] = useState(false);
     const onSearch = (value: any) => console.log(value);
+    // @ts-ignore
     const userLoca = JSON.parse(localStorage.getItem("user"));
     const logout = () => {
         localStorage.removeItem("user");
@@ -44,9 +45,9 @@ const Header: React.FC = () => {
                 onClick={() => navigator("/admin")}
                 style={{ cursor: "pointer", fontSize: 16, padding: "10px 10px 0 10px" }}
             >
-                <span style={{fontSize:18 ,marginRight:10}}>
+                <span style={{ fontSize: 18, marginRight: 10 }}>
 
-                <FaUsersCog />
+                    <FaUsersCog />
                 </span>
                 <span>Quản lý</span>
             </div>

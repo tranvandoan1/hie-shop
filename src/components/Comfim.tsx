@@ -6,8 +6,8 @@ type Props = {
     title?: string;
     conent?: string;
     isModalOpen?: boolean;
-    okText?:string,
-    cancelText?:string
+    okText?: string,
+    cancelText?: string
 };
 
 const Comfim = ({
@@ -22,11 +22,13 @@ const Comfim = ({
     const handleOk = () => {
         // setIsModalOpen(false);
 
+        // @ts-ignore
         btnComfim();
     };
 
     const handleCancel = () => {
         // setIsModalOpen(false);
+        // @ts-ignore
         btnReject();
     };
     return (

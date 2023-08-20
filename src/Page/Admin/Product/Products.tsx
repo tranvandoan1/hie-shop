@@ -26,6 +26,8 @@ const Products: React.FC = () => {
 
   const categories = useSelector((data: any) => data.categories);
   const classifies = useSelector((data: any) => data.classifies);
+    // @ts-ignore
+
   const [dataDeletePro, setDataDeletePro] = useState();
   const categoriesValue = categories?.value?.data
   console.log(classifies, 'classifies')

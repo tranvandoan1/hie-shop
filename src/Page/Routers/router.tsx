@@ -14,7 +14,9 @@ import Categories from '../Admin/Categories/Categories';
 import Cart from '../Admin/Cart/Cart';
 import Setting from '../Admin/Setting/Setting';
 import AddProduct from '../Admin/Product/addProduct/AddProduct';
+// @ts-ignore
 import PrivateRoute from './privateRoute';
+// @ts-ignore
 import PrivateRouteLogin from './privateRouteLogin';
 const Router = () => {
   return (
@@ -36,7 +38,7 @@ const Router = () => {
         } />
         <Route path="/signup" element={
           // <PrivateRoute>
-            <SignUpScreen />
+          <SignUpScreen />
           // </PrivateRoute>
         } />
         <Route path="/detail" element={

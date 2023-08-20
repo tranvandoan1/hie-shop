@@ -6,7 +6,6 @@ import "./css/signUp.css";
 // @ts-ignore
 import {
     Button,
-    Checkbox,
     Form,
     Input,
     Spin,

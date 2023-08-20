@@ -6,7 +6,6 @@ import {
 } from "@ant-design/icons";
 import { Button, Input, Select, Spin, Table, Upload } from "antd";
 import { useState, startTransition, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // @ts-ignore
 import { addProduct } from "./../../../../features/Products";
@@ -17,11 +16,13 @@ type Props = {
 };
 // @ts-ignore
 const ProInfo = ({ callBack, dataValue }: Props) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // @ts-ignore
   const userLoca = JSON.parse(localStorage.getItem("user"));
   const navigator = useNavigate();
+  // @ts-ignore
   const [nameClassify1, setNameClassify1] = useState(); //tên pl1
+  // @ts-ignore
   const [nameClassify2, setNameClassify2] = useState(); //tên pl2
   const [nameClassifyValue1, setNameClassifyValue1] = useState<any>([]); //tên giá trị pl1
   const [nameClassifyValue2, setNameClassifyValue2] = useState<any>([]); //tên giá trị pl2
@@ -140,7 +141,6 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
     for (let i = 0; i < classifyValue.length; i++) {
       // @ts-ignore
       if (classifyValue[i].id == e.data.id) {
-        console.log(classifyValue[i].values, "classifyValue[i].values");
         // @ts-ignore
         classifyValue[i].values = newData;
       }

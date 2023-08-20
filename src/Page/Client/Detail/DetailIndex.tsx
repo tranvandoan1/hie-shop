@@ -258,7 +258,7 @@ const DetailIndex = (props: Props) => {
                 <button className="button-add-pro">
                   <BsCartPlus /> <span>Thêm sản phẩm</span>
                 </button>
-                <button className="button-add-buy" onClick={()=>setIsModalOpen(true)}>Mua ngay</button>
+                <button className="button-add-buy" onClick={() => setIsModalOpen(true)}>Mua ngay</button>
               </div>
             </div>
           </div>
@@ -373,7 +373,6 @@ const DetailIndex = (props: Props) => {
         conent="Bạn có muốn xóa bình luận này không ?"
         btnComfim={() => setIsModalOpen(false)}
         btnReject={() => setIsModalOpen(false)}
-        data=''
         isModalOpen={isModalOpen}
       />
       <Footer />
