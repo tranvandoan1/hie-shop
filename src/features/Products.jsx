@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import ProAPI, { add, remove, removes, upload } from "../API/ProAPI";
-import axios from 'axios';
 
 // async function getAll() {
 //   const { data: products } = await ProAPI.getAll();

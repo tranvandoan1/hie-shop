@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { uploadInfoUser, getInfoUser, uploadPassword, uploadEmail } from "../api/Users";
 import CateAPI, { add, remove, upload } from "../api/Categoris";
 
 export const getCateAll = createAsyncThunk(

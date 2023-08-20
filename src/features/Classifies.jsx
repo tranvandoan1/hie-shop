@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { async } from "@firebase/util";
-import { remove } from "../API/Categoris";
 import ClassifyAPI, { add, removes, upload } from "../API/ClassifyAPI";
 
 export const getAllClassifies = createAsyncThunk(
