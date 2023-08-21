@@ -663,34 +663,3 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
 };
 
 export default ProInfo;
-// import { Select } from 'antd';
-
-// const { Option } = Select;
-
-// function handleDeselect(value, option) {
-//   // Kiểm tra value có phải là một tag hay không
-//   if (option.tag) {
-//     console.log('Xóa tag:', value);
-//     // Do something
-//   }
-// }
-
-// function handleSearch(value) {
-//   console.log('Giá trị input:', value);
-//   // Do something
-// }
-
-// function Example() {
-//   return (
-//     <Select
-//       mode="tags"
-//       onDeselect={handleDeselect}
-//       filterOption={false}
-//       onSearch={handleSearch}
-//     >
-//       <Option key="tag-1" tag>Tag 1</Option>
-//       <Option key="tag-2" tag>Tag 2</Option>
-//       <Option key="tag-3" tag>Tag 3</Option>
-//     </Select>
-//   );
-// }
