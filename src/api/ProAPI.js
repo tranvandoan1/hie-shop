@@ -1,5 +1,5 @@
-import { axiosClient } from "./API";
-import { axiosClientMultipart } from "./API";
+// @ts-ignore
+import { axiosClient, axiosClientMultipart } from "./API";
 
 const ProAPI = {
   getAll() {

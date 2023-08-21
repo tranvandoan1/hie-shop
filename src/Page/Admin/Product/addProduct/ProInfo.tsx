@@ -20,12 +20,15 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
   // @ts-ignore
   const userLoca = JSON.parse(localStorage.getItem("user"));
   const navigator = useNavigate();
-  // @ts-ignore
+
   const [nameClassify1, setNameClassify1] = useState(); //tên pl1
-  // @ts-ignore
   const [nameClassify2, setNameClassify2] = useState(); //tên pl2
+
   const [nameClassifyValue1, setNameClassifyValue1] = useState<any>([]); //tên giá trị pl1
   const [nameClassifyValue2, setNameClassifyValue2] = useState<any>([]); //tên giá trị pl2
+
+  const [classifyValue1, setClassifyValue1] = useState<any>([]); //tên giá trị pl2
+  const [classifyValue2, setClassifyValue2] = useState<any>([]); //tên giá trị pl2
 
   const [classifyValue, setClassifyValue] = useState([]); //dữ liệu hoàn tất
   const [selectImage, setSelectImage] = useState<any>();
@@ -34,7 +37,9 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
 
   const [comfimShowClassifyValue, setComfimShowClassifyValue] =
     useState<boolean>(false);
-
+  const handleSelectChange = (value: any) => {
+    setClassifyValue1(value)
+  }
   const UploadAvatatr = (file: any) => {
     setLoading(true);
     const src = URL.createObjectURL(file);
@@ -69,36 +74,81 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
 
   // giá trị phân loại 1
   console.log(nameClassifyValue2, "nameClassifyValue2ngoài");
-  const changeValue1 = (values: any) => {
-    console.log(values, "có vào nha");
-    // @ts-ignore
-    const newNameClassify1: any = nameClassifyValue1?.length > 0 ? [...nameClassifyValue1, {
-      name: values,
-      id: Math.random(),
-      quantity: 0,
-      price: 0,
-      values: [],
-      status: false,
-    }] : [{
-      name: values,
-      id: Math.random(),
-      quantity: 0,
-      price: 0,
-      values: [],
-      status: false,
-    }]
-    // );
-    console.log(newNameClassify1, 'newNameClassify1')
-    setNameClassifyValue1(newNameClassify1);
+  const changeValue1 = (value: any) => {
+    if (nameClassifyValue1?.length > 0) {
+      const valueDuplicate = nameClassifyValue1?.find((item: any) => item.name == value)
+      const newValue = nameClassifyValue1?.find((item: any) => item.name !== value)
+      console.log(newValue, 'newValue')
+      if (valueDuplicate == undefined) {
+        const newNameClassify1: any = [...nameClassifyValue1, {
+          name: value,
+          id: Math.random(),
+          quantity: 0,
+          price: 0,
+          values: [],
+          status: false,
+        }]
+        setNameClassifyValue1(newNameClassify1);
+      } else {
+        const newNameClassify1: any = [...newValue, {
+          name: value,
+          id: Math.random(),
+          quantity: 0,
+          price: 0,
+          values: [],
+          status: false,
+        }]
+        setNameClassifyValue1(newNameClassify1);
+      }
+    } else {
+      const newNameClassify1: any = [{
+        name: value,
+        id: Math.random(),
+        quantity: 0,
+        price: 0,
+        values: [],
+        status: false,
+      }]
+      setNameClassifyValue1(newNameClassify1);
+    }
+
   };
 
   // giá trị phân loại 2
-  const changeValue2 = (values: any) => {
-    const newValue: any = [];
-    values?.map((item: any) =>
-      newValue.push({ name: item, quantity: 0, price: 0, status: false })
-    );
-    setNameClassifyValue2(newValue);
+  const changeValue2 = (value: any) => {
+    if (nameClassifyValue2?.length > 0) {
+      const valueDuplicate = nameClassifyValue2?.find((item: any) => item.name == value)
+      const newValue = nameClassifyValue2?.find((item: any) => item.name !== value)
+      if (valueDuplicate == undefined) {
+        const newNameClassify2: any = [...nameClassifyValue2, {
+          name: value,
+          id: Math.random(),
+          quantity: 0,
+          price: 0,
+          status: false,
+        }]
+        setNameClassifyValue2(newNameClassify2);
+      } else {
+        const newNameClassify2: any = [...newValue, {
+          name: value,
+          id: Math.random(),
+          quantity: 0,
+          price: 0,
+          status: false,
+        }]
+        setNameClassifyValue2(newNameClassify2);
+      }
+    } else {
+      const newNameClassify2: any = [{
+        name: value,
+        id: Math.random(),
+        quantity: 0,
+        price: 0,
+        status: false,
+      }]
+      setNameClassifyValue2(newNameClassify2);
+    }
+
   };
 
   //kết hợp nameClassifyValue1 với nameClassifyValue2
@@ -166,6 +216,7 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
     setClassifyValue(classifyValue);
   };
 
+  // loại bỏ giá trị phân loại của phân loại nếu không muốn có
   const rejectValue = (e: any) => {
     const newDataValue: any = [];
     e.data.values?.map((item: any) => {
@@ -192,10 +243,23 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
     setClassifyValue(newData);
   };
 
-  // xóa tên phân loại
+  // xóa tên phân loại1
   const removeValue1 = (e: any) => {
     const newData: any = classifyValue?.filter((item: any) => item.name !== e)
+    const newNameClassifyValue1: any = nameClassifyValue1?.filter((item: any) => item.name !== e)
     setClassifyValue(newData)
+    setNameClassifyValue1(newNameClassifyValue1)
+  }
+  // xóa tên phân loại2
+  const removeValue2 = (e: any) => {
+    const newData: any = []
+    classifyValue?.map((item: any) => {
+      const newValue = item.values?.filter((itemValue: any) => itemValue.name !== e)
+      newData.push({ ...item, values: newValue })
+    })
+    const newNameClassifyValue2: any = nameClassifyValue2?.filter((item: any) => item.name !== e)
+    setClassifyValue(newData)
+    setNameClassifyValue2(newNameClassifyValue2)
   }
   console.log(classifyValue, 'classifyValue')
 
@@ -421,6 +485,7 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
     // navigator('/admin/products')
     // setLoading(false)
   };
+  console.log(classifyValue1, 'classifyValue1')
 
   return (
     <div>
@@ -469,14 +534,14 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
               mode="tags"
               size={"middle"}
               placeholder="Giá trị phân loại 1"
-              defaultValue={[]}
+              defaultValue={classifyValue1}
               // onChange={changeValue1}
               style={{
                 width: "100%",
               }}
-              filterOption={false}
               onDeselect={(e) => removeValue1(e)}
               onSelect={(e) => changeValue1(e)}
+              onChange={handleSelectChange}
 
             />
           </div>
@@ -502,7 +567,8 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
                 size={"middle"}
                 placeholder="Giá trị phân loại 2"
                 defaultValue={[]}
-                onChange={changeValue2}
+                onDeselect={(e) => removeValue2(e)}
+                onSelect={(e) => changeValue2(e)}
                 style={{
                   width: "100%",
                 }}

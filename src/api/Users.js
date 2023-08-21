@@ -6,20 +6,11 @@ const UserAPI = {
         return axiosClient.get(url);
     },
 
-    signup(user) {
-        const url = `/signup`;
-        return axiosClientMultipart.post(url, user);
-    },
-
     signOut() {
         const url = `/signout`;
         return axiosClient.get(url);
     },
-    signin(user) {
-        const url = `/signin`;
-        return axiosClient.post(url, user)
-    }
-    ,
+  
     remove(id) {
         const url = `/user/${id}`;
         return axiosClient.delete(url);

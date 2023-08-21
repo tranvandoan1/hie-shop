@@ -1,10 +1,39 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import ClassifyAPI, { add, removes, upload } from "../api/Classify.js";
+import { axiosClient } from "./API";
+
+export const getAll = () => {
+
+  const url = `/classifies`;
+  return axiosClient.get(url);
+}
+export const get = (id) => {
+
+  const url = `/classifies/${id}`;
+  return axiosClient.get(url);
+}
+
+
+export const add = (cate) => {
+  const url = `/classifies`;
+  return axiosClient.post(url, cate);
+};
+
+export const upload = (id, data) => {
+  const url = `/classifies/${id}`;
+  return axiosClient.put(url, data);
+};
+
+
+export const removes = (data) => {
+  const url = `/removes-classifies`;
+  return axiosClient.post(url, data);
+};
+
 
 export const getAllClassifies = createAsyncThunk(
   "classifies/getAllClassifies",
   async () => {
-    const { data: classifies } = await ClassifyAPI.getAll();
+    const { data: classifies } = await getAll();
     return classifies;
   }
 );
@@ -26,7 +55,7 @@ export const uploadtClassifies = createAsyncThunk(
 export const removesClassifies = createAsyncThunk(
   "classifies/removesClassifies",
   async (dataId) => {
-    const { data: classifies } = await  removes(dataId);
+    const { data: classifies } = await removes(dataId);
     return classifies;
   }
 );

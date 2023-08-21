@@ -1,11 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import CateAPI, { add, remove, upload } from "../api/Categoris.js";
+
+export const getAll = () => {
+  const url = `/categoris`;
+  return axiosClient.get(url);
+}
+export const get = (id) => {
+  const url = `/categoris/${id}`;
+  return axiosClient.get(url);
+}
+
+export const add = (cate) => {
+  const url = `/categoris`;
+  return axiosClientMultipart.post(url, cate);
+};
+
+export const remove = (cate) => {
+  console.log(cate, '3ed')
+  const url = `/categoris-remove`;
+  return axiosClient.post(url, cate);
+};
+
+export const upload = (data) => {
+  const url = `/categoris-upload`;
+  return axiosClientMultipart.post(url, data);
+};
 
 export const getCateAll = createAsyncThunk(
   "categories/getCateAll",
   async () => {
-    const { data: categories } = await CateAPI.getAll();
-    console.log(categories,'categories121312')
+    const { data: categories } = await getAll();
+    console.log(categories, 'categories121312')
     return categories;
   }
 );
@@ -20,7 +44,7 @@ export const uploadCate = createAsyncThunk(
 export const addCate = createAsyncThunk(
   "categories/addCate",
   async (data) => {
-    console.log(data,'data')
+    console.log(data, 'data')
     const { data: categories } = await add(data);
     return categories;
   }

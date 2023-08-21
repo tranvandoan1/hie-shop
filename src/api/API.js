@@ -10,6 +10,7 @@ export const axiosClient = axios.create({
 // dành cho form data
 const axiosClientMultipart = axios.create({
     baseURL: 'https://hieshop-backend.onrender.com/api',
+    // baseURL: "http://localhost:1991/api",
 });
 
 axiosClientMultipart.interceptors.request.use((req) => {

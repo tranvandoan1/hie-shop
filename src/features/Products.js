@@ -1,6 +1,36 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import ProAPI, { add, remove, removes, upload } from "../API/ProAPI.js";
+// @ts-ignore
+import { axiosClient, axiosClientMultipart } from "./API";
 
+
+export const getAll = () => {
+
+  const url = `/get-products`;
+  return axiosClient.get(url);
+}
+export const get = (id) => {
+
+  const url = `/products/${id}`;
+  return axiosClient.get(url);
+}
+export const add = (data) => {
+  const url = `/products`;
+  return axiosClientMultipart.post(url, data);
+};
+
+export const upload = (data) => {
+  const url = `/product-upload`;
+  return axiosClientMultipart.post(url, data);
+};
+export const remove = (id) => {
+  const url = `/product/${id}`;
+  return axiosClient.delete(url);
+};
+
+export const removes = (dataId) => {
+  const url = `/remove-products`;
+  return axiosClient.post(url, dataId);
+};
 // async function getAll() {
 //   const { data: products } = await ProAPI.getAll();
 //   const user = JSON.parse(localStorage.getItem("user"));
@@ -10,14 +40,14 @@ import ProAPI, { add, remove, removes, upload } from "../API/ProAPI.js";
 export const getProduct = createAsyncThunk(
   "products/getProduct",
   async (id) => {
-    const { data: products } = await ProAPI.get(id);
+    const { data: products } = await get(id);
     return products;
   }
 );
 export const getProductAll = createAsyncThunk(
   "products/getProductAll",
   async () => {
-    const { data: products } = await ProAPI.getAll();
+    const { data: products } = await getAll();
     return products;
   }
 );
