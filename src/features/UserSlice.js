@@ -11,12 +11,12 @@ export const getAll = () => {
 export const signOut = () => {
   const url = `/signout`;
   return axiosClient.get(url);
-},
+}
 
 export const remove = (id) => {
   const url = `/user/${id}`;
   return axiosClient.delete(url);
-},
+}
 export const upload = (id, data) => {
   const url = `/user/${id}`;
   return axiosClient.put(url, data);
