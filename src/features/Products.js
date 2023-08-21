@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// @ts-ignore
-import { axiosClient, axiosClientMultipart } from "./API";
+import { axiosClient, axiosClientMultipart } from "../api/API";
 
 
 export const getAll = () => {
