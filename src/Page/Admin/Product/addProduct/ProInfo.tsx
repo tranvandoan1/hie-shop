@@ -28,7 +28,7 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
   const [nameClassifyValue2, setNameClassifyValue2] = useState<any>([]); //tên giá trị pl2
 
   const [classifyValue1, setClassifyValue1] = useState<any>([]); //tên giá trị pl2
-  const [classifyValue2, setClassifyValue2] = useState<any>([]); //tên giá trị pl2
+  // const [classifyValue2, setClassifyValue2] = useState<any>([]); //tên giá trị pl2
 
   const [classifyValue, setClassifyValue] = useState([]); //dữ liệu hoàn tất
   const [selectImage, setSelectImage] = useState<any>();
@@ -273,6 +273,9 @@ const ProInfo = ({ callBack, dataValue }: Props) => {
       render: (name, data) => {
         return (
           <div className="pro-data">
+            {
+              nameClassify1
+            }{nameClassify2}
             <span
               style={{
                 fontSize: data?.values?.length > 0 ? 18 : 16,
