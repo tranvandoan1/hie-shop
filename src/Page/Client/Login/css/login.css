@@ -161,3 +161,9 @@
     cursor: pointer;
     border-bottom: 1px solid #c0c0c0;
 }
+
+.form-item-icon {
+    color: rgba(208, 208, 208, 0.5);
+    font-size: 18px;
+    margin-right: 20px;
+}

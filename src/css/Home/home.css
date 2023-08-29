@@ -153,3 +153,8 @@
 .css-library:hover .BrainhubCarousel__arrowLeft {
     display: block;
 }
+
+.BrainhubCarouselItem {
+    display: block !important;
+    width: 0 !important;
+}

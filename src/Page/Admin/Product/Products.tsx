@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Descriptions, Space, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import './product.css'
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { Button, Descriptions, Modal, Space, Table, message } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import "./product.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getProductAll } from '../../../features/Products'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { getProductAll, removeProduct } from "../../../features/Products";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 // @ts-ignore
-import { getCateAll } from './../../../features/CateSlice';
+import { getCategoriAll } from "./../../../features/CateSlice";
 // @ts-ignore
-import { getAllClassifies } from './../../../features/Classifies';
+import { getAllClassifies } from "./../../../features/Classifies";
+// @ts-ignore
+import Loading from "../../../components/Loading";
+// @ts-ignore
+import { messaging } from "./../../../firebase/index";
+import Comfim from "../../../components/Comfim";
+import ShowValue from "./ShowValue";
+
 interface DataType {
   key: React.Key;
   name: string;
@@ -18,93 +25,162 @@ interface DataType {
   address: string;
 }
 
-
 const Products: React.FC = () => {
-  const dispatch = useDispatch()
-  const navigater = useNavigate()
-  const products = useSelector((data: any) => data.products)
+  const dispatch = useDispatch();
+  const navigator = useNavigate();
+  const products = useSelector((data: any) => data.products);
+  const productsValue = products?.value?.data;
 
   const categories = useSelector((data: any) => data.categories);
   const classifies = useSelector((data: any) => data.classifies);
-    // @ts-ignore
+  // @ts-ignore
 
   const [dataDeletePro, setDataDeletePro] = useState();
-  const categoriesValue = categories?.value?.data
-  console.log(classifies, 'classifies')
+  const [showValue, setShowValue] = useState<any>({
+    status: false,
+    data: undefined,
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [comfimDelete, setComfimDelete] = useState<any>({
+    status: false,
+    data: undefined,
+  });
+  const categoriesValue = categories?.value?.data;
 
-  const dataProducts = products?.value?.data?.map((item: any) => {
+  const dataProducts = productsValue?.map((item: any) => {
     return { ...item, key: item?._id };
   });
-  const dataProducts1: any = []
-  // products?.value?.data?.map((item: any) => {
-  //   classifies?.value?.map((itemClas: any) => {
-  //     if (item.linked == itemClas.linked) {
-  //       dataProducts1.push({ ...item, key: item?._id,values:[itemClas.values] })
-  //     }
-  //   })
-  // });
-  console.log(dataProducts1, 'dataProducts1')
+
   useEffect(() => {
-    dispatch(getProductAll())
-    dispatch(getCateAll());
+    dispatch(getProductAll());
+    dispatch(getCategoriAll());
     dispatch(getAllClassifies());
-  }, [])
+  }, []);
   const [textPro, setTextPro] = useState({ status: false, id: null });
 
+  const dataDeleteProduct = async (data: any) => {
+    setLoading(true)
+    const dataClass = classifies?.value?.filter(
+      (item: any) => item.linked == data.linked
+    );
+    await dispatch(removeProduct({ product: data, classify: dataClass }));
+    setLoading(false)
+  };
 
   const columns: ColumnsType<DataType> = [
     {
-      title: 'Tên sản phẩm',
-      dataIndex: 'name',
+      title: "Tên sản phẩm",
+      dataIndex: "name",
       render: (text: string) => <span>{text}</span>,
     },
     {
-      title: 'Danh mục',
-      dataIndex: 'cate_id',
+      title: "Danh mục",
+      dataIndex: "cate_id",
       // @ts-ignore
-      render: (cate_id: any) => {
-        categoriesValue?.map((item: any) => {
-          if (item._id == cate_id) {
-            return <span style={{ fontSize: 18 }}>{item.name}</span>
-          }
-        })
-      },
-
+      render: (cate_id: any) => (
+        <div>
+          {categoriesValue?.map((item: any) => {
+            if (item._id == cate_id) {
+              return (
+                <span style={{ color: "red", fontWeight: "600" }}>
+                  {item.name}
+                </span>
+              );
+            }
+          })}
+        </div>
+      ),
     },
     {
       title: "Ảnh",
       key: "photo",
       dataIndex: "photo",
       render: (photo) => (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
           <div className={"categori-logo"}>
             <img src={photo} alt="" />
           </div>
         </div>
-
       ),
     },
     {
-      title: 'Giảm giá',
-      dataIndex: 'sale',
+      title: "Giảm giá",
+      dataIndex: "sale",
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
+      title: "Tên phân loại",
+      dataIndex: "_id",
+      key: "_id",
+      render: (_id: any, data: any) => (
+        <div>
+          {classifies?.value?.map((item: any) => {
+            if (data.linked == item.linked) {
+              return (
+                <div className="pro-flex">
+                  <span
+                    style={{ color: "red", fontWeight: "600", marginLeft: 10 }}
+                  >
+                    {item.name},
+                  </span>
+
+                </div>
+              );
+            }
+          })}
+        </div>
+      ),
+    },
+    {
+      title: "Giá trị phân loại",
+      key: "_id",
+      render: (_id, data: any) => (
+        <div
+          onClick={() => setShowValue({ status: true, data: data })}
+          style={{ cursor: "pointer" }}
+        >
+
+          <EyeOutlined />
+
+        </div>
+      ),
     },
     {
       title: "Thao tác",
-      key: "data._id",
-      render: (_id) => (
-        <div>
-          <Space size="middle" style={{ marginRight: 10, cursor: 'pointer' }} >
-            <EditOutlined />
-          </Space>
-          <Space size="middle" style={{ cursor: 'pointer' }}>
-            <a>
+      key: "_id",
+      render: (_id, data:any) => (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+          <div style={{ cursor: "pointer" }}>
+            <Space
+              size="middle"
+              style={{ marginRight: 10 }}
+              onClick={() =>
+                navigator(`/admin/products/edit/${data.name}/${data._id}`)
+              }
+            >
+              <EditOutlined />
+            </Space>
+          </div>
+          <div style={{ cursor: "pointer" }}>
+            <Space
+              size="middle"
+              onClick={() => setComfimDelete({ status: true, data: _id })}
+            >
               <DeleteOutlined />
-            </a>
-          </Space>
+            </Space>
+          </div>
         </div>
       ),
     },
@@ -119,28 +195,24 @@ const Products: React.FC = () => {
   };
   const handleExpand = (expanded: any) => {
     if (expanded) {
-      setTextPro(
-        { status: false, id: null }
-      )
+      setTextPro({ status: false, id: null });
     } else {
-      setTextPro(
-        { status: false, id: null }
-      )
+      setTextPro({ status: false, id: null });
     }
-  }
+  };
   return (
-    <div>
-      <div className='admin-product'>
-        <h4>Sản phẩm</h4>
-        <Button onClick={() => navigater('add')}>Thêm sản phẩm</Button>
+    <div style={{ overflow: "auto" }}>
+      {loading == true && <Loading />}
+      <div className="admin-product">
+        <h4>Sản phẩm ({productsValue?.length})</h4>
+        <Button onClick={() => navigator("add")}>Thêm sản phẩm </Button>
       </div>
       <hr />
 
-      <div className='admin-product-table'>
-
+      <div className="admin-product-table">
         <Table
           rowSelection={{
-            type: 'checkbox',
+            type: "checkbox",
             ...rowSelection,
           }}
           expandable={{
@@ -283,12 +355,10 @@ const Products: React.FC = () => {
                       dangerouslySetInnerHTML={{
                         __html:
                           textPro.id == record._id
-                            ?
-                            record?.description
+                            ? record?.description
                             : record?.description.substring(
                               0,
-                              String(record?.description).length /
-                              10
+                              String(record?.description).length / 10
                             ) + "...",
                       }}
                     />
@@ -309,12 +379,32 @@ const Products: React.FC = () => {
               );
             },
 
-            onExpand: handleExpand,//ấn hiện chi tiết
+            onExpand: handleExpand, //ấn hiện chi tiết
           }}
           columns={columns}
-          dataSource={dataProducts}
+          dataSource={dataProducts?.slice().reverse()}
         />
       </div>
+
+      <Comfim
+        title="Xóa sản phẩm"
+        conent="Bạn có muốn xóa sản phẩm này không ?"
+        btnComfim={() => {
+          setLoading(true);
+          dataDeleteProduct(comfimDelete?.data);
+          setComfimDelete({ status: false, data: undefined });
+          setLoading(false);
+        }}
+        btnReject={() => setComfimDelete({ status: false, data: undefined })}
+        isModalOpen={comfimDelete?.status}
+      />
+      <ShowValue
+        title={showValue?.data?.name}
+        status={showValue?.status}
+        callBack={(e) => setShowValue(e)}
+        data={showValue?.data}
+        dataClass={classifies?.value}
+      />
     </div>
   );
 };

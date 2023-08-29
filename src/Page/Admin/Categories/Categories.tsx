@@ -8,10 +8,9 @@ import "./categori.css";
 import AddCategori from "./AddCategori";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { addCate, removeCate, uploadCate } from "./../../../features/CateSlice";
+import { addCategori, removeCategori, uploadCategori, getCategoriAll } from "./../../../features/CateSlice";
 import Loading from "../../../components/Loading";
 // @ts-ignore
-import { getCateAll } from "./../../../features/CateSlice";
 import EditCategori from "./EditCategori";
 type Props = {};
 interface DataType {
@@ -33,7 +32,7 @@ const Categories = (props: Props) => {
     });
     const categories = useSelector((data: any) => data.categories);
     useEffect(() => {
-        dispatch(getCateAll());
+        dispatch(getCategoriAll());
     }, []);
 
     useEffect(() => {
@@ -48,7 +47,7 @@ const Categories = (props: Props) => {
 
     const deleteCate = async (item: any) => {
         setLoading(true);
-        await dispatch(removeCate({ _id: item._id, image_id: item.image_id }));
+        await dispatch(removeCategori({ _id: item._id, image_id: item.image_id }));
         setLoading(false);
     };
 
@@ -79,7 +78,7 @@ const Categories = (props: Props) => {
             title: "Thao tác",
             key: "data._id",
             render: (_id, data: any) => (
-                <div>
+                <div >
                     <Space size="middle" style={{ marginRight: 10, cursor: 'pointer' }} onClick={() => setIsModalOpenUpload({ status: true, data: data })}>
                         <EditOutlined />
                     </Space>
@@ -100,7 +99,7 @@ const Categories = (props: Props) => {
             const formData = new FormData();
             formData.append("name", e.data.name);
             formData.append("files", e.data.file);
-            await dispatch(addCate(formData));
+            await dispatch(addCategori(formData));
             setLoading(false);
         }
         setIsModalOpenAdd(false);
@@ -116,7 +115,7 @@ const Categories = (props: Props) => {
             // @ts-ignore
             formData.append("image_id", isModalOpenUpload.data.image_id);
             formData.append("files", e.data.file);
-            await dispatch(uploadCate(formData));
+            await dispatch(uploadCategori(formData));
             setLoading(false);
         }
 

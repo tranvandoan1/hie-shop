@@ -1,35 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { axiosClient, axiosClientMultipart } from "../api/API";
+import { addPro, getAllPro, getPro, removePro, removesPro, uploadPro } from './../api/ProAPI';
 
-
-export const getAll = () => {
-
-  const url = `/get-products`;
-  return axiosClient.get(url);
-}
-export const get = (id) => {
-
-  const url = `/products/${id}`;
-  return axiosClient.get(url);
-}
-export const add = (data) => {
-  const url = `/products`;
-  return axiosClientMultipart.post(url, data);
-};
-
-export const upload = (data) => {
-  const url = `/product-upload`;
-  return axiosClientMultipart.post(url, data);
-};
-export const remove = (id) => {
-  const url = `/product/${id}`;
-  return axiosClient.delete(url);
-};
-
-export const removes = (dataId) => {
-  const url = `/remove-products`;
-  return axiosClient.post(url, dataId);
-};
 // async function getAll() {
 //   const { data: products } = await ProAPI.getAll();
 //   const user = JSON.parse(localStorage.getItem("user"));
@@ -39,44 +10,43 @@ export const removes = (dataId) => {
 export const getProduct = createAsyncThunk(
   "products/getProduct",
   async (id) => {
-    const { data: products } = await get(id);
+    const { data: products } = await getPro(id);
     return products;
   }
 );
 export const getProductAll = createAsyncThunk(
   "products/getProductAll",
   async () => {
-    const { data: products } = await getAll();
+    const { data: products } = await getAllPro();
     return products;
   }
 );
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (data) => {
-    console.log(data, 'test xem')
-    const { data: products } = await add(data);
+    const { data: products } = await addPro(data);
     return products;
   }
 );
 export const uploadProduct = createAsyncThunk(
   "products/uploadProduct",
   async (data) => {
-    console.log(data, 'test xem')
-    const { data: products } = await upload(data);
+    const { data: products } = await uploadPro(data);
     return products;
   }
 );
 export const removeProduct = createAsyncThunk(
   "products/removeProduct",
-  async (id) => {
-    const { data: products } = await remove(id);
+  async (data) => {
+    console.log(data,'3ewfrfddata')
+    const { data: products } = await removePro(data);
     return products;
   }
 );
 export const removeProducts = createAsyncThunk(
   "products/removeProducts",
   async (dataId) => {
-    const { data: products } = await removes(dataId);
+    const { data: products } = await removesPro(dataId);
     return products;
   }
 );

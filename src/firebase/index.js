@@ -2,7 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { FacebookAuthProvider, GoogleAuthProvider, getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
+import { getMessaging } from "firebase/messaging";
+// TODO: Add SDKs for Fireimport { getMessaging } from "firebase/messaging";base products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -24,3 +25,7 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const providerGoogle = new GoogleAuthProvider()
 export const providerFacebook = new FacebookAuthProvider()
+
+
+// Initialize Realtime Database and get a reference to the service
+export const messaging  = getMessaging(app);

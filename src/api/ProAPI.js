@@ -1,38 +1,29 @@
 // @ts-ignore
 import { axiosClient, axiosClientMultipart } from "./API";
 
-const ProAPI = {
-  getAll() {
-    const url = `/get-products`;
-    return axiosClient.get(url);
-  },
-  get(id) {
-    const url = `/products/${id}`;
-    return axiosClient.get(url);
-  },
-
-  // remove(id) {
-  //   const url = `/products/${id}`;
-  //   return axiosClient.delete(url);
-  // },
-
+export const getAllPro = () => {
+  const url = `/get-products`;
+  return axiosClient.get(url);
 };
-export default ProAPI;
-export const add = (data) => {
-  const url = `/products`;
+export const getPro = (id) => {
+  const url = `/products/${id}`;
+  return axiosClient.get(url);
+};
+export const addPro = (data) => {
+  const url = `/products-add`;
   return axiosClientMultipart.post(url, data);
 };
 
-export const upload = (data) => {
+export const uploadPro = (data) => {
   const url = `/product-upload`;
   return axiosClientMultipart.post(url, data);
 };
-export const remove = (id) => {
-  const url = `/product/${id}`;
-  return axiosClient.delete(url);
+export const removePro = (id) => {
+  const url = `/products-remove`;
+  return axiosClient.post(url, id);
 };
 
-export const removes = (dataId) => {
-  const url = `/remove-products`;
+export const removesPro = (dataId) => {
+  const url = `/products-removes`;
   return axiosClient.post(url, dataId);
 };

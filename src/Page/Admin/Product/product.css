@@ -90,13 +90,13 @@
 
 .close {
   position: absolute;
-  right: -8px;
+  right: -30px;
   top: -8px;
   color: red;
   cursor: pointer;
 }
 
-.pro-info-add{
+.pro-info-add {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
@@ -201,10 +201,11 @@
 
 .select-image {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 30px;
 }
-.btn{
+
+.btn {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -214,6 +215,33 @@
   width: 100%;
   z-index: 10;
 }
-.admin-product-table .ant-table-cell{
+
+.admin-product-table .ant-table-cell {
+  text-align: center !important;
+}
+
+.pro-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.pro-flex-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+}
+
+.pro-flex-values-tiem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+}
+
+.modal-table .ant-table-cell {
   text-align: center !important;
 }

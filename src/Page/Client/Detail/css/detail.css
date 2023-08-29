@@ -40,6 +40,8 @@
 }
 
 .product-briefing-pro_image {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     margin-top: 20px;
     width: 100%;
 }
@@ -106,12 +108,14 @@
     text-decoration: line-through;
     font-weight: 400;
     color: #a9a9a9;
+    font-size: 16px;
 }
 
 .product-briefing-prices {
     color: #ee4d2d;
-    font-size: 30px;
+    font-size: 23px;
     margin-left: 30px;
+    font-weight: 600;
 }
 
 .product-briefing-sale {
@@ -140,7 +144,7 @@
 .classify1>span,
 .classify2>span {
     width: 25%;
-    font-size: 17px;
+    font-size: 14px;
     color: rgb(117, 117, 117);
     text-transform: capitalize;
 }
@@ -211,6 +215,7 @@
 
 .quantity span {
     width: 25%;
+    font-size: 14px;
 }
 
 .button-quantity {
@@ -355,10 +360,12 @@
     height: 1500px;
     overflow: auto;
 }
-.detail-pro-info_right::-webkit-scrollbar{
+
+.detail-pro-info_right::-webkit-scrollbar {
     height: 0;
     width: 0;
 }
+
 .detail-pro-info_right h4 {
     background-color: #ee4d2d;
     text-transform: uppercase;
@@ -522,10 +529,24 @@
 .product-other-price span:nth-child(2) {
     font-size: 14px;
 }
-.product-other h5{
+
+.product-other h5 {
     color: #5e5e5e;
-    text-transform: capitalize;    
+    text-transform: capitalize;
 }
+
+.product-price_sale {
+    display: flex;
+    align-items: center;
+}
+
+.product-loading-image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 @media (min-width:1200px) {}
 
 @media (min-width:481px) and (max-width:1023px) {

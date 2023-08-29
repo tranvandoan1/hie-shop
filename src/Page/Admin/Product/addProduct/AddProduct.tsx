@@ -19,7 +19,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getCateAll } from "./../../../../features/CateSlice";
+import { getCategoriAll } from "./../../../../features/CateSlice";
 import ProInfo from './ProInfo';
 // @ts-ignore
 const AddProduct: React.FC = ({ callBack, state, data }) => {
@@ -28,7 +28,7 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
   const [p1, setP1] = useState(1);
   const categories = useSelector((data: any) => data.categories.value);
   useEffect(() => {
-    dispatch(getCateAll());
+    dispatch(getCategoriAll());
   }, []);
   const [imageUrlAvatar, setImageUrlAvatar] = useState<any>({
     url: undefined,
@@ -42,16 +42,23 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
   };
   const [content, setContent] = useState("");
   const [dataValue, setDataValue] = useState<any>();
-  console.log(dataValue, 'dataValue')
+
+  const [stateValue, setStateValue] = useState()
+
   const onFinish = (values: any) => {
     if (imageUrlAvatar.file == undefined) {
       message.warning('Chưa chọn ảnh !')
     } else {
       const newData = {
-        ...values,
         description: content,
-        imageUrlAvatar: imageUrlAvatar
-
+        imageUrlAvatar: imageUrlAvatar,
+        trademark: dataValue?.trademark == undefined ? values.trademark : dataValue?.trademark,
+        warehouse: dataValue?.warehouse == undefined ? values.warehouse : dataValue?.warehouse,
+        sent_from: dataValue?.sent_from == undefined ? values.sent_from : dataValue?.sent_from,
+        sale: dataValue?.sale == undefined ? values.sale : dataValue?.sale,
+        origin: dataValue?.origin == undefined ? values.origin : dataValue?.origin,
+        name: dataValue?.name == undefined ? values.name : dataValue?.name,
+        cate_id: dataValue?.cate_id == undefined ? values.cate_id : dataValue?.cate_id,
       }
       setDataValue(newData)
       setP1(2)
@@ -59,7 +66,6 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
 
   };
   const onFinishFailed = (values: any) => { console.log(values, '21wed') };
-
   return (
     <div style={{ background: "#fff" }}>
       {
@@ -162,48 +168,26 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                   label="Tên sản phẩm"
                   name="name"
                   labelAlign="left"
-                  // rules={[
-                  //   {
-                  //     required: (String(dataValue?.name)?.length <= 0 || dataValue?.name == undefined) ? true : false,
-                  //     message: "Bạn chưa nhập tên sản phẩm!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: (String(dataValue?.name)?.length <= 0 || dataValue?.name == undefined) ? true : false,
+                      message: "Bạn chưa nhập tên sản phẩm!",
+                    },
+                  ]}
                 >
                   <Input placeholder="Tên sản phẩm" defaultValue={(String(dataValue?.name)?.length <= 0 || dataValue?.name == undefined) ? "" : dataValue?.name} />
                 </Form.Item>
-                <Form.Item
-                  label="Mô tả"
-                  labelAlign="left"
-                  name="description"
-                  // rules={[
-                  //   {
-                  //     required: (String(dataValue?.description)?.length <= 0 || dataValue?.description == undefined) ? true : false,
-                  //     message: "Bạn chưa nhập mô tả!",
-                  //   },
-                  // ]}
-                >
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={(String(dataValue?.description)?.length <= 0 || dataValue?.description == undefined) ? "" : dataValue?.description}
-                    // @ts-ignore
-                    onChange={(event: any, editor: any) => {
-                      const data = editor.getData();
-                      startTransition(() => {
-                        setContent(data);
-                      });
-                    }}
-                  />
-                </Form.Item>
+
                 <Form.Item
                   label="Giảm giá"
                   name="sale"
                   labelAlign="left"
-                  // rules={[
-                  //   {
-                  //     required: (String(dataValue?.sale)?.length <= 0 || dataValue?.sale == undefined) ? true : false,
-                  //     message: "Bạn chưa nhập giảm giá!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: (String(dataValue?.sale)?.length <= 0 || dataValue?.sale == undefined) ? true : false,
+                      message: "Bạn chưa nhập giảm giá!",
+                    },
+                  ]}
                   style={{ marginTop: 80 }}
                 >
                   <Input
@@ -219,19 +203,19 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                   label="Danh mục"
                   labelAlign="left"
                   name="cate_id"
-                  // rules={[
-                  //   {
-                  //     required: dataValue?._id == undefined ? true : false,
-                  //     message: "Bạn chưa chọn danh mục!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: dataValue?.cate_id == undefined ? true : false,
+                      message: "Bạn chưa chọn danh mục!",
+                    },
+                  ]}
                 >
                   <Select
                     placeholder="Chọn danh mục"
-                    defaultValue={categories?.data?.find((item: any) => item._id == dataValue?._id ? dataValue?._id : '')}
+                    defaultValue={categories?.data?.find((item: any) => item._id == dataValue?.cate_id)?._id}
                   >
                     {categories?.data?.map((item: any) => (
-                      <Select.Option value={item._id}>{item.name}</Select.Option>
+                      <Select.Option key={item} value={item._id}>{item.name}</Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
@@ -240,12 +224,12 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                   label="Thương hiệu"
                   name="trademark"
                   labelAlign="left"
-                  // rules={[
-                  //   {
-                  //     required:dataValue?.trademark==undefined? true:false,
-                  //     message: "Bạn chưa chọn thương hiệu!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: dataValue?.trademark == undefined ? true : false,
+                      message: "Bạn chưa chọn thương hiệu!",
+                    },
+                  ]}
 
                 >
                   <Select placeholder="Thương hiệu" key="1" defaultValue={dataValue?.trademark}>
@@ -258,12 +242,12 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                   label="Nguồn gốc"
                   name="origin"
                   labelAlign="left"
-                  // rules={[
-                  //   {
-                  //     required:dataValue?.origin==undefined? true:false,
-                  //     message: "Bạn chưa chọn nguồn gốc!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: dataValue?.origin == undefined ? true : false,
+                      message: "Bạn chưa chọn nguồn gốc!",
+                    },
+                  ]}
                 >
                   <Select placeholder="Nguồn gốc" key="2" defaultValue={dataValue?.origin}>
                     <Select.Option value="Châu Âu">Châu Âu</Select.Option>
@@ -275,12 +259,12 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                   label="Kho hàng"
                   name="warehouse"
                   labelAlign="left"
-                  // rules={[
-                  //   {
-                  //     required:dataValue?.warehouse==undefined? true:false,
-                  //     message: "Bạn chưa chọn kho hàng!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: dataValue?.warehouse == undefined ? true : false,
+                      message: "Bạn chưa chọn kho hàng!",
+                    },
+                  ]}
                 >
                   <Select placeholder="Thương hiệu" key="3" defaultValue={dataValue?.warehouse}>
                     <Select.Option value="Đoàn 123">Đoàn 123</Select.Option>
@@ -292,17 +276,42 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                   label="Gửi từ"
                   name="sent_from"
                   labelAlign="left"
-                  // rules={[
-                  //   {
-                  //     required:dataValue?.sent_from==undefined? true:false,
-                  //     message: "Bạn chưa chọn gửi từ đâu !",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: dataValue?.sent_from == undefined ? true : false,
+                      message: "Bạn chưa chọn gửi từ đâu !",
+                    },
+                  ]}
                 >
                   <Select placeholder="Gửi từ" key="4" defaultValue={dataValue?.sent_from}>
                     <Select.Option value="Thường Tín">Thường Tín</Select.Option>
                     <Select.Option value="Hoàng Mai">Hoàng Mai</Select.Option>
                   </Select>
+                </Form.Item>
+
+
+                <Form.Item
+                  label="Mô tả"
+                  labelAlign="left"
+                  name="description"
+                  rules={[
+                    {
+                      required: (String(dataValue?.description)?.length <= 0 || dataValue?.description == undefined) ? true : false,
+                      message: "Bạn chưa nhập mô tả!",
+                    },
+                  ]}
+                >
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={(String(dataValue?.description)?.length <= 0 || dataValue?.description == undefined) ? "" : dataValue?.description}
+                    // @ts-ignore
+                    onChange={(event: any, editor: any) => {
+                      const data = editor.getData();
+                      startTransition(() => {
+                        setContent(data);
+                      });
+                    }}
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -322,8 +331,12 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
           :
           <div className='pro-info'>
             <ProInfo
-              callBack={() => setP1(1)}
+              callBack={(e) => {
+                setP1(1)
+                setStateValue(e)
+              }}
               dataValue={dataValue}
+              stateValue={stateValue}
             />
           </div>
 

@@ -56,3 +56,8 @@ export const getOtp_Email = (email) => {
     return axiosClient.post(url, email);
 };
 
+
+export const forgotPassword = (value) => {
+    const url = `/forgot-password`;
+    return axiosClient.post(url, value);
+};

@@ -42,7 +42,11 @@ const Header: React.FC = () => {
                 <span style={{ marginLeft: 10 }}>Đăng xuất</span>
             </div>
             <div
-                onClick={() => navigator("/admin")}
+                onClick={() => {
+                    localStorage.removeItem("key");
+                    localStorage.setItem("key", JSON.stringify(["1"]));
+                    navigator("/admin/dashboard")
+                }}
                 style={{ cursor: "pointer", fontSize: 16, padding: "10px 10px 0 10px" }}
             >
                 <span style={{ fontSize: 18, marginRight: 10 }}>

@@ -24,15 +24,14 @@ const OtpEmailSiginUp = ({
   loading,
 }: Props) => {
   const handleOk = () => {
-    // setIsModalOpen(false);
-
     btnComfim(otp);
+    setOtp('')
   };
   const [otp, setOtp] = useState("");
 
   const handleCancel = () => {
-    // setIsModalOpen(false);
     btnReject();
+    setOtp('')
   };
   return (
     <Modal

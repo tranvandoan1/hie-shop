@@ -5,21 +5,22 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Input, Select, Spin, Table, Upload, message } from "antd";
-import { startTransition, useReducer } from "react";
+import { startTransition, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 // @ts-ignore
-import { addProduct } from "./../../../../features/Products";
+import { addProduct, uploadProduct } from "./../../../../features/Products";
 import Loading from "../../../../components/Loading";
 import { useDispatch } from "react-redux";
 type Props = {
   callBack: (e: any) => void;
   dataValue: any;
   stateValue: any;
+  newClassifies: any;
+  product: any;
 };
 type State = {
   nameClassify1: any;
   nameClassify2: any;
-
   classifyValue1: any;
   classifyValue2: any;
   classifyValue: any;
@@ -28,8 +29,17 @@ type State = {
   comfimShowClassifyValue: boolean;
 };
 // @ts-ignore
-const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
+const ProInfo = ({
+  callBack,
+  dataValue,
+  stateValue,
+  newClassifies,
+  product,
+}: Props) => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
   // @ts-ignore
   const userLoca = JSON.parse(localStorage.getItem("user"));
   const navigator = useNavigate();
@@ -72,11 +82,11 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
 
       loading: false,
 
-      comfimShowClassifyValue: false,
+      comfimShowClassifyValue:
+        (product?.name_commodityvalue == undefined || product?.name_commodityvalue == null) ? false : true,
     }
   );
-
-
+  console.log(product?.name_commodityvalue, 'product?.name_commodityvalue')
   const addNameValue1 = (values: any) => {
     setState({ classifyValue1: values });
   };
@@ -86,22 +96,22 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     values.map((item: any) =>
       newData.push({
         name: item,
-        id: Math.random(),
+        _id: Math.random(),
         quantity: 0,
         price: 0,
         status: false,
       })
     );
-    setState({ classifyValue2: newData });
+    setState({ classifyValue2: values });
   };
   // thêm ảnh phân loại
   const UploadAvatatr = (file: any) => {
-    setState({ loading: true });
+    // setState({ loading: true });
 
     const src = URL.createObjectURL(file);
     const newData: any = [];
     state?.classifyValue?.map((item: any) => {
-      if (item.id == state?.selectImage.id) {
+      if (item._id == state?.selectImage._id) {
         newData.push({ ...item, url: src, file: file });
       } else {
         newData.push({ ...item, url: item.url, file: item.file });
@@ -109,21 +119,6 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     });
     setState({ classifyValue: newData, loading: false });
   };
-
-  // xóa ảnh phân loại
-  const removeImage = (e: any) => {
-    setState({ loading: true });
-    const newData: any = [];
-    state?.classifyValue?.map((item: any) => {
-      if (item.id == e.id) {
-        newData.push({ ...item, url: undefined, file: undefined });
-      } else {
-        newData.push({ ...item, url: item.url, file: item.file });
-      }
-    });
-    setState({ classifyValue: newData, loading: false });
-  };
-
   // giá trị phân loại 1
   const changeValue1 = (value: any) => {
     if (state?.classifyValue?.length > 0) {
@@ -134,16 +129,26 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
         (item: any) => item.name !== value
       );
 
+      const newClassify2: any = [];
+
+      state?.classifyValue2?.map((item: any) => {
+        newClassify2.push({
+          name: item,
+          _id: Math.random(),
+          quantity: 0,
+          price: 0,
+          status: false,
+        });
+      });
       if (valueDuplicate == undefined) {
         const newNameClassify1: any = [
           ...state?.classifyValue,
           {
             name: value,
-            id: Math.random(),
+            _id: Math.random(),
             quantity: 0,
             price: 0,
-            values:
-              state?.classifyValue2?.length > 0 ? state?.classifyValue2 : [],
+            values: newClassify2,
             status: false,
           },
         ];
@@ -154,7 +159,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
           ...newValue,
           {
             name: value,
-            id: Math.random(),
+            _id: Math.random(),
             quantity: 0,
             price: 0,
             values:
@@ -168,7 +173,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
       const newNameClassify1: any = [
         {
           name: value,
-          id: Math.random(),
+          _id: Math.random(),
           quantity: 0,
           price: 0,
           values: [],
@@ -198,7 +203,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
             ...item.values,
             {
               name: value,
-              id: Math.random(),
+              _id: Math.random(),
               quantity: 0,
               price: 0,
               status: false,
@@ -232,7 +237,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     });
     for (let i = 0; i < state?.classifyValue.length; i++) {
       // @ts-ignore
-      if (state.classifyValue[i].id == e.data.id) {
+      if (state.classifyValue[i]._id == e.data._id) {
         // @ts-ignore
         state.classifyValue[i].values = newData;
       }
@@ -243,7 +248,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
   const saveNoValue = (item: any) => {
     for (let i = 0; i < state?.classifyValue.length; i++) {
       // @ts-ignore
-      if (state.classifyValue[i].id == item.data.id) {
+      if (state.classifyValue[i]._id == item.data._id) {
         item.select == "price"
           ? // @ts-ignore
           (state.classifyValue[i].price = item.value)
@@ -269,7 +274,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     });
     const newData: any = [];
     state?.classifyValue?.map((item: any) => {
-      if (item.id == e.data.id) {
+      if (item._id == e.data._id) {
         newData.push({
           ...item,
           values: newDataValue,
@@ -280,7 +285,6 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     });
     setState({ classifyValue: newData });
   };
-
   // xóa tên phân loại1
   const removeValue1 = (e: any) => {
     const newData: any = state?.classifyValue?.filter(
@@ -301,15 +305,20 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
       newData.push({ ...item, values: newValue });
     });
 
-
     setState({
       classifyValue: newData,
     });
   };
+  // loại bỏ phân loại 2
+  const removeClass2 = () => {
+    setState({
+      comfimShowClassifyValue: !state?.comfimShowClassifyValue,
+    });
 
+  };
   const columns = [
     {
-      title: "Name",
+      title: "Tên giá trị",
       dataIndex: "name",
       key: "name",
       width: "40%",
@@ -327,24 +336,25 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
             >
               {name}
             </span>
-            {data?.values?.length > 0 && (
-              <div className="pro-data-values">
-                {data?.values?.map((item: any, index: any) => {
-                  return (
-                    <span
-                      style={{
-                        marginTop: index == 0 ? 0 : 20,
-                        textDecoration:
-                          item.status == true ? "line-through" : "none",
-                        opacity: item.status == true ? 0.3 : 1,
-                      }}
-                    >
-                      {item.name}
-                    </span>
-                  );
-                })}
-              </div>
-            )}
+            {data?.values?.length > 0 &&
+              state?.comfimShowClassifyValue == true && (
+                <div className="pro-data-values">
+                  {data?.values?.map((item: any, index: any) => {
+                    return (
+                      <span
+                        style={{
+                          marginTop: index == 0 ? 0 : 20,
+                          textDecoration:
+                            item.status == true ? "line-through" : "none",
+                          opacity: item.status == true ? 0.3 : 1,
+                        }}
+                      >
+                        {item.name}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
             <div></div>
           </div>
         );
@@ -358,7 +368,8 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
       render: (id: any, data: any) => {
         return (
           <div>
-            {data?.values?.length > 0 ? (
+            {data?.values?.length > 0 &&
+              state?.comfimShowClassifyValue == true ? (
               data?.values?.map((item: any, index: any) => {
                 return (
                   <div style={{ marginTop: index == 0 ? 0 : 10 }}>
@@ -391,7 +402,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
                     });
                   })
                 }
-                defaultValue={data?.quantity == 0 ? "" : data.quantity}
+                defaultValue={data?.price == 0 ? "" : data.price}
                 placeholder="Giá tiền"
               />
             )}
@@ -406,7 +417,8 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
       // @ts-ignore
       render: (id: any, data: any) => (
         <div>
-          {data?.values?.length > 0 ? (
+          {data?.values?.length > 0 &&
+            state?.comfimShowClassifyValue == true ? (
             data?.values?.map((item: any, index: any) => {
               return (
                 <div style={{ marginTop: index == 0 ? 0 : 10 }}>
@@ -448,6 +460,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     },
   ];
   (state?.nameClassify2 !== undefined || state?.nameClassify2?.length > 0) &&
+    state?.comfimShowClassifyValue == true &&
     columns.push({
       title: "Trạng thái",
       dataIndex: "id",
@@ -489,25 +502,10 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
     });
 
 
-  // loại bỏ phân loại 2
-  const removeClass2 = () => {
-    setState({
-      comfimShowClassifyValue: !state?.comfimShowClassifyValue,
-      classifyValue2: [],
-      nameClassify2: undefined,
-    });
-    const newData: any = [];
-    state?.classifyValue?.map((item: any) =>
-      newData.push({ ...item, values: [] })
-    );
-    setState({
-      classifyValue: newData,
-    });
-  };
   // thêm sản phẩm
   const save = async () => {
     const newDataImage: any = state?.classifyValue?.filter(
-      (item: any) => item.file !== undefined
+      (item: any) => item.file !== undefined || item.photo !== undefined
     );
     if (newDataImage?.length < state?.classifyValue?.length) {
       message.warning("Chưa nhập hết ảnh phân loại !");
@@ -520,25 +518,14 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
         );
         newData.push({
           ...item,
-          values: data,
+          values: state?.comfimShowClassifyValue == false ? [] : data,
         });
       });
-      const linked = Math.random();
       const dataImage: any = [dataValue.imageUrlAvatar.file];
       // @ts-ignore
-      state?.classifyValue.map((item) => dataImage.push(item.file));
+      state?.classifyValue.map((item) => item.file !== undefined && dataImage.push(item.file));
 
-      const newDataClass: any = [];
-      newData?.map((item: any) =>
-        newDataClass.push({
-          linked: linked,
-          price: item.price,
-          quantity: item.quantity,
-          values: item.values,
-          name: item.name,
-        })
-      );
-      const product = {
+      const newProduct = {
         warehouse: dataValue.warehouse,
         trademark: dataValue.trademark,
         sent_from: dataValue.sent_from,
@@ -546,26 +533,28 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
         name: dataValue.name,
         description: dataValue.description,
         cate_id: dataValue.cate_id,
-        linked: linked,
-        name_commodityvalue: state?.nameClassify2,
+        linked: product.linked,
+        name_commodityvalue: state?.comfimShowClassifyValue == false ? undefined : state?.nameClassify2,
         name_classification: state?.nameClassify1,
         sale: dataValue.sale,
         user_id: userLoca._id,
         valueClassify: JSON.stringify(state?.classifyValue2),
+        file: dataValue.imageUrlAvatar
       };
+      console.log(newProduct, 'newProduct')
       const formData = new FormData();
       // @ts-ignore
       formData.append(
         "data",
-        JSON.stringify({ product: product, classifies: newDataClass })
+        JSON.stringify({ newProduct: newProduct, newClassifies: newData, product: product, classifies: newClassifies })
       );
       for (let i = 0; i < dataImage.length; i++) {
         formData.append("files", dataImage[i]);
       }
-      await dispatch(addProduct(formData));
+      await dispatch(uploadProduct(formData));
       navigator("/admin/products");
       setState({ loading: false });
-    }
+    };
   };
   return (
     <div>
@@ -653,7 +642,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
                 mode="tags"
                 size={"middle"}
                 placeholder="Giá trị phân loại 2"
-                defaultValue={[]}
+                defaultValue={state?.classifyValue2}
                 onDeselect={(e) => removeValue2(e)}
                 onSelect={(e) => changeValue2(e)}
                 onChange={addNameValue2}
@@ -693,9 +682,12 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
                     // @ts-ignore
                     onClick={() => setState({ selectImage: item })}
                   >
-                    {item.file ? (
+                    {(item.file == undefined ? item.photo : item.file) ? (
                       <div className="add-pro-box-image">
-                        <img src={item.url} className="add-pro-image" />
+                        <img
+                          src={item.url || item.photo}
+                          className="add-pro-image"
+                        />
                       </div>
                     ) : (
                       <div
@@ -719,13 +711,20 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
                   </Upload>
                   {item.file !== undefined && (
                     <div
-                      onClick={() => removeImage(item)}
-                      className="add-pro-avatar-close"
+                      className={"close"}
+                    // onClick={() => (
+                    //   // setImageUrlAvatar({ url: undefined, file: undefined, status: false })
+                    //   // // callBack({
+                    //   // //   data: { ...state?.dataBasicInfo, photo: "" },
+                    //   // //   check: 1,
+                    //   // // })
+                    // )}
                     >
                       <CloseCircleOutlined style={{ fontSize: 17 }} />
                     </div>
                   )}
                 </div>
+
               );
             })}
           </div>
@@ -733,7 +732,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
       )}
 
       <div className="btn">
-        <Button type="primary" danger onClick={() => callBack(state)}>
+        <Button type="primary" danger onClick={() => callBack({ state: state, dataValue: dataValue })}>
           Quay lại
         </Button>
         <Button

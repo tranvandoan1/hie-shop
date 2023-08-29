@@ -1,40 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { axiosClient } from "../api/API";
-
-
-export const getAll = () => {
-
-  const url = `/classifies`;
-  return axiosClient.get(url);
-}
-export const get = (id) => {
-
-  const url = `/classifies/${id}`;
-  return axiosClient.get(url);
-}
-
-
-export const add = (cate) => {
-  const url = `/classifies`;
-  return axiosClient.post(url, cate);
-};
-
-export const upload = (id, data) => {
-  const url = `/classifies/${id}`;
-  return axiosClient.put(url, data);
-};
-
-
-export const removes = (data) => {
-  const url = `/removes-classifies`;
-  return axiosClient.post(url, data);
-};
+import { addClassify, getAllClassify, removesClassify, uploadClassify } from './../api/Classify';
 
 
 export const getAllClassifies = createAsyncThunk(
   "classifies/getAllClassifies",
   async () => {
-    const { data: classifies } = await getAll();
+    const { data: classifies } = await getAllClassify();
     return classifies;
   }
 );
@@ -42,21 +13,21 @@ export const getAllClassifies = createAsyncThunk(
 export const addClassifies = createAsyncThunk(
   "classifies/addComments",
   async (data) => {
-    const { data: classifies } = await add(data);
+    const { data: classifies } = await addClassify(data);
     return classifies;
   }
 );
 export const uploadtClassifies = createAsyncThunk(
   "classifies/uploadtClassifies",
   async (data) => {
-    const { data: classifies } = await upload(data.id, data.dataUploat);
+    const { data: classifies } = await uploadClassify(data.id, data.dataUploat);
     return classifies;
   }
 );
 export const removesClassifies = createAsyncThunk(
   "classifies/removesClassifies",
   async (dataId) => {
-    const { data: classifies } = await removes(dataId);
+    const { data: classifies } = await removesClassify(dataId);
     return classifies;
   }
 );

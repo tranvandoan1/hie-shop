@@ -1,4 +1,4 @@
-import "./comment.css";
+import "./css/comment.css";
 import { Avatar, Input, Pagination } from 'antd';
 import { CameraOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import EditComment from "../../../components/EditComment";

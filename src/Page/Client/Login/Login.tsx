@@ -25,12 +25,15 @@ const Login = (props: Props) => {
     const onFinish = async (values) => {
         setLoading(true)
         const { data } = await signinApi(values);
+        console.log(data, 'data')
         message.open({
             type: data.status == false ? 'error' : "success",
             duration: 2,
             content: data.message,
         });
-        navigator('/home')
+        data.status == true && localStorage.setItem("token", JSON.stringify(data.token));
+        data.status == true && localStorage.setItem("user", JSON.stringify(data.user));
+        data.status == true && navigator('/home')
         setLoading(false)
     };
     // @ts-ignore
@@ -61,7 +64,7 @@ const Login = (props: Props) => {
                 data.status == true && localStorage.setItem("token", JSON.stringify(data.token));
                 data.status == true && localStorage.setItem("user", JSON.stringify(data.user));
                 setLoading(false)
-                data.status == true&&  navigator('/home')
+                data.status == true && navigator('/home')
 
             }).catch(() => {
                 setLoading(false)
@@ -123,8 +126,8 @@ const Login = (props: Props) => {
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                             />
                         </Form.Item>
-                        <div className="forgot-password">
-                            <span className="forgot-password-text">Quên mật khẩu?</span>
+                        <div className="forgot-password" >
+                            <span className="forgot-password-text" onClick={() => navigator('/forgot-password')}>Quên mật khẩu?</span>
                         </div>
                         <Form.Item
                             wrapperCol={{

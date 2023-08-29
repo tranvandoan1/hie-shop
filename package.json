@@ -14,6 +14,8 @@
     "@brainhubeu/react-carousel": "^2.0.4",
     "@ckeditor/ckeditor5-build-classic": "^39.0.1",
     "@ckeditor/ckeditor5-react": "^6.1.0",
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.11.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/brainhubeu__react-carousel": "^2.0.5",
     "antd": "^5.8.2",
