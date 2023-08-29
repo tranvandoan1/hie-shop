@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Descriptions, Modal, Space, Table, message } from "antd";
+import { Button, Descriptions,  Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import "./product.css";
 import { useNavigate } from "react-router-dom";

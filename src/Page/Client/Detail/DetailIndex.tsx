@@ -4,9 +4,8 @@ import Header from "../../../components/Header";
 // @ts-ignore
 import "@brainhubeu/react-carousel/lib/style.css";
 import "./css/detail.css";
-import Carousel, { slidesToShowPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { Button, Col, Input, Rate, Row, Spin } from "antd";
+import { Button, Col, Input, Rate, Row } from "antd";
 import { BsCartPlus } from "react-icons/bs";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import Footer from "../../../components/Footer";
@@ -115,9 +114,12 @@ const DetailIndex = (props: Props) => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
+  // @ts-ignore
   const [valueImage, setValueImage] = useState<any>(image[0]);
+  // @ts-ignore
   const [quantityValue, setQuantityValue] = useState<any>(1);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // @ts-ignore
   const [selectHoverImage, setSelectHoverImage] = useState<any>();
   const [selectClassifies, setSelectClassifies] = useState<any>({
     data1: undefined,

@@ -29,7 +29,7 @@ import { getAllClassifies } from "../../../../features/Classifies";
 // @ts-ignore
 
 const UploadProduct: React.FC = ({ callBack, state, data }: Props) => {
-  const { id, name } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [p1, setP1] = useState(1);
@@ -174,7 +174,7 @@ const UploadProduct: React.FC = ({ callBack, state, data }: Props) => {
       setP1(2);
     }
   };
-  const onFinishFailed = (values: any) => {
+  const onFinishFailed = () => {
   };
   return (
     <div style={{ background: "#fff" }}>

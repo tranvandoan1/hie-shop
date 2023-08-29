@@ -21,6 +21,7 @@ const Product = () => {
     const productsValue = products?.value?.data;
 
     const classifies = useSelector((data: any) => data.classifies);
+    // @ts-ignore
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -66,7 +67,7 @@ const Product = () => {
                 <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item}>
                     <div
                         className={styles["products"]}
-                        style={{ marginLeft: 10,cursor:'pointer' }}
+                        style={{ marginLeft: 10, cursor: 'pointer' }}
                         onClick={() =>
                             navigate(`/detail/${item.name.replace(/\s+/g, "-")}/${item._id}`)
                         }
