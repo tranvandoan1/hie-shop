@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Carousel, Col } from 'antd';
+import { Carousel } from 'antd';
 import Header from '../../../components/Header';
 
 
@@ -16,16 +16,7 @@ const Home = () => {
   const onChange = (currentSlide: any) => {
     // console.log(currentSlide);
   };
-  const data = [
-    { id: 1, name: 'quần áo', photo: 'https://nhanmachatc.com/wp-content/uploads/2021/08/hinh-in-ao-thun-theo-yeu-cau-la-gi.jpg' },
-    { id: 2, name: 'giày dép', photo: 'https://cf.shopee.vn/file/dee1682bb885c7465b94e1f064221127' },
-    { id: 3, name: 'chăn gối', photo: 'https://demxanh.com/media/news/0607_4181_bnl6mon04_01.jpg' },
-    { id: 4, name: 'rèm cửa', photo: 'https://mancuathaituan.com/wp-content/uploads/2019/10/rem-cua-quan-go-vap-dep-1.jpg' },
-    { id: 4, name: 'rèm cửa', photo: 'https://mancuathaituan.com/wp-content/uploads/2019/10/rem-cua-quan-go-vap-dep-1.jpg' },
-    { id: 4, name: 'rèm cửa', photo: 'https://mancuathaituan.com/wp-content/uploads/2019/10/rem-cua-quan-go-vap-dep-1.jpg' },
-
-    { id: 4, name: 'rèm cửa', photo: 'https://mancuathaituan.com/wp-content/uploads/2019/10/rem-cua-quan-go-vap-dep-1.jpg' },
-  ]
+ 
   return (
     <div style={{ background: "#fff" }}>
       <Header />

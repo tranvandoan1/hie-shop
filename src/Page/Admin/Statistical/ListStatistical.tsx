@@ -9,7 +9,7 @@ import { Col, Row, Spin } from "antd";
 import { getOrder } from "../../../features/Order";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { FaProductHunt, FaOpencart, FaTable } from "react-icons/fa";
+import { FaProductHunt, FaOpencart } from "react-icons/fa";
 // @ts-ignore
 import { getProductAll } from "../../../features/Products";
 // @ts-ignore

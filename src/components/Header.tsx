@@ -42,8 +42,9 @@ const Header: React.FC = () => {
     const newDataSaveOrder = saveorders
         ?.slice()
         .reverse()
+        // @ts-ignore
         .filter((item: any, index: any) => index < 4);
-   
+
 
     const [avtiveMenu, setActiveMenu] = useState(
         localStorage.getItem("value")
@@ -99,7 +100,7 @@ const Header: React.FC = () => {
 
     const renderSaveOrder = (
         <div style={{ width: 300, cursor: "pointer" }}>
-            {newDataSaveOrder?.map((item: any, index: number) => {
+            {newDataSaveOrder?.map((item: any) => {
                 return (
                     <div className="saveorder">
                         <div

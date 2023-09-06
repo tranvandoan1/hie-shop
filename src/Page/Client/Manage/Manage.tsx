@@ -1,13 +1,11 @@
-import React from 'react'
 import Header from '../../../components/Header'
 import './manage.css'
 import Footer from '../../../components/Footer'
 import { RiFileUserLine, RiExchangeLine } from 'react-icons/ri'
 import { BsCart4 } from 'react-icons/bs'
 import { Outlet, useNavigate } from 'react-router-dom'
-type Props = {}
 
-const Manage = (props: Props) => {
+const Manage = () => {
 const navigator=useNavigate()
     return (
         <div style={{ background: "#e8e8e8" }}>

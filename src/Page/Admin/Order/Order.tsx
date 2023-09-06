@@ -1,8 +1,6 @@
-import React from 'react'
 
-type Props = {}
 
-const Order = (props: Props) => {
+const Order = () => {
   return (
     <div>Order</div>
   )

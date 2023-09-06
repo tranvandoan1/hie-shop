@@ -21,6 +21,7 @@ const SelectShop = ({
     conent,
     isModalOpen,
     cancelText,
+    // @ts-ignore
     code,
     okText,
     users

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from "@ant-design/plots";
 import styles from "../CssAdmin.module.css";
 import { BarChartOutlined, EyeOutlined } from "@ant-design/icons";

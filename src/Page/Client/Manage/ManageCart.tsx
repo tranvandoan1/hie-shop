@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // @ts-ignore
 import { getOrder } from './../../../features/Order';
 import { useNavigate } from 'react-router-dom';
 
-type Props = {}
 
-const ManageCart = (props: Props) => {
+const ManageCart = () => {
     const dispatch = useDispatch()
     const navigator=useNavigate()
     const orders = useSelector((data: any) => data.orders.value)

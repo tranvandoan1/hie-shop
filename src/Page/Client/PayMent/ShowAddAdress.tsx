@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./css.css";
 import { useDispatch } from "react-redux";
 import { Button, Checkbox, Form, Input, Modal, message } from "antd";
@@ -24,9 +24,9 @@ import Loading from "../../../components/Loading";
 import { getDataUserLoca } from './../../../app/getDataLoca';
 
 type Props = {
-  isModalOpen: boolean;
-  setIsModalOpen: (e: any) => void;
-  infoUsers: any;
+  isModalOpen?: boolean;
+  setIsModalOpen?: (e: any) => void;
+  infoUsers?: any;
 };
 const ShowAddAddress = ({ isModalOpen, setIsModalOpen, infoUsers }: Props) => {
   // @ts-ignore
@@ -105,6 +105,7 @@ const ShowAddAddress = ({ isModalOpen, setIsModalOpen, infoUsers }: Props) => {
         setUploadAdres({ status: false, data: undefined, close: false })
       } else {
         await dispatch(addInfoUser(newData_InfoUser));
+        // @ts-ignore
         setIsModalOpen(false);
         setAddAdress(false);
       }
@@ -128,9 +129,11 @@ const ShowAddAddress = ({ isModalOpen, setIsModalOpen, infoUsers }: Props) => {
     }
   };
   const handleOk = () => {
+        // @ts-ignore
     setIsModalOpen(false);
   };
   const handleCancel = () => {
+        // @ts-ignore
     setIsModalOpen(false);
   };
 

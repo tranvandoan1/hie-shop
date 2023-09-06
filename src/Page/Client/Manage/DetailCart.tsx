@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 // @ts-ignore
@@ -6,9 +6,8 @@ import { getProductAll } from "../../../features/Products";
 // @ts-ignore
 import { getOrder } from "./../../../features/Order";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-type Props = {};
 
-const DetailCart = (props: Props) => {
+const DetailCart = () => {
     const { id } = useParams();
     const navigator = useNavigate()
     const dispatch = useDispatch();

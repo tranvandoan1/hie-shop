@@ -11,9 +11,9 @@ import Loading from "../../../components/Loading";
 import { uploadInfoUser } from '../../../api/Users.js'
 // @ts-ignore
 import { getDataUserLoca } from './../../../app/getDataLoca';
-type Props = {};
 
-const Info = (props: Props) => {
+
+const Info = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const users = useSelector((data: any) => data.users.value)

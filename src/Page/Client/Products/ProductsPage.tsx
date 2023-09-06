@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
-import styles from "../../../css/Home/product.module.css";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
 import { getCategoriAll } from "./../../../features/CateSlice";
@@ -14,9 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { getProductAll } from "../../../features/Products";
 // @ts-ignore
 import { getAllClassifies } from "./../../../features/Classifies";
-type Props = {};
 
-const ProductsPage = (props: Props) => {
+const ProductsPage = () => {
   const dispatch = useDispatch();
   const navigator = useNavigate()
   const categories = useSelector((data: any) => data.categories.value);
