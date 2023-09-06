@@ -38,6 +38,10 @@
     .classify-value2>span {
         width: 40% !important;
     }
+
+    .header-menu {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -56,13 +60,8 @@
         height: 70px !important;
         transition: 350ms ease-in 0s;
     }
-    /* .name-classify1>span,
-    .name-classify2>span {
-        width: 90% !important;
-    }
 
-    .classify-value1>span,
-    .classify-value2>span {
-        width: 40% !important;
-    } */
+    .header-menu {
+        display: none;
+    }
 }

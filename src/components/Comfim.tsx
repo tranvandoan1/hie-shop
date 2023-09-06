@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { Input, Modal } from "antd";
 import "./css/comfim.css";
 type Props = {
     btnReject?: () => void;
@@ -8,6 +8,7 @@ type Props = {
     isModalOpen?: boolean;
     okText?: string,
     cancelText?: string
+    code?: boolean
 };
 
 const Comfim = ({
@@ -17,6 +18,7 @@ const Comfim = ({
     conent,
     isModalOpen,
     cancelText,
+    code,
     okText
 }: Props) => {
     const handleOk = () => {
@@ -37,11 +39,19 @@ const Comfim = ({
             onOk={handleOk}
             onCancel={handleCancel}
             okText={okText}
+            style={{ zIndex: 100 }}
             cancelText={cancelText}
         >
             <div>
                 <h5 style={{ color: 'red' }}>{title}</h5>
                 <h6>{conent}</h6>
+
+
+                {
+                    code == true &&
+                    <Input placeholder="Nhập mã cửa hàng " style={{ margin: '10px 0' }} />
+                }
+
             </div>
         </Modal>
     );

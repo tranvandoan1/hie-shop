@@ -12,6 +12,8 @@ import { addCategori, removeCategori, uploadCategori, getCategoriAll } from "./.
 import Loading from "../../../components/Loading";
 // @ts-ignore
 import EditCategori from "./EditCategori";
+// @ts-ignore
+import { getDataUserLoca } from "../../../app/getDataLoca";
 type Props = {};
 interface DataType {
     key: string;
@@ -34,7 +36,6 @@ const Categories = (props: Props) => {
     useEffect(() => {
         dispatch(getCategoriAll());
     }, []);
-
     useEffect(() => {
         if (
             categories?.value?.getdata !== true &&
@@ -95,14 +96,20 @@ const Categories = (props: Props) => {
 
     const saveCate = async (e: any) => {
         if (e !== 'close') {
-            setLoading(true);
-            const formData = new FormData();
-            formData.append("name", e.data.name);
-            formData.append("files", e.data.file);
-            await dispatch(addCategori(formData));
-            setLoading(false);
+            if (e.data.file == undefined) {
+                message.warning('Chưa chọn ảnh !')
+            } else {
+                setLoading(true);
+                const formData = new FormData();
+                formData.append("name", e.data.name);
+                formData.append("code_shop", getDataUserLoca().code);
+                formData.append("files", e.data.file);
+                await dispatch(addCategori(formData));
+                setLoading(false);
+                setIsModalOpenAdd(false);
+
+            }
         }
-        setIsModalOpenAdd(false);
     };
     const uploadCategories = async (e: any) => {
         // @ts-ignore
@@ -137,7 +144,7 @@ const Categories = (props: Props) => {
             </div>
             <hr />
             <div className="table-categoris">
-                <Table columns={columns} dataSource={categories?.value?.data} />
+                <Table columns={columns} dataSource={categories?.value} />
             </div>
 
             <AddCategori

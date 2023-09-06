@@ -28,7 +28,7 @@ import { signupApi } from "../../../api/Users";
 import OtpEmailSiginUp from "../../../components/OtpEmailSiginUp";
 import { signInWithPopup } from "firebase/auth";
 // @ts-ignore
-import { auth ,providerGoogle} from './../../../firebase/index';
+import { auth, providerGoogle } from './../../../firebase/index';
 // @ts-ignore
 import Comfim from "../../../components/Comfim";
 import Loading from "../../../components/Loading";
@@ -39,6 +39,7 @@ const SignUpScreen = (props: Props) => {
     let navigator = useNavigate();
     const [loading, setLoading] = useState<boolean>(false);
     const [comfimAmin, setComfimAmin] = useState<{ status: boolean, data: any }>({ status: false, data: undefined });//đăng ký với google thì sẽ hiện comfim hỏi có đăng ký bán hàng không
+
     const [OtpEmailSiginUpStatus, setOtpEmailSiginUpStatus] = useState<{
         status: boolean;
         otp: any;
@@ -61,6 +62,7 @@ const SignUpScreen = (props: Props) => {
 
     // xác thực otp
     const onFinish = async (values: any) => {
+
         setLoading(true);
         const formData = new FormData();
         formData.append("phone", values.phone);
@@ -84,6 +86,12 @@ const SignUpScreen = (props: Props) => {
     };
     // thêm user
     const save = async (e: any) => {
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let code = '';
+        for (let i = 0; i < 5; i++) {
+            code += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+
         if (e == otp) {
             setLoading(true);
             const formData = new FormData();
@@ -92,6 +100,7 @@ const SignUpScreen = (props: Props) => {
             formData.append("name", valueSignUp.name);
             formData.append("password", valueSignUp.password);
             formData.append("files", imageUrlAvatar.file);
+            formData.append("code", valueSignUp.email.slice(0, 2).toUpperCase() + code);
             formData.append("google", 'false');
             // @ts-ignore
             formData.append("role", valueSignUp.role == true ? true : false);
@@ -338,7 +347,7 @@ const SignUpScreen = (props: Props) => {
 
                                     <div className="form-signup-logo">
                                         <img
-                                            src="https://firebasestorage.googleapis.com/v0/b/order-94f58.appspot.com/o/images%2FSHOP%20(1).png?alt=media&token=aa1fc61d-956d-4f7f-8f07-d07f7b50bb94"
+                                            src="https://firebasestorage.googleapis.com/v0/b/hieshop-df804.appspot.com/o/images%2Flogo.png?alt=media&token=9836e096-bfcf-46dd-b8a2-c5616bfa21ed"
                                             alt=""
                                         />
                                     </div>

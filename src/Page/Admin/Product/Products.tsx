@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Descriptions,  Space, Table } from "antd";
+import { Button, Descriptions, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import "./product.css";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,7 @@ const Products: React.FC = () => {
   const dispatch = useDispatch();
   const navigator = useNavigate();
   const products = useSelector((data: any) => data.products);
-  const productsValue = products?.value?.data;
+  const productsValue = products?.value;
 
   const categories = useSelector((data: any) => data.categories);
   const classifies = useSelector((data: any) => data.classifies);
@@ -45,8 +45,7 @@ const Products: React.FC = () => {
     status: false,
     data: undefined,
   });
-  const categoriesValue = categories?.value?.data;
-
+  const categoriesValue = categories?.value;
   const dataProducts = productsValue?.map((item: any) => {
     return { ...item, key: item?._id };
   });
@@ -154,7 +153,7 @@ const Products: React.FC = () => {
     {
       title: "Thao tác",
       key: "_id",
-      render: (_id, data:any) => (
+      render: (_id, data: any) => (
         <div
           style={{
             display: "flex",

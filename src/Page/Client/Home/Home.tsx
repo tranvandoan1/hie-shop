@@ -27,46 +27,60 @@ const Home = () => {
     { id: 4, name: 'rèm cửa', photo: 'https://mancuathaituan.com/wp-content/uploads/2019/10/rem-cua-quan-go-vap-dep-1.jpg' },
   ]
   return (
-    <div style={{background:'#fff'}}>
+    <div style={{ background: "#fff" }}>
       <Header />
-      <div className='body'>
-        <div className='slider'>
-          <Carousel afterChange={onChange} className='slide-image' autoplay
+      <div className="body">
+        <div className="slider">
+          <Carousel
+            afterChange={onChange}
+            className="slide-image"
+            autoplay
             ref={slider}
           >
             <div>
-              <img src="https://intphcm.com/data/upload/banner-thoi-trang-nam.jpg" alt="" />
+              <img
+                src="https://intphcm.com/data/upload/banner-thoi-trang-nam.jpg"
+                alt=""
+              />
             </div>
             <div>
-              <img src="https://intphcm.com/data/upload/banner-thoi-trang-nam-dep.jpg" alt="" />
+              <img
+                src="https://intphcm.com/data/upload/banner-thoi-trang-nam-dep.jpg"
+                alt=""
+              />
             </div>
             <div>
-              <img src="https://arena.fpt.edu.vn/wp-content/uploads/2022/10/banner-thoi-trang-la-mot-phan-khong-the-thieu-trong-truyen-thong-1.jpg" alt="" />
+              <img
+                src="https://arena.fpt.edu.vn/wp-content/uploads/2022/10/banner-thoi-trang-la-mot-phan-khong-the-thieu-trong-truyen-thong-1.jpg"
+                alt=""
+              />
             </div>
-
           </Carousel>
-         
-          <LeftOutlined className='slider-button_left' onClick={() => slider.current.prev()} />
 
-          <RightOutlined className='slider-button_right' onClick={() => slider.current.next()}
+          <LeftOutlined
+            className="slider-button_left"
+            onClick={() => slider.current.prev()}
           />
 
+          <RightOutlined
+            className="slider-button_right"
+            onClick={() => slider.current.next()}
+          />
         </div>
-        <div>
-
-          <div className='categori-title'>
+        {/* <div>
+          <div className="categori-title">
             <h4>Danh mục sản phẩm</h4>
           </div>
-          <div className='categori-list'>
+          <div className="categori-list">
             <Carousel1
               animationSpeed={1000}
               plugins={[
-                'infinite',
+                "infinite",
                 {
                   resolve: autoplayPlugin,
                   options: {
                     interval: 2000,
-                  }
+                  },
                 },
                 "arrows",
                 {
@@ -77,33 +91,36 @@ const Home = () => {
                 },
               ]}
             >
-              {
-                data.map((item: any) => {
-                  return (
-                    <Col xs={12} sm={8} md={6} lg={4} xl={4}>
-
-                      <div className='categoris'>
-                        <div className='categoris-logo'>
-                          <img src={item.photo} alt="" />
-                        </div>
-                        <span>{item.name}</span>
+              {data.map((item: any) => {
+                return (
+                  <Col xs={12} sm={8} md={6} lg={4} xl={4}>
+                    <div className="categoris">
+                      <div className="categoris-logo">
+                        <img src={item.photo} alt="" />
                       </div>
-                    </Col>
-                  )
-                })
-              }
+                      <span>{item.name}</span>
+                    </div>
+                  </Col>
+                );
+              })}
             </Carousel1>
-
           </div>
-
-
-        </div>
+        </div> */}
 
         <Product />
+
+        <div>
+          <div>
+            <div>
+              
+            </div>
+            <span>Sản phẩm luôn được bảo hành.</span>
+          </div>
+        </div>
       </div>
       <Footer />
     </div>
-  )
+  );
 }
 
 export default Home

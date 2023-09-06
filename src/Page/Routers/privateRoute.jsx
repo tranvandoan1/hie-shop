@@ -2,9 +2,10 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
-  const userLoca = JSON.parse(localStorage.getItem('user'))
-  console.log(userLoca,'userLoca')
-  if (userLoca==undefined) {
+  localStorage.removeItem('order')
+  
+  if (localStorage.getItem('data') == null) {
+
     return <Navigate to='/login' replace />
   }
   return children

@@ -12,33 +12,65 @@ import { auth, providerGoogle } from './../../../firebase/index';
 // @ts-ignore
 import { signinApi } from './../../../api/Users';
 import Loading from "../../../components/Loading";
+import SelectShop from "../../../components/SelectShop";
+import { useDispatch, useSelector } from "react-redux";
+// @ts-ignore
+import { getAllUser } from '../../../features/UserSlice'
 type Props = {};
 
 // @ts-ignore
 const Login = (props: Props) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState<boolean>(false);
+    const [showCodeShop, setShowCodeShop] = useState<{ status: boolean, data: any }>({ status: false, data: undefined });//check xem nếu mà đăng nhập với khách thì nhận mã cửa hàng
     // @ts-ignore
     const [timeClassName, setTimeClassName] = useState<boolean>(false)
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
-        setLoading(true)
         const { data } = await signinApi(values);
-        console.log(data, 'data')
         message.open({
             type: data.status == false ? 'error' : "success",
             duration: 2,
             content: data.message,
         });
-        data.status == true && localStorage.setItem("token", JSON.stringify(data.token));
-        data.status == true && localStorage.setItem("user", JSON.stringify(data.user));
-        data.status == true && navigator('/home')
-        setLoading(false)
+        data.status == false && setLoading(false)
+        if (data.user.role == 0) {
+            const jsonString = JSON.stringify({
+                token: data.token,
+                data: data.user
+            });
+            localStorage.setItem("data", btoa(unescape(encodeURIComponent(jsonString))));
+
+            navigator('/home')
+            setLoading(false)
+        } else {
+            setShowCodeShop({ status: true, data: data })
+
+        }
+
     };
     // @ts-ignore
     const onFinishFailed = (errorInfo) => {
     };
+
+    const sigin = (e: any) => {
+        const jsonString = JSON.stringify({
+            token: showCodeShop?.data?.token,
+            data: { ...showCodeShop?.data.user, code: e.code, shop: e.email }
+        });
+
+        localStorage.setItem("data", btoa(unescape(encodeURIComponent(jsonString))));
+        navigator('/home')
+    };
+
+    const dispatch = useDispatch()
+    const users = useSelector((data: any) => data.users.value).data
+    console.log(users, 'users')
+    const userRoleAdmin = users?.filter((item: any) => item.role == 0)
+    useEffect(() => {
+        dispatch(getAllUser())
+    }, [])
     // đăng nhập bằng google
     const loginGoogle = async () => {
         form.resetFields();
@@ -112,20 +144,22 @@ const Login = (props: Props) => {
                             />
                         </Form.Item>
                         <br />
-                        <Form.Item
-                            name="password"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Chưa nhập mật khẩu !",
-                                },
-                            ]}
-                        >
-                            <Input.Password
-                                placeholder="Mật khẩu"
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                            />
-                        </Form.Item>
+                        <div className="input-password">
+                            <Form.Item
+                                name="password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Chưa nhập mật khẩu !",
+                                    },
+                                ]}
+                            >
+                                <Input.Password
+                                    placeholder="Mật khẩu"
+                                    prefix={<LockOutlined className="site-form-item-icon" />}
+                                />
+                            </Form.Item>
+                        </div>
                         <div className="forgot-password" >
                             <span className="forgot-password-text" onClick={() => navigator('/forgot-password')}>Quên mật khẩu?</span>
                         </div>
@@ -161,6 +195,22 @@ const Login = (props: Props) => {
 
                 </div>
             </div>
+            {
+                showCodeShop.status == true &&
+
+                <SelectShop
+                    title="Cửa hàng"
+                    conent="Chọn cửa hàng bạn muốn vào"
+                    btnComfim={(e: any) => sigin(e)}
+                    btnReject={() => setShowCodeShop({ status: false, data: undefined })}
+                    isModalOpen={showCodeShop.status}
+                    cancelText="Hủy"
+                    okText="Chọn"
+                    code={showCodeShop.status}
+                    users={userRoleAdmin}
+                />
+            }
+
         </div>
     );
 };

@@ -1,0 +1,314 @@
+.form__header>.shopee-popup-form__title {
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    text-transform: capitalize;
+    color: rgb(238, 77, 45);
+}
+
+.form__header .title {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form__header .title h3 {
+    text-transform: capitalize;
+    font-size: 20px;
+    color: #ee4d2d;
+    font-weight: 600;
+}
+
+.form__header .title p {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form__header .button-comfim {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.shop_address {
+    position: relative;
+}
+
+.shopee-popup-form__header-comfim {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    visibility: visible;
+    opacity: 0;
+    z-index: 10000;
+    transform: scale(0, 0);
+    transition: ease-in 0.3s;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active-shopee-popup-form__header-comfim {
+    transform: scale(1, 1);
+    opacity: 1;
+    transition: ease-in 0.3s;
+    visibility: visible;
+}
+
+.phoneInput .react-tel-input {
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+.form__header .phone {
+    text-align: center;
+    color: #ee4d2d;
+    font-weight: 600;
+}
+
+.name-phone>.shop_name>input:focus,
+.name-phone>.shop_phone>input:focus,
+.shop_address>input:focus,
+.shop_specific-address>input:focus {
+    outline: none;
+}
+
+.city-district-ward {
+    position: absolute;
+    top: 45px;
+    width: 100%;
+    left: 0;
+    right: 0;
+    height: 300px;
+    overflow-y: auto;
+    background-color: #fff;
+    z-index: 1;
+    border: 1px solid rgb(220, 220, 220);
+}
+
+
+.city-district-ward::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+}
+
+.city-district-ward>.city-district-ward_header>ul {
+    display: flex;
+    border-bottom: 1px solid rgb(220, 220, 220);
+}
+.city-district-ward>.city-district-ward_header>ul li{
+    cursor: pointer;
+}
+.city-district-ward_header {
+    position: sticky;
+    top: 0px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #fff;
+    margin-top: -2px;
+}
+
+.city-district-ward ul>li {
+    flex: 1;
+    list-style: none;
+    position: relative;
+    padding: 10px;
+    text-align: center;
+}
+
+.active-city-district-ward {
+    cursor: pointer;
+    display: block;
+}
+
+.active-city-district-ward::before {
+    content: " ";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: -1px;
+    left: 0;
+    background-color: rgb(238, 77, 45);
+}
+
+.city-district-ward_show>ul>li {
+    display: none;
+}
+
+.city-district-ward_show .city-show>option {
+    padding: 10px;
+}
+
+.city-district-ward_show .city-show>option:hover {
+    color: rgb(238, 77, 45);
+}
+
+.active-city-district-ward_show {
+    display: block !important;
+    text-align: left !important;
+}
+
+.pay {
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+.pay-box {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.pay-box h4 {
+    color: #ee4d2d;
+    font-weight: 500;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.pay-logo {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.pay-logo img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pay-pro {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 3px;
+    padding: 20px;
+    display: flex;
+}
+
+.pay-pro-logo {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    overflow: hidden;
+}
+
+.pay-pro-logo img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pay-pro-info-title {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(193, 193, 193);
+    margin-bottom: 10px;
+    border-radius: 3px;
+    padding: 10px 20px;
+}
+
+.pay-pro-info {
+    width: 70%;
+}
+
+.pay-pro-info-item {
+    padding: 10px 20px;
+    background-color: #fff;
+}
+
+.pay-pro-sum-info3_s {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.pay-pro-sum {
+    padding: 10px 20px;
+    background-color: #fff;
+    margin-left: 10px;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+    border-radius: 4px;
+}
+
+.pay-pro-sum button {
+    background-color: #ee4d2d;
+    color: #fff;
+    width: 100%;
+    font-weight: 500;
+    height: 40px;
+    font-size: 18px;
+}
+
+.pay-pro-sum-info h4 {
+    text-align: center;
+}
+
+.pay-pro-quantity,
+.pay-pro-summ {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pay-pro-quantity span,
+.pay-pro-summ span {
+    font-weight: 500;
+}
+
+.pay-pro-quantity span:nth-child(2),
+.pay-pro-summ span:nth-child(2) {
+    color: #ee4d2d;
+    font-size: 18px;
+}
+
+.pay-pro-adress {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pay-pro-adress-title span:nth-child(1) {
+    font-size: 16px;
+    font-weight: 500;
+
+}
+
+.pay-pro-adress-title span:nth-child(2) {
+    color: blue;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.pay-pro-adress-title span:nth-child(2):hover {
+    text-decoration: underline;
+
+}
+
+.shopee-popup-form__footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-adress-icon-upload {
+    font-size: 17px;
+    color: red;
+    cursor: pointer;
+    text-align: right;
+    margin-top: 4px;
+}

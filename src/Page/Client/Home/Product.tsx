@@ -18,7 +18,7 @@ const Product = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const products = useSelector((data: any) => data.products);
-    const productsValue = products?.value?.data;
+    const productsValue = products?.value;
 
     const classifies = useSelector((data: any) => data.classifies);
     // @ts-ignore
@@ -80,7 +80,10 @@ const Product = () => {
                                 <img src={item.photo} alt="" />
                             </div>
                         </div>
-                        <span className={styles["product-sale"]}>-{item.sale}%</span>
+                        {
+                            item.sale > 0 &&
+                            <span className={styles["product-sale"]}>-{item.sale}%</span>
+                        }
                         <div className={styles["product-title"]}>
                             <span className={styles["product-name"]}>{item.name}</span>
                             <div className={styles["product-price"]}>
@@ -137,7 +140,10 @@ const Product = () => {
                             <img src={item.photo} alt="" />
                         </div>
                     </div>
-                    <span className={styles["product-sale"]}>-{item.sale}%</span>
+                    {
+                        item.sale > 0 &&
+                        <span className={styles["product-sale"]}>-{item.sale}%</span>
+                    }
                     <div className={styles["product-title"]}>
                         <span className={styles["product-name"]}>{item.name}</span>
                         <div className={styles["product-price"]}>

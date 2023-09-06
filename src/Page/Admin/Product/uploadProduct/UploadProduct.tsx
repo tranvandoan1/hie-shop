@@ -36,7 +36,7 @@ const UploadProduct: React.FC = ({ callBack, state, data }: Props) => {
   const categories = useSelector((data: any) => data.categories.value);
   const products = useSelector((data: any) => data.products);
   const classifies = useSelector((data: any) => data.classifies);
-  const productsValue = products?.value?.data?.find(
+  const productsValue = products?.value?.find(
     (item: any) => item?._id == id
   );
   useEffect(() => {
@@ -152,18 +152,18 @@ const UploadProduct: React.FC = ({ callBack, state, data }: Props) => {
         description:
           String(content).length <= 0 ? dataValue?.description : content,
         imageUrlAvatar: imageUrlAvatar,
-        trademark:
-          values.trademark == undefined
-            ? dataValue?.trademark
-            : values.trademark,
-        warehouse:
-          values.warehouse == undefined
-            ? dataValue?.warehouse
-            : values.warehouse,
-        sent_from:
-          values.sent_from == undefined
-            ? dataValue?.sent_from
-            : values.sent_from,
+        // trademark:
+        //   values.trademark == undefined
+        //     ? dataValue?.trademark
+        //     : values.trademark,
+        // warehouse:
+        //   values.warehouse == undefined
+        //     ? dataValue?.warehouse
+        //     : values.warehouse,
+        // sent_from:
+        //   values.sent_from == undefined
+        //     ? dataValue?.sent_from
+        //     : values.sent_from,
         sale: values.sale == undefined ? dataValue?.sale : values.sale,
         origin: values.origin == undefined ? dataValue?.origin : values.origin,
         name: values.name == undefined ? dataValue?.name : values.name,
@@ -348,7 +348,7 @@ const UploadProduct: React.FC = ({ callBack, state, data }: Props) => {
                 </Select>
               </Form.Item>
 
-              <Form.Item
+              {/* <Form.Item
                 label="Thương hiệu"
                 name="trademark"
                 labelAlign="left"
@@ -430,7 +430,7 @@ const UploadProduct: React.FC = ({ callBack, state, data }: Props) => {
                   <Select.Option value="Thường Tín">Thường Tín</Select.Option>
                   <Select.Option value="Hoàng Mai">Hoàng Mai</Select.Option>
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item
                 label="Mô tả"

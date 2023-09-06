@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { addProduct } from "./../../../../features/Products";
 import Loading from "../../../../components/Loading";
 import { useDispatch } from "react-redux";
+// @ts-ignore
+import { getDataUserLoca } from './../../../../app/getDataLoca';
 type Props = {
   callBack: (e: any) => void;
   dataValue: any;
@@ -30,8 +32,9 @@ type State = {
 // @ts-ignore
 const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
   const dispatch = useDispatch();
+  //lấy data user từ loca
   // @ts-ignore
-  const userLoca = JSON.parse(localStorage.getItem("user"));
+
   const navigator = useNavigate();
   const [state, setState] = useReducer(
     (state: State, newState: Partial<State>) => ({
@@ -539,10 +542,10 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
         })
       );
       const product = {
-        warehouse: dataValue.warehouse,
-        trademark: dataValue.trademark,
-        sent_from: dataValue.sent_from,
-        origin: dataValue.origin,
+        // warehouse: dataValue.warehouse,
+        // trademark: dataValue.trademark,
+        // sent_from: dataValue.sent_from,
+        // origin: dataValue.origin,
         name: dataValue.name,
         description: dataValue.description,
         cate_id: dataValue.cate_id,
@@ -550,7 +553,7 @@ const ProInfo = ({ callBack, dataValue, stateValue }: Props) => {
         name_commodityvalue: state?.nameClassify2,
         name_classification: state?.nameClassify1,
         sale: dataValue.sale,
-        user_id: userLoca._id,
+        code_shop: getDataUserLoca().code,
         valueClassify: JSON.stringify(state?.classifyValue2),
       };
       const formData = new FormData();

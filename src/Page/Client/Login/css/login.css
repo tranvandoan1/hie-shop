@@ -167,3 +167,7 @@
     font-size: 18px;
     margin-right: 20px;
 }
+.input-password .ant-input-password-icon{
+    color: #fff !important;
+    
+}

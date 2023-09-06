@@ -1,33 +1,41 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addCate, removeCate, uploadCate, getAllCate } from './../api/Categoris';
+import { getDataUserLoca } from "../app/getDataLoca";
 
+async function getAll() {
+  const { data: categories } = await getAllCate();
+  const dataCategories = categories?.data?.filter((item) => item?.code_shop == getDataUserLoca().code)
+  return dataCategories
+}
 export const getCategoriAll = createAsyncThunk(
   "categories/getCategoriAll",
   async () => {
-    const { data: categories } = await getAllCate();
-    return categories;
+    return getAll();
   }
 );
 
 export const uploadCategori = createAsyncThunk(
   "categories/uploadCategori",
   async (data) => {
-    const { data: categories } = await uploadCate(data);
-    return categories;
+    await uploadCate(data);
+    return getAll();
+
   }
 );
 export const addCategori = createAsyncThunk(
   "categories/addCategori",
   async (data) => {
-    const { data: categories } = await addCate(data);
-    return categories;
+    await addCate(data);
+    return getAll();
+
   }
 );
 export const removeCategori = createAsyncThunk(
   "categories/removeCategori",
   async (id) => {
-    const { data: categories } = await removeCate(id);
-    return categories;
+    await removeCate(id);
+    return getAll();
+
   }
 );
 

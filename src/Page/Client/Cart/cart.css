@@ -1,0 +1,113 @@
+.cart {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.cart .ant-table-cell {
+    text-align: center !important;
+}
+
+.cart .ant-table-tbody .ant-table-cell:nth-child(2) {
+    text-align: start !important;
+}
+
+.cart-list-title {
+    box-shadow: 0 0 5px rgb(174, 174, 174);
+    margin-top: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.cart-list-title span {
+    font-size: 1rem;
+    color: rgb(78, 78, 78);
+    font-weight: 400;
+    text-transform: capitalize;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    transition: .3s;
+    overflow: hidden;
+}
+
+.cart-list {
+    display: flex;
+    align-items: center;
+    /* box-shadow: 0 0 10px rgb(174, 174, 174); */
+    margin-top: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.cart-list-info {
+    width: 50%;
+
+}
+
+.cart-list-info span {
+    font-size: 1rem;
+    color: black;
+    text-transform: capitalize;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    transition: .3s;
+    overflow: hidden;
+}
+
+.cart-image {
+    position: relative;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+
+}
+
+.cart-image img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.cart-sum {
+    background-color: #fff;
+    box-shadow: 0 0 2px rgb(174, 174, 174);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    border-radius: 2px;
+}
+
+.cart-sum-title h4 {
+    display: inline-block;
+    margin-right: 20px;
+    color: #ee4d2d;
+}
+
+.cart-sum-title span {
+    font-size: 20px;
+    font-weight: 500;
+    color: #ee4d2d;
+}
+
+.cart-sum button {
+    background-color: #ee4d2d;
+    color: #fff;
+    font-size: 18px;
+    height: 50px;
+}
+
+.cart-sum button:hover {
+    color: #fff !important;
+
+}

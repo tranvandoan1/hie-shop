@@ -52,11 +52,11 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
       const newData = {
         description: content,
         imageUrlAvatar: imageUrlAvatar,
-        trademark: dataValue?.trademark == undefined ? values.trademark : dataValue?.trademark,
-        warehouse: dataValue?.warehouse == undefined ? values.warehouse : dataValue?.warehouse,
-        sent_from: dataValue?.sent_from == undefined ? values.sent_from : dataValue?.sent_from,
+        // trademark: dataValue?.trademark == undefined ? values.trademark : dataValue?.trademark,
+        // warehouse: dataValue?.warehouse == undefined ? values.warehouse : dataValue?.warehouse,
+        // sent_from: dataValue?.sent_from == undefined ? values.sent_from : dataValue?.sent_from,
         sale: dataValue?.sale == undefined ? values.sale : dataValue?.sale,
-        origin: dataValue?.origin == undefined ? values.origin : dataValue?.origin,
+        // origin: dataValue?.origin == undefined ? values.origin : dataValue?.origin,
         name: dataValue?.name == undefined ? values.name : dataValue?.name,
         cate_id: dataValue?.cate_id == undefined ? values.cate_id : dataValue?.cate_id,
       }
@@ -212,14 +212,14 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                 >
                   <Select
                     placeholder="Chọn danh mục"
-                    defaultValue={categories?.data?.find((item: any) => item._id == dataValue?.cate_id)?._id}
+                    defaultValue={categories?.find((item: any) => item._id == dataValue?.cate_id)?._id}
                   >
-                    {categories?.data?.map((item: any) => (
+                    {categories?.map((item: any) => (
                       <Select.Option key={item} value={item._id}>{item.name}</Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
-
+{/* 
                 <Form.Item
                   label="Thương hiệu"
                   name="trademark"
@@ -287,7 +287,7 @@ const AddProduct: React.FC = ({ callBack, state, data }) => {
                     <Select.Option value="Thường Tín">Thường Tín</Select.Option>
                     <Select.Option value="Hoàng Mai">Hoàng Mai</Select.Option>
                   </Select>
-                </Form.Item>
+                </Form.Item> */}
 
 
                 <Form.Item

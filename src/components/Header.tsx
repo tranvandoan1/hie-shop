@@ -1,4 +1,5 @@
 import styles from "../css/Home/home.module.css";
+import "../css/Home/home.css";
 // @ts-ignore
 import React, { useEffect, useMemo, useState } from "react";
 import { Input, Badge, Drawer, Popover } from "antd";
@@ -7,29 +8,81 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     LoginOutlined,
+    SearchOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 // @ts-ignore
 import { Size } from "./../assets/size";
-import { FaUsersCog } from 'react-icons/fa'
+import { FaUsersCog } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+// @ts-ignore
+import { getAllUsers } from "./../features/UserSlice";
+// @ts-ignore
+import { getSaveOrderAll } from "./../features/SaveOrderSlice.js";
+import Comfim from "./Comfim";
+// @ts-ignore
+import { getDataUserLoca } from "./../app/getDataLoca";
+// @ts-ignore
 const { Search } = Input;
 const Header: React.FC = () => {
     const navigator = useNavigate();
+    const dispatch = useDispatch();
     const sizeWindonw = Size();
     const [statusMenu, setStatusMenu] = useState(false);
-    const onSearch = (value: any) => console.log(value);
+    const [comfimLogOut, setComfimLogOut] = useState(false);
     // @ts-ignore
-    const userLoca = JSON.parse(localStorage.getItem("user"));
+    const onSearch = (value: any) => console.log(value);
+
+    // @ts-ignore
+    const users = useSelector((data: any) => data.users.value);
+    const user = users?.data?.find(
+        (item: any) => item._id == getDataUserLoca()?._id
+    );
+    const saveorders = useSelector((data: any) => data.saveorders.value);
+    const newDataSaveOrder = saveorders
+        ?.slice()
+        .reverse()
+        .filter((item: any, index: any) => index < 4);
+   
+
+    const [avtiveMenu, setActiveMenu] = useState(
+        localStorage.getItem("value")
+    );
     const logout = () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+        localStorage.removeItem("data");
         localStorage.removeItem("key");
         navigator("/login");
     };
+    useEffect(() => {
+        dispatch(getAllUsers());
+        dispatch(getSaveOrderAll());
+    }, []);
     const content = (
         <div>
             <div
-                onClick={() => logout()}
+                onClick={() => {
+                    localStorage.removeItem("key");
+                    localStorage.setItem("key", JSON.stringify(["1"]));
+                    navigator(
+                        getDataUserLoca()?.role == 0
+                            ? "/admin/dashboard"
+                            : "/manage/info-user"
+                    );
+                }}
+                style={{
+                    cursor: "pointer",
+                    fontSize: 16,
+                    padding: `0px 10px 10px 10px`,
+                }}
+            >
+                <span style={{ fontSize: 18, marginRight: 10 }}>
+                    <FaUsersCog />
+                </span>
+                <span>Quản lý</span>
+            </div>
+
+            <div
+                onClick={() => setComfimLogOut(true)}
                 style={{
                     cursor: "pointer",
                     fontSize: 16,
@@ -41,29 +94,68 @@ const Header: React.FC = () => {
                 <LoginOutlined />
                 <span style={{ marginLeft: 10 }}>Đăng xuất</span>
             </div>
-            <div
-                onClick={() => {
-                    localStorage.removeItem("key");
-                    localStorage.setItem("key", JSON.stringify(["1"]));
-                    navigator("/admin/dashboard")
-                }}
-                style={{ cursor: "pointer", fontSize: 16, padding: "10px 10px 0 10px" }}
-            >
-                <span style={{ fontSize: 18, marginRight: 10 }}>
+        </div>
+    );
 
-                    <FaUsersCog />
-                </span>
-                <span>Quản lý</span>
-            </div>
+    const renderSaveOrder = (
+        <div style={{ width: 300, cursor: "pointer" }}>
+            {newDataSaveOrder?.map((item: any, index: number) => {
+                return (
+                    <div className="saveorder">
+                        <div
+                            style={{
+                                marginTop: 10,
+                                padding: "10px 5px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <span className="name-pro-order">{item?.name_pro}</span>
+                            <span style={{ color: "red", fontWeight: "500" }}>
+                                {item?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ
+                            </span>
+                        </div>
+                        <div
+                            style={{
+                                padding: "0 5px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <span className="name-pro-order">
+                                {item?.classification} ({item?.amount})
+                            </span>
+                            <span style={{ color: "red", fontWeight: "500" }}>
+                                {item?.commodity_value}
+                            </span>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 
     const renderUserCart = () => (
         <div className={styles.iconleft}>
-            <Badge count={5}>
-                <ShoppingCartOutlined className={styles.icon} />
-            </Badge>
-            {userLoca == undefined ? (
+            <div className="icon-search-cart" onClick={() => navigator("/cart")}>
+                <SearchOutlined
+                    style={{ fontSize: 25, cursor: "pointer", marginRight: 10 }}
+                />
+                <Popover
+                    content={renderSaveOrder}
+                    title={
+                        saveorders?.length > 0 ? "Sản phẩm đã thêm" : "Chưa có sản phẩm"
+                    }
+                >
+                    <Badge count={saveorders?.length}>
+                        <ShoppingCartOutlined className={styles.icon} />
+                    </Badge>
+                </Popover>
+            </div>
+
+            {user == undefined ? (
                 <span
                     className={styles["btn-login"]}
                     onClick={() => navigator("/login")}
@@ -72,23 +164,77 @@ const Header: React.FC = () => {
                 </span>
             ) : (
                 <Popover content={content}>
-                    <span className={styles["btn-login"]}>{userLoca.name}</span>
+                    <span className={styles["btn-login"]}>{user?.name}</span>
                 </Popover>
             )}
         </div>
     );
-
     return (
         <div className={styles.header}>
             <div className="header-content" id="navbar">
                 <div className={"logo"} onClick={() => navigator("/")}>
-                    <img
-                        src="https://firebasestorage.googleapis.com/v0/b/hieshop-df804.appspot.com/o/images%2Flogo.png?alt=media&token=9836e096-bfcf-46dd-b8a2-c5616bfa21ed"
-                        alt=""
-                    />
+                    {user?.logo == undefined ? (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                height: "100%",
+                                alignItems: "center",
+                                width: "100%",
+                                color: "red",
+                                fontWeight: "600",
+                            }}
+                        >
+                            Chưa có logo
+                        </div>
+                    ) : (
+                        <img src={user?.role == 1 ? user?.avatar : user?.logo} alt="" />
+                    )}
                 </div>
-                <div className="header-input">
+                {/* <div className="header-input">
                     <Search placeholder="Tìm kiếm..." onSearch={onSearch} />
+                </div> */}
+                <div className="header-menu">
+                    <span
+                        onClick={() => {
+                            navigator("/home");
+                            setActiveMenu("home");
+                            localStorage.setItem('value', 'home')
+                        }}
+                        style={{
+                            borderBottom:
+                                avtiveMenu == "home" ? "3px solid #e74c3c" : "0",
+                        }}
+                    >
+                        Home
+                    </span>
+                    <span
+                        style={{
+                            borderBottom:
+                                avtiveMenu == "products" ? "3px solid #e74c3c" : "0",
+                        }}
+                        onClick={() => {
+                            navigator("/products");
+                            setActiveMenu("products");
+                            localStorage.setItem('value', 'products')
+                        }}
+                    >
+                        Sản phẩm
+                    </span>
+                    <span
+                        style={{
+                            borderBottom:
+                                avtiveMenu == "contact" ? "3px solid #e74c3c" : "0",
+                        }}
+                        onClick={() => {
+                            navigator("/contact");
+                            setActiveMenu("contact");
+                            localStorage.setItem('value', 'contact')
+                        }}
+                    >
+                        Liên hệ
+                    </span>
                 </div>
 
                 {sizeWindonw?.width <= 480 ? (
@@ -115,6 +261,15 @@ const Header: React.FC = () => {
             >
                 {renderUserCart()}
             </Drawer>
+            <Comfim
+                title="Đăng xuất"
+                conent="Bạn có muốn đăng xuất không ?"
+                okText="Đăng xuất"
+                cancelText="Không"
+                btnComfim={() => logout()}
+                btnReject={() => setComfimLogOut(false)}
+                isModalOpen={comfimLogOut}
+            />
         </div>
     );
 };

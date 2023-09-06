@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@ant-design/icons": "^5.2.5",
     "@brainhubeu/react-carousel": "^2.0.4",
     "@ckeditor/ckeditor5-build-classic": "^39.0.1",

@@ -114,7 +114,7 @@
 .product-briefing-prices {
     color: #ee4d2d;
     font-size: 23px;
-    margin-left: 30px;
+    /* margin-left: 30px; */
     font-weight: 600;
 }
 
@@ -244,7 +244,7 @@
 
 .button-quantity .button-quantity-input .ant-btn {
     height: 38px;
-    width: 50px;
+    width:40px;
     display: flex;
     justify-content: center;
     align-items: center;

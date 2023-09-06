@@ -5,7 +5,7 @@ import Header from "../../../components/Header";
 import "@brainhubeu/react-carousel/lib/style.css";
 import "./css/detail.css";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { Button, Col, Input, Rate, Row } from "antd";
+import { Button, Col, Input, Rate, Row, message } from "antd";
 import { BsCartPlus } from "react-icons/bs";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import Footer from "../../../components/Footer";
@@ -18,6 +18,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductAll } from "../../../features/Products";
 // @ts-ignore
 import { getAllClassifies } from "./../../../features/Classifies";
+// @ts-ignore
+import {
+  addSaveOrder,
+  uploadSaveOrder,
+  // @ts-ignore
+} from "./../../../features/SaveOrderSlice.js";
+// @ts-ignore
+import { getSaveOrderAll } from "./../../../features/SaveOrderSlice";
+// @ts-ignore
+import { getDataUserLoca } from '../../../app/getDataLoca'
 type Props = {};
 // @ts-ignore
 type State = {
@@ -111,6 +121,8 @@ const data = [
 ];
 // @ts-ignore
 const DetailIndex = (props: Props) => {
+  // @ts-ignore
+  const userLoca: any = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
@@ -128,19 +140,30 @@ const DetailIndex = (props: Props) => {
 
   const products = useSelector((data: any) => data.products);
   const classifies = useSelector((data: any) => data.classifies);
-
-  const productsValue = products?.value?.data;
+  const saveorders = useSelector((data: any) => data.saveorders.value);
+  // lấy sản phẩm được chọn
+  const productsValue = products?.value;
   const productDetail = productsValue?.find((item: any) => item._id == id);
-
   const newProClassifies: any = classifies?.value?.filter(
     (item: any) => item.linked == productDetail?.linked
   );
 
+  // kiểm tra xem có phân loại 2 không
+  const condition =
+    productDetail?.name_commodityvalue == undefined ||
+    productDetail?.name_commodityvalue == null ||
+    String(productDetail?.name_commodityvalue).length <= 0;
+
+  // lọc giá trị phân loại
   const dataPrice: any = [];
   newProClassifies?.map((item: any) => {
-    item.values.map((itemValue: any) => {
-      dataPrice?.push(itemValue.price);
-    });
+    if (condition) {
+      dataPrice?.push(item.price);
+    } else {
+      item.values.map((itemValue: any) => {
+        dataPrice?.push(itemValue.price);
+      });
+    }
   });
   const minPrice = Math.min.apply(Math, dataPrice);
   const maxPrice = Math.max.apply(Math, dataPrice);
@@ -148,6 +171,7 @@ const DetailIndex = (props: Props) => {
   useEffect(() => {
     dispatch(getProductAll());
     dispatch(getAllClassifies());
+    dispatch(getSaveOrderAll());
   }, []);
   // @ts-ignore
   const onchange = (value: any) => { };
@@ -157,14 +181,14 @@ const DetailIndex = (props: Props) => {
 
   const classifieSelect1 = (item: any) => {
     if (selectClassifies?.data1?._id == item._id) {
-      setSelectClassifies({ data1: undefined, data2: selectClassifies.data2 });
+      setSelectClassifies({ data1: undefined, data2: undefined });
     } else {
       setSelectClassifies({ data1: item, data2: undefined });
     }
   };
 
   const classifieSelect2 = (item: any) => {
-    if (selectClassifies?.data2?.id == item.id) {
+    if (selectClassifies?.data2?._id == (item._id || item.id)) {
       setSelectClassifies({ data2: undefined, data1: selectClassifies.data1 });
     } else {
       setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
@@ -186,7 +210,76 @@ const DetailIndex = (props: Props) => {
       setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
     }
   };
-  console.log(selectClassifies?.data1?.photo, "selectClassifies");
+
+  const selectValuePro = (pro: any) => {
+    setQuantityValue(
+      pro == "reduce"
+        ? quantityValue == 1
+          ? 1
+          : quantityValue - 1
+        : quantityValue + 1
+    );
+  };
+
+  const saveOrder = async () => {
+    if (
+      condition
+        ? selectClassifies?.data1 == undefined
+        : selectClassifies?.data1 == undefined &&
+        selectClassifies?.data2 == undefined
+    ) {
+      message.warning("Chưa chọn phân loại !");
+    } else {
+
+      const dk = productDetail?.name_commodityvalue == null || productDetail?.name_commodityvalue == undefined || String(productDetail?.name_commodityvalue).length <= 0
+
+      const checkDataSaveOrder = saveorders?.find(
+        (item: any) =>
+          dk ?
+            item.classification == selectClassifies?.data1?.name &&
+            item.user_id == getDataUserLoca()._id &&
+            item.code_shop == getDataUserLoca().code &&
+            item.pro_id == productDetail?._id
+            :
+            item.classification == selectClassifies?.data1?.name &&
+            item.commodity_value == selectClassifies?.data2?.name &&
+            item.user_id == getDataUserLoca()._id &&
+            item.code_shop == getDataUserLoca().code &&
+            item.pro_id == productDetail?._id
+      );
+      if (checkDataSaveOrder == undefined) {
+        const newData = {
+          code_shop: productDetail.code_shop,
+          pro_id: productDetail?._id,
+          sale: productDetail?.sale,
+          photo: selectClassifies?.data1?.photo,
+          name_pro: productDetail?.name,
+          price:
+            selectClassifies?.data2 == undefined
+              ? selectClassifies?.data1?.price
+              : selectClassifies?.data2?.price,
+          classification: selectClassifies?.data1?.name,
+          commodity_value:
+            selectClassifies?.data2 == undefined
+              ? ""
+              : selectClassifies?.data2?.name,
+          amount: quantityValue,
+          user_id: getDataUserLoca()._id,
+        };
+        console.log(newData, 'newData')
+        await dispatch(addSaveOrder(newData));
+        setSelectClassifies({ data2: undefined, data1: undefined });
+        setQuantityValue(1)
+        message.success("Thêm thành công");
+      } else {
+        await dispatch(uploadSaveOrder({ _id: checkDataSaveOrder._id, amount: quantityValue + checkDataSaveOrder.amount }));
+        setQuantityValue(1)
+        setSelectClassifies({ data2: undefined, data1: undefined });
+        message.success("Sửa thành công");
+      }
+    }
+  };
+
   return (
     <div className="detail">
       <Header />
@@ -197,7 +290,7 @@ const DetailIndex = (props: Props) => {
               <img
                 src={
                   selectClassifies?.data1 == undefined
-                    ? valueImage.photo
+                    ? productDetail?.photo
                     : selectClassifies?.data1?.photo
                 }
                 alt=""
@@ -233,34 +326,68 @@ const DetailIndex = (props: Props) => {
 
             <div className="product-briefing-price">
               {productDetail?.sale > 0 && (
-                <div className="product-price_sale">
-                  <span className="product-briefing-price_sale">
-                    đ{" "}
-                    {minPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-                  </span>
-                  -
-                  <span className="product-briefing-price_sale">
-                    đ{" "}
-                    {maxPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-                  </span>
+                <div className="product-price_sale" style={{ marginRight: 30 }}>
+                  {selectClassifies?.data1 !== undefined ? (
+                    <span className="product-briefing-price_sale">
+                      đ{" "}
+                      {(condition
+                        ? selectClassifies?.data1?.price
+                        : selectClassifies?.data2?.price == undefined
+                          ? minPrice
+                          : selectClassifies?.data2?.price
+                      )
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                    </span>
+                  ) : (
+                    <React.Fragment>
+                      <span className="product-briefing-price_sale">
+                        đ{" "}
+                        {minPrice
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                      </span>
+                      -
+                      <span className="product-briefing-price_sale">
+                        đ{" "}
+                        {maxPrice
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                      </span>
+                    </React.Fragment>
+                  )}
                 </div>
               )}
               <div className="product-briefing-price-sale">
-                {productDetail?.sale > 0 ? (
-                  <span className="product-briefing-prices">
-                    đ{" "}
-                    {Math.ceil(minPrice * ((100 - productDetail?.sale) / 100))
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
-                    - đ{" "}
-                    {Math.ceil(maxPrice * ((100 - productDetail?.sale) / 100))
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-                  </span>
+                {selectClassifies?.data1 == undefined ? (
+                  <React.Fragment>
+                    <span className="product-briefing-prices">
+                      đ{" "}
+                      {Math.ceil(minPrice * ((100 - productDetail?.sale) / 100))
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+                      - đ{" "}
+                      {Math.ceil(maxPrice * ((100 - productDetail?.sale) / 100))
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                    </span>
+                  </React.Fragment>
                 ) : (
-                  <span className="product-briefing-prices">
-                    đ {minPrice} - đ {maxPrice}
-                  </span>
+                  <React.Fragment>
+                    <span className="product-briefing-prices">
+                      đ{" "}
+                      {Math.ceil(
+                        (condition
+                          ? selectClassifies?.data1?.price
+                          : selectClassifies?.data2 == undefined
+                            ? minPrice
+                            : selectClassifies?.data2?.price) *
+                        ((100 - productDetail?.sale) / 100)
+                      )
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+                    </span>
+                  </React.Fragment>
                 )}
 
                 {productDetail?.sale > 0 && (
@@ -297,7 +424,7 @@ const DetailIndex = (props: Props) => {
                   </div>
                 </div>
               </div>
-              {productDetail?.name_commodityvalue !== undefined && (
+              {condition ? null : (
                 <div className="product-briefing-classify">
                   <div className="classify2">
                     <span>{productDetail?.name_commodityvalue}</span>
@@ -307,14 +434,14 @@ const DetailIndex = (props: Props) => {
                         : selectClassifies?.data1?.values
                       )?.map((item: any) => (
                         <span
-                          className={`value-classify2 ${selectClassifies?.data2?.name == item.name &&
-                            "value-classify2-active"
+                          className={`value-classify2 ${selectClassifies?.data2?.name ==
+                            (item.name || item) && "value-classify2-active"
                             }`}
                           onClick={() => {
                             classifieSelect2(item);
                           }}
                         >
-                          {item.name}
+                          {item.name || item}
                           {selectClassifies?.data2?.name == item.name && (
                             <span className="_v">
                               <i className="fas fa-check"></i>
@@ -331,29 +458,26 @@ const DetailIndex = (props: Props) => {
                 <span>Số lượng</span>
                 <div className="button-quantity">
                   <div className="button-quantity-input">
-                    <Button>
+                    <Button onClick={() => selectValuePro("reduce")}>
                       <MinusOutlined />
                     </Button>
-                    <Input defaultValue={quantityValue} />
-                    <Button>
+                    <Input value={quantityValue} />
+                    <Button onClick={() => selectValuePro("increase")}>
                       <PlusOutlined />
                     </Button>
                   </div>
-                  {(productDetail?.name_commodityvalue == undefined
+                  {(condition
                     ? selectClassifies?.data1
                     : selectClassifies?.data2) !== undefined && (
                       <div className="button-quantity_pro">
-                        <span>
-                          {selectClassifies?.data2?.quantity}
-                          sản phẩm
-                        </span>
+                        <span>{selectClassifies?.data2?.quantity} sản phẩm</span>
                       </div>
                     )}
                 </div>
               </div>
 
               <div className="button-add">
-                <button className="button-add-pro">
+                <button className="button-add-pro" onClick={() => saveOrder()}>
                   <BsCartPlus /> <span>Thêm sản phẩm</span>
                 </button>
                 <button
@@ -370,7 +494,7 @@ const DetailIndex = (props: Props) => {
         <div className="detail-pro-info">
           <div className="detail-pro-info_left">
             <div className="detail-pro-info_left_1">
-              <h4>chi tiết sản phẩm</h4>
+              {/* <h4>chi tiết sản phẩm</h4>
               <div className="detail-pro-info-cate">
                 <span>danh mục</span>
                 <span>quần áo đẹp</span>
@@ -382,7 +506,7 @@ const DetailIndex = (props: Props) => {
               <div className="detail-pro-info-sent-from">
                 <span>Gửi từ</span>
                 <span>Hà nội</span>
-              </div>
+              </div> */}
 
               <h4>mô tả sản phẩm</h4>
               <div className="product-description">

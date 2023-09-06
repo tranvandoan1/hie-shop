@@ -118,12 +118,12 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    color: red;
+    color: #fff;
     font-weight: 600;
-    font-size: 1.3rem;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 100%;
+    font-size: .8rem;
+    background-color: rgb(255, 87, 87);
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 .product-name {

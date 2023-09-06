@@ -1,0 +1,11 @@
+.info-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-user-name,.info-user-email,.info-user-phone {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    margin-bottom: 20px;
+}

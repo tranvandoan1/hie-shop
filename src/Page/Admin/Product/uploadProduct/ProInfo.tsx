@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { addProduct, uploadProduct } from "./../../../../features/Products";
 import Loading from "../../../../components/Loading";
 import { useDispatch } from "react-redux";
+// @ts-ignore
+import { getDataUserLoca } from './../../../../app/getDataLoca';
 type Props = {
   callBack: (e: any) => void;
   dataValue: any;
@@ -86,7 +88,7 @@ const ProInfo = ({
         (product?.name_commodityvalue == undefined || product?.name_commodityvalue == null) ? false : true,
     }
   );
-  console.log(product?.name_commodityvalue, 'product?.name_commodityvalue')
+
   const addNameValue1 = (values: any) => {
     setState({ classifyValue1: values });
   };
@@ -526,10 +528,10 @@ const ProInfo = ({
       state?.classifyValue.map((item) => item.file !== undefined && dataImage.push(item.file));
 
       const newProduct = {
-        warehouse: dataValue.warehouse,
-        trademark: dataValue.trademark,
-        sent_from: dataValue.sent_from,
-        origin: dataValue.origin,
+        // warehouse: dataValue.warehouse,
+        // trademark: dataValue.trademark,
+        // sent_from: dataValue.sent_from,
+        // origin: dataValue.origin,
         name: dataValue.name,
         description: dataValue.description,
         cate_id: dataValue.cate_id,
@@ -537,11 +539,10 @@ const ProInfo = ({
         name_commodityvalue: state?.comfimShowClassifyValue == false ? undefined : state?.nameClassify2,
         name_classification: state?.nameClassify1,
         sale: dataValue.sale,
-        user_id: userLoca._id,
+        code_shop: getDataUserLoca().code,
         valueClassify: JSON.stringify(state?.classifyValue2),
         file: dataValue.imageUrlAvatar
       };
-      console.log(newProduct, 'newProduct')
       const formData = new FormData();
       // @ts-ignore
       formData.append(

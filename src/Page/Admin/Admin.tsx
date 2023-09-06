@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  InfoCircleOutlined,
   LoginOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  RollbackOutlined,
   SettingOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -13,6 +15,11 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./css/admin.css";
 import { FaProductHunt } from "react-icons/fa";
 import Comfim from "../../components/Comfim";
+import { useDispatch, useSelector } from "react-redux";
+// @ts-ignore
+import { getAllUsers, uploadUser } from '../../features/UserSlice'
+// @ts-ignore
+import { getDataUserLoca } from './../../app/getDataLoca';
 const { Header, Sider, Content } = Layout;
 
 const Admin: React.FC = () => {
@@ -25,11 +32,18 @@ const Admin: React.FC = () => {
   // @ts-ignore
   const key = JSON.parse(localStorage.getItem("key"));
   // @ts-ignore
-  const userLoca = JSON.parse(localStorage.getItem('user'))
+  const dispatch = useDispatch()
+  // @ts-ignore
+
+  const users = useSelector((data: any) => data.users.value)
+  console.log(users,'users12312123')
+  const user = users?.data?.find((item: any) => item._id == getDataUserLoca()._id)
+  useEffect(() => {
+    dispatch(getAllUsers())
+  }, [])
   const logout = () => {
-    
-    localStorage.removeItem('user')
-    localStorage.removeItem('token')
+
+    localStorage.removeItem('data')
     localStorage.removeItem('key')
     navigator('/login')
   }
@@ -52,7 +66,7 @@ const Admin: React.FC = () => {
             }}
           >
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/hieshop-df804.appspot.com/o/images%2Flogo.png?alt=media&token=9836e096-bfcf-46dd-b8a2-c5616bfa21ed"
+              src={user?.logo}
               alt=""
             />
           </div>
@@ -100,7 +114,7 @@ const Admin: React.FC = () => {
               key: "4",
               icon: <ShoppingCartOutlined />,
               label: "Đơn hàng",
-              itemIcon: <NavLink to="cart" />,
+              itemIcon: <NavLink to="order" />,
               style: { color: "black" },
               onClick: () => {
                 localStorage.removeItem("key");
@@ -120,24 +134,35 @@ const Admin: React.FC = () => {
             },
             {
               key: "6",
-              icon: <SettingOutlined />,
+              icon: <InfoCircleOutlined />,
+              label: "Thông tin",
+              itemIcon: <NavLink to="info" />,
+              style: { color: "black" },
+              onClick: () => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["6"]));
+              },
+            },
+            {
+              key: "7",
+              icon: <RollbackOutlined />,
               label: "Quay lại",
               itemIcon: <NavLink to="/home" />,
               style: { color: "black" },
               onClick: () => {
                 localStorage.removeItem("key");
-                localStorage.setItem("key", JSON.stringify(["5"]));
+                localStorage.setItem("key", JSON.stringify(["7"]));
               },
             },
             {
               key: "7",
               icon: <LoginOutlined />,
               label: "Đăng xuất",
-              itemIcon:null,
+              itemIcon: null,
               style: { color: "black" },
               onClick: () => {
                 setLogouComfim(true)
-              
+
               },
             },
           ]}
@@ -165,8 +190,8 @@ const Admin: React.FC = () => {
               // color: "#fff",
             }}
           />
-          <div style={{ paddingRight: 30 }}>
-            <Avatar size={34} src={userLoca.avatar}
+          <div style={{ paddingRight: 30, display: 'flex', alignItems: 'center' }}>
+            <Avatar size={34} src={user?.avatar}
             />
             <span
               style={{
@@ -176,7 +201,7 @@ const Admin: React.FC = () => {
                 marginLeft: 10,
               }}
             >
-              {userLoca.name}
+              {user?.name}
             </span>
           </div>
         </Header>
@@ -186,7 +211,7 @@ const Admin: React.FC = () => {
             padding: 24,
             height: 280,
             background: colorBgContainer,
-            overflow:'auto'
+            overflow: 'auto'
           }}
         >
           <Outlet />
@@ -197,8 +222,8 @@ const Admin: React.FC = () => {
         conent="Bạn có muốn đăng xuất không ?"
         okText="Đăng xuất"
         cancelText="Không"
-        btnComfim={()=>logout()}
-        btnReject={()=>setLogouComfim(false)}
+        btnComfim={() => logout()}
+        btnReject={() => setLogouComfim(false)}
         isModalOpen={logoutComfim}
       />
     </Layout>

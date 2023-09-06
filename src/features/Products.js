@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addPro, getAllPro, getPro, removePro, removesPro, uploadPro } from './../api/ProAPI';
+import { getDataUserLoca } from "../app/getDataLoca";
 
-// async function getAll() {
-//   const { data: products } = await ProAPI.getAll();
-//   const user = JSON.parse(localStorage.getItem("user"));
-//   const dataProducts = products?.filter((item) =>item.user_id == user._id)
-//   return dataProducts;
-// }
+async function getAll() {
+  const { data: products } = await getAllPro();
+
+  const dataProducts = products?.data?.filter((item) => item.code_shop == getDataUserLoca().code)
+  return dataProducts
+}
 export const getProduct = createAsyncThunk(
   "products/getProduct",
   async (id) => {
@@ -17,37 +18,40 @@ export const getProduct = createAsyncThunk(
 export const getProductAll = createAsyncThunk(
   "products/getProductAll",
   async () => {
-    const { data: products } = await getAllPro();
-    return products;
+    return getAll();
   }
 );
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (data) => {
-    const { data: products } = await addPro(data);
-    return products;
+    await addPro(data);
+    return getAll();
+
   }
 );
 export const uploadProduct = createAsyncThunk(
   "products/uploadProduct",
   async (data) => {
-    const { data: products } = await uploadPro(data);
-    return products;
+    await uploadPro(data);
+    return getAll();
+
   }
 );
 export const removeProduct = createAsyncThunk(
   "products/removeProduct",
   async (data) => {
-    console.log(data,'3ewfrfddata')
-    const { data: products } = await removePro(data);
-    return products;
+    console.log(data, '3ewfrfddata')
+    await removePro(data);
+    return getAll();
+
   }
 );
 export const removeProducts = createAsyncThunk(
   "products/removeProducts",
   async (dataId) => {
-    const { data: products } = await removesPro(dataId);
-    return products;
+    await removesPro(dataId);
+    return getAll();
+
   }
 );
 const productSlice = createSlice({
