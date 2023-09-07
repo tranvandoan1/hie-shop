@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // @ts-ignore
-import OrderAPI, { add } from "../API/Orders";
+import OrderAPI, { add } from "../api/Orders";
 import { getDataUserLoca } from "../app/getDataLoca";
 async function getAll() {
     const { data: orders } = await OrderAPI.getAll();
