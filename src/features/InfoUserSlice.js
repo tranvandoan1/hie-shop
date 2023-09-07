@@ -3,7 +3,6 @@ import InfoUserAPI, { add, removeAdress, updateInfoAdress, upload } from "../api
 import { getDataUserLoca } from "../app/getDataLoca";
 async function getAll() {
   const { data: info_user } = await InfoUserAPI.getAll();
-console.log(info_user,'info_user')
   const dataProducts = info_user?.data?.filter((item) => item.user_id == getDataUserLoca()._id)
   return dataProducts;
 }

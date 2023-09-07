@@ -21,10 +21,10 @@ import { getAllUser } from '../../../features/UserSlice'
 // @ts-ignore
 const Login = () => {
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [showCodeShop, setShowCodeShop] = useState<{ status: boolean, data }>({ status: false, data: undefined });//check xem nếu mà đăng nhập với khách thì nhận mã cửa hàng
+    const [loading, setLoading] = useState(false);
+    const [showCodeShop, setShowCodeShop] = useState({ status: false, data: undefined });//check xem nếu mà đăng nhập với khách thì nhận mã cửa hàng
     // @ts-ignore
-    const [timeClassName, setTimeClassName] = useState<boolean>(false)
+    const [timeClassName, setTimeClassName] = useState(false)
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
