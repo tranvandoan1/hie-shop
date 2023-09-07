@@ -1,5 +1,5 @@
 // @ts-ignore
-import { axiosClient, axiosClientMultipart } from "./API";
+import { axiosClient} from "./API";
 
 
 const SaveOrderAPI = {
