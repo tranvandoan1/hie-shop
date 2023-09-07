@@ -6,7 +6,6 @@ import SaveOrderAPI, {
   upload,
   uploadSaveOrders,
   uploadSaveoderCart,
-  // @ts-ignore
 } from "../API/SaveOrder";
 import { getDataUserLoca } from "../app/getDataLoca";
 async function getAll() {

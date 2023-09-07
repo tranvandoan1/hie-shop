@@ -1,0 +1,737 @@
+import {
+  CloseCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import { Button, Input, Select, Spin, Table, Upload, message } from "antd";
+import { startTransition, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+// @ts-ignore
+import { addProduct, uploadProduct } from "../../../../features/Products";
+import Loading from "../../../../components/Loading";
+import { useDispatch } from "react-redux";
+// @ts-ignore
+import { getDataUserLoca } from '../../../../app/getDataLoca';
+
+// @ts-ignore
+const ProInfo = ({
+  callBack,
+  dataValue,
+  stateValue,
+  newClassifies,
+  product,
+}) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
+  // @ts-ignore
+  const userLoca = JSON.parse(localStorage.getItem("user"));
+  const navigator = useNavigate();
+  const [state, setState] = useReducer(
+    (state, newState) => ({
+      ...state,
+      ...newState,
+    }),
+    {
+      nameClassify1:
+        stateValue?.nameClassify1 == undefined
+          ? undefined
+          : stateValue?.nameClassify1, //tên pl1
+      nameClassify2:
+        stateValue?.nameClassify2 == undefined
+          ? undefined
+          : stateValue?.nameClassify2, //tên pl2
+
+      classifyValue1:
+        stateValue?.classifyValue1 == undefined ||
+          stateValue?.classifyValue1?.length <= 0
+          ? []
+          : stateValue?.classifyValue1, //gía trị phân loại 1
+      classifyValue2:
+        stateValue?.classifyValue2 == undefined ||
+          stateValue?.classifyValue2?.length <= 0
+          ? []
+          : stateValue?.classifyValue2, //giá trị phân loại 2
+
+      classifyValue:
+        stateValue?.classifyValue == undefined ||
+          stateValue?.classifyValue?.length <= 0
+          ? []
+          : stateValue?.classifyValue, //dữ liệu hoàn tất
+
+      selectImage:
+        stateValue?.selectImage == undefined
+          ? undefined
+          : stateValue?.selectImage, //chọn ảnh cho từng phân loại
+
+      loading: false,
+
+      comfimShowClassifyValue:
+        (product?.name_commodityvalue == undefined || product?.name_commodityvalue == null) ? false : true,
+    }
+  );
+
+  const addNameValue1 = (values) => {
+    setState({ classifyValue1: values });
+  };
+
+  const addNameValue2 = (values) => {
+    const newData = [];
+    values.map((item) =>
+      newData.push({
+        name: item,
+        _id: Math.random(),
+        quantity: 0,
+        price: 0,
+        status: false,
+      })
+    );
+    setState({ classifyValue2: values });
+  };
+  // thêm ảnh phân loại
+  const UploadAvatatr = (file) => {
+    // setState({ loading: true });
+
+    const src = URL.createObjectURL(file);
+    const newData = [];
+    state?.classifyValue?.map((item) => {
+      if (item._id == state?.selectImage._id) {
+        newData.push({ ...item, url: src, file: file });
+      } else {
+        newData.push({ ...item, url: item.url, file: item.file });
+      }
+    });
+    setState({ classifyValue: newData, loading: false });
+  };
+  // giá trị phân loại 1
+  const changeValue1 = (value) => {
+    if (state?.classifyValue?.length > 0) {
+      const valueDuplicate = state?.classifyValue?.find(
+        (item) => item.name == value
+      );
+      const newValue = state?.classifyValue?.find(
+        (item) => item.name !== value
+      );
+
+      const newClassify2 = [];
+
+      state?.classifyValue2?.map((item) => {
+        newClassify2.push({
+          name: item,
+          _id: Math.random(),
+          quantity: 0,
+          price: 0,
+          status: false,
+        });
+      });
+      if (valueDuplicate == undefined) {
+        const newNameClassify1 = [
+          ...state?.classifyValue,
+          {
+            name: value,
+            _id: Math.random(),
+            quantity: 0,
+            price: 0,
+            values: newClassify2,
+            status: false,
+          },
+        ];
+        setState({ classifyValue: newNameClassify1 });
+      } else {
+        message.warning("Tên đã được dùng !");
+        const newNameClassify1 = [
+          ...newValue,
+          {
+            name: value,
+            _id: Math.random(),
+            quantity: 0,
+            price: 0,
+            values:
+              state?.classifyValue2?.length > 0 ? state?.classifyValue2 : [],
+            status: false,
+          },
+        ];
+        setState({ classifyValue: newNameClassify1 });
+      }
+    } else {
+      const newNameClassify1 = [
+        {
+          name: value,
+          _id: Math.random(),
+          quantity: 0,
+          price: 0,
+          values: [],
+          status: false,
+        },
+      ];
+      setState({ classifyValue: newNameClassify1 });
+    }
+  };
+
+  // giá trị phân loại 2
+  const changeValue2 = (value) => {
+    const checkDuplicateName = (data, name) => {
+      return data.some((item) =>
+        item.values.some((value) => value.name == name)
+      );
+    };
+    if (checkDuplicateName(state?.classifyValue, value) == true) {
+      message.warning("Tên đã được dùng !");
+    } else {
+      const newData = [];
+
+      state?.classifyValue.map((item) => {
+        newData.push({
+          ...item,
+          values: [
+            ...item.values,
+            {
+              name: value,
+              _id: Math.random(),
+              quantity: 0,
+              price: 0,
+              status: false,
+            },
+          ],
+        });
+      });
+      setState({ classifyValue: newData });
+    }
+  };
+
+  // thêm giá tền với số lượng đối với tường hợp có giá trị phân loại 2
+  const saveValue = (e) => {
+    const newData = [];
+    e.data.values?.map((item) => {
+      if (item.name == e.item.name) {
+        if (e.select == "price") {
+          newData.push({
+            ...item,
+            price: e.value,
+          });
+        } else {
+          newData.push({
+            ...item,
+            quantity: e.value,
+          });
+        }
+      } else {
+        newData.push(item);
+      }
+    });
+    for (let i = 0; i < state?.classifyValue.length; i++) {
+      // @ts-ignore
+      if (state.classifyValue[i]._id == e.data._id) {
+        // @ts-ignore
+        state.classifyValue[i].values = newData;
+      }
+    }
+    setState({ classifyValue: state?.classifyValue });
+  };
+  // thay đổi giá tiền với trường hợp không có giá trị phân loại 2
+  const saveNoValue = (item) => {
+    for (let i = 0; i < state?.classifyValue.length; i++) {
+      // @ts-ignore
+      if (state.classifyValue[i]._id == item.data._id) {
+        item.select == "price"
+          ? // @ts-ignore
+          (state.classifyValue[i].price = item.value)
+          : // @ts-ignore
+          (state.classifyValue[i].quantity = item.value);
+      }
+    }
+    setState({ classifyValue: state?.classifyValue });
+  };
+
+  // loại bỏ giá trị phân loại của phân loại nếu không muốn có
+  const rejectValue = (e) => {
+    const newDataValue = [];
+    e.data.values?.map((item) => {
+      if (item.name == e.item.name) {
+        newDataValue.push({
+          ...item,
+          status: e.status,
+        });
+      } else {
+        newDataValue.push(item);
+      }
+    });
+    const newData = [];
+    state?.classifyValue?.map((item) => {
+      if (item._id == e.data._id) {
+        newData.push({
+          ...item,
+          values: newDataValue,
+        });
+      } else {
+        newData.push(item);
+      }
+    });
+    setState({ classifyValue: newData });
+  };
+  // xóa tên phân loại1
+  const removeValue1 = (e) => {
+    const newData = state?.classifyValue?.filter(
+      (item) => item.name !== e
+    );
+
+    setState({
+      classifyValue: newData,
+    });
+  };
+  // xóa tên phân loại2
+  const removeValue2 = (e) => {
+    const newData = [];
+    state?.classifyValue?.map((item) => {
+      const newValue = item.values?.filter(
+        (itemValue) => itemValue.name !== e
+      );
+      newData.push({ ...item, values: newValue });
+    });
+
+    setState({
+      classifyValue: newData,
+    });
+  };
+  // loại bỏ phân loại 2
+  const removeClass2 = () => {
+    setState({
+      comfimShowClassifyValue: !state?.comfimShowClassifyValue,
+    });
+
+  };
+  const columns = [
+    {
+      title: "Tên giá trị",
+      dataIndex: "name",
+      key: "name",
+      width: "40%",
+      // @ts-ignore
+      render: (name, data) => {
+        return (
+          <div className="pro-data">
+            <span
+              style={{
+                fontSize: data?.values?.length > 0 ? 18 : 16,
+                color: "red",
+                fontWeight: "600",
+                textTransform: "capitalize",
+              }}
+            >
+              {name}
+            </span>
+            {data?.values?.length > 0 &&
+              state?.comfimShowClassifyValue == true && (
+                <div className="pro-data-values">
+                  {data?.values?.map((item, index) => {
+                    return (
+                      <span
+                        style={{
+                          marginTop: index == 0 ? 0 : 20,
+                          textDecoration:
+                            item.status == true ? "line-through" : "none",
+                          opacity: item.status == true ? 0.3 : 1,
+                        }}
+                      >
+                        {item.name}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+            <div></div>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "id",
+      key: "id",
+      // @ts-ignore
+      render: (id, data) => {
+        return (
+          <div>
+            {data?.values?.length > 0 &&
+              state?.comfimShowClassifyValue == true ? (
+              data?.values?.map((item, index) => {
+                return (
+                  <div style={{ marginTop: index == 0 ? 0 : 10 }}>
+                    <Input
+                      disabled={item.status}
+                      onChange={(e) =>
+                        startTransition(() => {
+                          saveValue({
+                            value: e.target.value,
+                            data: data,
+                            item: item,
+                            select: "price",
+                          });
+                        })
+                      }
+                      defaultValue={item?.price == 0 ? "" : item.price}
+                      placeholder="Giá tiền"
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <Input
+                onChange={(e) =>
+                  startTransition(() => {
+                    saveNoValue({
+                      value: e.target.value,
+                      data: data,
+                      select: "price",
+                    });
+                  })
+                }
+                defaultValue={data?.price == 0 ? "" : data.price}
+                placeholder="Giá tiền"
+              />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "id",
+      key: "id",
+      // @ts-ignore
+      render: (id, data) => (
+        <div>
+          {data?.values?.length > 0 &&
+            state?.comfimShowClassifyValue == true ? (
+            data?.values?.map((item, index) => {
+              return (
+                <div style={{ marginTop: index == 0 ? 0 : 10 }}>
+                  <Input
+                    disabled={item.status}
+                    onChange={(e) =>
+                      startTransition(() => {
+                        saveValue({
+                          value: e.target.value,
+                          data: data,
+                          item: item,
+                          select: "quantity",
+                        });
+                      })
+                    }
+                    defaultValue={item?.quantity == 0 ? "" : item.quantity}
+                    placeholder="Số lượng"
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <Input
+              onChange={(e) =>
+                startTransition(() => {
+                  saveNoValue({
+                    value: e.target.value,
+                    data: data,
+                    select: "quantity",
+                  });
+                })
+              }
+              defaultValue={data?.quantity == 0 ? "" : data.quantity}
+              placeholder="Số lượng"
+            />
+          )}
+        </div>
+      ),
+    },
+  ];
+  (state?.nameClassify2 !== undefined || state?.nameClassify2?.length > 0) &&
+    state?.comfimShowClassifyValue == true &&
+    columns.push({
+      title: "Trạng thái",
+      dataIndex: "id",
+      key: "id",
+      // @ts-ignore
+      render: (id, data) => (
+        <div>
+          {data?.values?.length > 0 ? (
+            data?.values?.map((item, index) => {
+              return (
+                <div
+                  style={{
+                    marginTop: index == 0 ? 0 : 13,
+                    cursor: "pointer",
+                    fontSize: 18,
+                  }}
+                >
+                  {item.status == false ? (
+                    <EyeOutlined
+                      onClick={() =>
+                        rejectValue({ item: item, data: data, status: true })
+                      }
+                    />
+                  ) : (
+                    <EyeInvisibleOutlined
+                      onClick={() =>
+                        rejectValue({ item: item, data: data, status: false })
+                      }
+                    />
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <EyeOutlined />
+          )}
+        </div>
+      ),
+    });
+
+
+  // thêm sản phẩm
+  const save = async () => {
+    const newDataImage = state?.classifyValue?.filter(
+      (item) => item.file !== undefined || item.photo !== undefined
+    );
+    if (newDataImage?.length < state?.classifyValue?.length) {
+      message.warning("Chưa nhập hết ảnh phân loại !");
+    } else {
+      setState({ loading: true });
+      const newData = [];
+      state?.classifyValue?.map((item) => {
+        const data = item.values.filter(
+          (itemValue) => itemValue.status !== true
+        );
+        newData.push({
+          ...item,
+          values: state?.comfimShowClassifyValue == false ? [] : data,
+        });
+      });
+      const dataImage = [dataValue.imageUrlAvatar.file];
+      // @ts-ignore
+      state?.classifyValue.map((item) => item.file !== undefined && dataImage.push(item.file));
+
+      const newProduct = {
+        // warehouse: dataValue.warehouse,
+        // trademark: dataValue.trademark,
+        // sent_from: dataValue.sent_from,
+        // origin: dataValue.origin,
+        name: dataValue.name,
+        description: dataValue.description,
+        cate_id: dataValue.cate_id,
+        linked: product.linked,
+        name_commodityvalue: state?.comfimShowClassifyValue == false ? undefined : state?.nameClassify2,
+        name_classification: state?.nameClassify1,
+        sale: dataValue.sale,
+        code_shop: getDataUserLoca().code,
+        valueClassify: JSON.stringify(state?.classifyValue2),
+        file: dataValue.imageUrlAvatar
+      };
+      const formData = new FormData();
+      // @ts-ignore
+      formData.append(
+        "data",
+        JSON.stringify({ newProduct: newProduct, newClassifies: newData, product: product, classifies: newClassifies })
+      );
+      for (let i = 0; i < dataImage.length; i++) {
+        formData.append("files", dataImage[i]);
+      }
+      await dispatch(uploadProduct(formData));
+      navigator("/admin/products");
+      setState({ loading: false });
+    };
+  };
+  return (
+    <div>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          marginBottom: 49,
+        }}
+      >
+        <span style={{ width: "10%" }} className="pro-pl2">
+          Phân loại 2
+        </span>
+        <Button
+          style={{
+            marginTop: 10,
+            background: state?.comfimShowClassifyValue == true ? "red" : "blue",
+            color: "#fff",
+            fontWeight: "500",
+          }}
+          onClick={() => removeClass2()}
+        >
+          {state?.comfimShowClassifyValue == true
+            ? "Hủy phân loại 2"
+            : "Thêm phân loại 2"}
+        </Button>
+      </div>
+      {state?.loading == true && <Loading />}
+
+      <div className="pro-info-add">
+        <div className="name-classify" style={{ width: "100%" }}>
+          <div className="name-classify1" style={{ width: "100%" }}>
+            <span>Tên phân loại 1</span>
+            <Input
+              onChange={(e) =>
+                startTransition(() =>
+                  setState({ nameClassify1: e.target.value })
+                )
+              }
+              defaultValue={state?.nameClassify1}
+              placeholder="Tên phân loại 1"
+            />
+          </div>
+          <br />
+          <div className="classify-value1" style={{ width: "100%" }}>
+            <span>Giá trị phân loại 1</span>
+            <Select
+              mode="tags"
+              size={"middle"}
+              placeholder="Giá trị phân loại 1"
+              defaultValue={state?.classifyValue1}
+              // onChange={changeValue1}
+              style={{
+                width: "100%",
+              }}
+              onDeselect={(e) => removeValue1(e)}
+              onSelect={(e) => changeValue1(e)}
+              onChange={addNameValue1}
+            />
+          </div>
+        </div>
+        {state?.comfimShowClassifyValue == true && (
+          <div
+            className="classify-value"
+            style={{
+              width: state?.comfimShowClassifyValue == true ? "100%" : "48%",
+            }}
+          >
+            <div className="name-classify2" style={{ width: "100%" }}>
+              <span>Tên phân loại 2</span>
+
+              <Input
+                onChange={(e) =>
+                  setState({ nameClassify2: e.target.value })
+                }
+                defaultValue={state?.nameClassify2}
+                placeholder="Tên phân loại 2"
+              />
+            </div>
+            <br />
+            <div className="classify-value2" style={{ width: "100%" }}>
+              <span>Giá trị phân loại 2</span>
+              <Select
+                mode="tags"
+                size={"middle"}
+                placeholder="Giá trị phân loại 2"
+                defaultValue={state?.classifyValue2}
+                onDeselect={(e) => removeValue2(e)}
+                onSelect={(e) => changeValue2(e)}
+                onChange={addNameValue2}
+                style={{
+                  width: "100%",
+                }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {state?.classifyValue?.length > 0 && (
+        <div style={{ marginTop: 40 }}>
+          <Table
+            columns={columns}
+            dataSource={state?.classifyValue}
+            pagination={false}
+          />
+        </div>
+      )}
+
+      <br />
+      <br />
+      {state?.classifyValue?.length > 0 && (
+        <div className="add-pro-avatar">
+          <span>Chọn ảnh cho phân loại</span>
+          <div className="select-image">
+            {state?.classifyValue?.map((item) => {
+              return (
+                <div className="avatar">
+                  <Upload
+                    listType="picture-card"
+                    showUploadList={false}
+                    beforeUpload={UploadAvatatr}
+                    className="add-pro-avatar"
+                    // @ts-ignore
+                    onClick={() => setState({ selectImage: item })}
+                  >
+                    {(item.file == undefined ? item.photo : item.file) ? (
+                      <div className="add-pro-box-image">
+                        <img
+                          src={item.url || item.photo}
+                          className="add-pro-image"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          marginTop: 8,
+                        }}
+                      >
+                        {state?.loading == true ? (
+                          <Spin />
+                        ) : (
+                          <PlusCircleOutlined
+                            style={{
+                              fontSize: 30,
+                              opacity: 0.8,
+                              color: "#ee4d2d",
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </Upload>
+                  {item.file !== undefined && (
+                    <div
+                      className={"close"}
+                    // onClick={() => (
+                    //   // setImageUrlAvatar({ url: undefined, file: undefined, status: false })
+                    //   // // callBack({
+                    //   // //   data: { ...state?.dataBasicInfo, photo: "" },
+                    //   // //   check: 1,
+                    //   // // })
+                    // )}
+                    >
+                      <CloseCircleOutlined style={{ fontSize: 17 }} />
+                    </div>
+                  )}
+                </div>
+
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="btn">
+        <Button type="primary" danger onClick={() => callBack({ state: state, dataValue: dataValue })}>
+          Quay lại
+        </Button>
+        <Button
+          style={{ margin: "0 10px" }}
+          onClick={() => navigator("/admin/products")}
+        >
+          Hủy
+        </Button>
+        <Button type="primary" onClick={() => save()}>
+          Hoàn tất
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default ProInfo;
