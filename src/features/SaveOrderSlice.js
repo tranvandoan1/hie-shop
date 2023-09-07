@@ -6,7 +6,7 @@ import SaveOrderAPI, {
   upload,
   uploadSaveOrders,
   uploadSaveoderCart,
-} from "../API/SaveOrder.js";
+} from "../api/SaveOrder.js";
 import { getDataUserLoca } from "../app/getDataLoca";
 async function getAll() {
   const { data: saveorders } = await SaveOrderAPI.getAll();

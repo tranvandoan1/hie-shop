@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { add, removeAdress, updateInfoAdress, upload } from "../API/InFoUser";
-import InfoUserAPI from "./../API/InFoUser";
+import InfoUserAPI, { add, removeAdress, updateInfoAdress, upload } from "../api/InFoUser";
 import { getDataUserLoca } from "../app/getDataLoca";
 async function getAll() {
   const { data: info_user } = await InfoUserAPI.getAll();
