@@ -28,6 +28,7 @@ import {
 import { getSaveOrderAll } from "../../../features/SaveOrderSlice.js";
 // @ts-ignore
 import { getDataUserLoca } from '../../../app/getDataLoca.js'
+import { getAllComment } from "../../../features/CommentSlice.js";
 
 const image = [
   {
@@ -115,8 +116,6 @@ const data = [
 ];
 // @ts-ignore
 const DetailIndex = () => {
-  // @ts-ignore
-  const userLoca = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
@@ -135,6 +134,10 @@ const DetailIndex = () => {
   const products = useSelector((data) => data.products);
   const classifies = useSelector((data) => data.classifies);
   const saveorders = useSelector((data) => data.saveorders.value);
+  const comments = useSelector((data) => data.comments.value);
+  const users = useSelector((data) => data.users.value).data
+  console.log(users, 'users')
+
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
   const productDetail = productsValue?.find((item) => item._id == id);
@@ -166,13 +169,12 @@ const DetailIndex = () => {
     dispatch(getProductAll());
     dispatch(getAllClassifies());
     dispatch(getSaveOrderAll());
+    dispatch(getAllComment());
   }, []);
-  // @ts-ignore
-  const onchange = (value) => { };
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
-
+  console.log(selectClassifies, 'ưqds')
   const classifieSelect1 = (item) => {
     if (selectClassifies?.data1?._id == item._id) {
       setSelectClassifies({ data1: undefined, data2: undefined });
@@ -203,6 +205,7 @@ const DetailIndex = () => {
     } else {
       setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
     }
+    console.log(item, '2ewds')
   };
 
   const selectValuePro = (pro) => {
@@ -260,7 +263,6 @@ const DetailIndex = () => {
           amount: quantityValue,
           user_id: getDataUserLoca()._id,
         };
-        console.log(newData, 'newData')
         await dispatch(addSaveOrder(newData));
         setSelectClassifies({ data2: undefined, data1: undefined });
         setQuantityValue(1)
@@ -284,8 +286,8 @@ const DetailIndex = () => {
               <img
                 src={
                   selectClassifies?.data1 == undefined
-                    ? productDetail?.photo
-                    : selectClassifies?.data1?.photo
+                    ? selectHoverImage == undefined ? productDetail?.photo : selectHoverImage
+                    : selectHoverImage == undefined ? selectClassifies?.data1?.photo : selectHoverImage
                 }
                 alt=""
               />
@@ -514,7 +516,7 @@ const DetailIndex = () => {
                 </span>
               </div>
             </div>
-            <Comment />
+            <Comment comments={comments} users={users}/>
             <br />
             <div className="product-other">
               <h5>sản phẩm khác của shop</h5>

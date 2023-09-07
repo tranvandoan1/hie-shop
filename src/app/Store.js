@@ -7,7 +7,7 @@ import saveOrderSlice from "../features/SaveOrderSlice";
 // import shopOwnersSlice from "./../reducers/ShopOwner";
 // import cateshopeeSlice from "../reducers/CateShop";
 // import dataAddProSlice from "./../reducers/DataAddProSlice";
-// import commentSlice from "../reducers/CommentSlice";
+import commentSlice from "../features/CommentSlice";
 // import checkOutSlice from "../reducers/CheckOutSlice";
 import infoUserSlice from "../features/InfoUserSlice";
 import classifieSlice from "../features/Classifies";
@@ -25,7 +25,7 @@ export const store = configureStore({
     // shopowners: shopOwnersSlice,
     // cateshops: cateshopeeSlice,
     // dataaddpro: dataAddProSlice,
-    // comments: commentSlice,
+    comments: commentSlice,
     // checkOut: checkOutSlice,
     infoUsers: infoUserSlice,
     classifies:classifieSlice,

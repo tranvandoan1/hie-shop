@@ -1,13 +1,22 @@
 import "./css/comment.css";
-import { Avatar, Input, Pagination } from 'antd';
+import { Avatar, Button, Input, Pagination } from 'antd';
 import { CameraOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import EditComment from "../../../components/EditComment";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addComment } from "../../../features/Classifies";
+import { addComments } from "../../../features/CommentSlice";
+import { getDataUserLoca } from "../../../app/getDataLoca";
+import { useParams } from "react-router-dom";
 const { TextArea } = Input;
 
 // @ts-ignore
-const Comment = () => {
+const Comment = ({ comments,users }) => {
+    console.log(comments, 'comments')
+    const dispatch = useDispatch()
+    const { id } = useParams()
     const [isModalOpenEditComment, setIsModalOpenEditComment] = useState(false);
+    const [valueComment, setValueComment] = useState();
     function getTimeAgo(commentTime) {
         // Lấy thời gian hiện tại
         const now = new Date();
@@ -37,6 +46,18 @@ const Comment = () => {
     const timeAgo = getTimeAgo(commentTime);
     console.log(timeAgo, 'aewqdsa'); // Kết quả: "2 ngày trước"
 
+    const saveComment = async () => {
+        // console.log(valueComment,'3ewds')
+        const newComment = {
+            comment: valueComment,
+            user_id: getDataUserLoca()._id,
+            code_shop: getDataUserLoca().code,
+            pro_id: id
+        }
+        // console.log(newComment,'2eweds')
+        await dispatch(addComments(newComment))
+    }
+
     return (
         <div className='comment'>
             <h4>đánh giá sản phẩm</h4>
@@ -50,80 +71,67 @@ const Comment = () => {
                     <div className='comment-avatar'>
                         <Avatar size={100} src='https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png' />
                     </div>
-                    <TextArea rows={4} placeholder='Hãy để lại đáng giá của bạn' />
-                    <CameraOutlined className='comment-upload-image' />
+                    <TextArea rows={4} placeholder='Hãy để lại đáng giá của bạn' onChange={(e) => setValueComment(e.target.value)} />
+                    {/* <label htmlFor="image-comment" id="image-comment"> 
+                        <input type="file" name="" id="image-comment"  />
+                    </label> */}
+                    <CameraOutlined className='comment-upload-image' id="image-comment" />
                 </div>
-
-
+                <br></br>
+                <Button onClick={() => saveComment()}>Bình luận</Button>
                 <div className='comment-user'>
                     <h5>đánh giá của khách hàng</h5>
 
                 </div>
-                <div className='list-comment-user'>
-                    <div className='list-comment-user-title'>
-                        <div>
-                            <Avatar size={35} src='https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png' style={{ marginRight: 10 }} />
-                            <span>tranvandoan</span>-<span>{timeAgo}</span>
-                        </div>
-                        <div>
-                            <EditOutlined className='list-comment-user-edit' onClick={() => setIsModalOpenEditComment(true)} />
-                            <DeleteOutlined className='list-comment-user-delete' />
-                        </div>
-                    </div>
-                    <div style={{ padding: 10 }}>
-                        <div className='show-comment-user'>
-                            ádasdaslkdadladlk
-                        </div>
 
-                        <div className='image-comment'>
-                            <div>
-                                <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                            </div>
-                            <div>
-                                <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                            </div>
-                            <div>
-                                <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                            </div>
-                        </div>
-                        <div className='image-comment-view'>
-                            <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                        </div>
-                    </div>
-                </div>
+                {
+                    comments?.map(item => {
+                        return (
+                            <div className='list-comment-user'>
+                                <div className='list-comment-user-title'>
+                                    <div>
+                                        <Avatar size={35} src='https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png' style={{ marginRight: 10 }} />
+                                        <span>{
+                                            users?.map(itemUser=>{
+                                                if(item.user_id==itemUser._id){
+                                                    return(
+                                                        itemUser.name
+                                                    )
+                                                }
+                                            })
+                                            
+                                            }</span>-<span>{timeAgo}</span>
+                                    </div>
+                                    <div>
+                                        <EditOutlined className='list-comment-user-edit' />
+                                        <DeleteOutlined className='list-comment-user-delete' />
+                                    </div>
+                                </div>
+                                <div style={{ padding: 10 }}>
+                                    <div className='show-comment-user'>
+                                        {item.comment}
+                                    </div>
 
-                <div className='list-comment-user'>
-                    <div className='list-comment-user-title'>
-                        <div>
-                            <Avatar size={35} src='https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png' style={{ marginRight: 10 }} />
-                            <span>tranvandoan</span>-<span>{timeAgo}</span>
-                        </div>
-                        <div>
-                            <EditOutlined className='list-comment-user-edit' />
-                            <DeleteOutlined className='list-comment-user-delete' />
-                        </div>
-                    </div>
-                    <div style={{ padding: 10 }}>
-                        <div className='show-comment-user'>
-                            ádasdaslkdadladlk
-                        </div>
+                                    <div className='image-comment'>
+                                        <div>
+                                            <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
+                                        </div>
+                                        <div>
+                                            <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
+                                        </div>
+                                        <div>
+                                            <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
+                                        </div>
+                                    </div>
+                                    <div className='image-comment-view'>
+                                        <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
 
-                        <div className='image-comment'>
-                            <div>
-                                <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                            </div>
-                            <div>
-                                <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                            </div>
-                            <div>
-                                <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                            </div>
-                        </div>
-                        <div className='image-comment-view'>
-                            <img src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" alt="" />
-                        </div>
-                    </div>
-                </div>
                 <div className='comment-pagination'>
                     <Pagination defaultCurrent={1} total={50} />
                 </div>

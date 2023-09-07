@@ -68,7 +68,6 @@ const Login = () => {
 
     const dispatch = useDispatch()
     const users = useSelector((data) => data.users.value).data
-    console.log(users, 'users')
     const userRoleAdmin = users?.filter((item) => item.role == 0)
     useEffect(() => {
         dispatch(getAllUser())
