@@ -17,7 +17,7 @@ import { getDataUserLoca } from "../../../app/getDataLoca";
 // @ts-ignore
 const Categories = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
     const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
     const [isModalOpenUpload, setIsModalOpenUpload] = useState({
         status: false,

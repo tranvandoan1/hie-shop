@@ -28,6 +28,7 @@ const Login = () => {
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
+        setLoading(true)
         const { data } = await signinApi(values);
         message.open({
             type: data.status == false ? 'error' : "success",
@@ -46,6 +47,7 @@ const Login = () => {
             setLoading(false)
         } else {
             setShowCodeShop({ status: true, data: data })
+            setLoading(false)
 
         }
 

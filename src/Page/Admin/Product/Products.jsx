@@ -35,7 +35,7 @@ const Products = () => {
     status: false,
     data: undefined,
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [comfimDelete, setComfimDelete] = useState({
     status: false,
     data: undefined,

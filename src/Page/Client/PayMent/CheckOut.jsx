@@ -30,7 +30,7 @@ const CheckOut = () => {
     const dataAdressUser = infoUsers?.find((item) => item.status == true);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState < boolean > (false);
+    const [loading, setLoading] = useState(false);
 
     // @ts-ignore
     const dataOrderLoca = JSON.parse(localStorage.getItem("order"));

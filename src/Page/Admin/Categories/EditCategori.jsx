@@ -13,9 +13,9 @@ const EditCategori = ({ isModalOpen, callBack }) => {
   });
   const [form] = Form.useForm();
   // @ts-ignore
-  const [loading, setLoading] = useState < boolean > false;
+  const [loading, setLoading] = useState(false);
   // @ts-ignore
-  const [name, setName] = useState < string > isModalOpen?.data?.name;
+  const [name, setName] = useState(isModalOpen?.data?.name);
   useEffect(() => {
     form.resetFields();
 

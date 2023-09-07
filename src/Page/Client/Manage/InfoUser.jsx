@@ -22,7 +22,7 @@ const InfoUser = () => {
 
     const user = users?.data?.find((item) => item._id == getDataUserLoca()?._id)
     console.log(users, 'us123123ers21')
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
     const [imageUrlAvatar, setImageUrlAvatar] = useState(
         { url: user?.avatar, file: undefined }
     );

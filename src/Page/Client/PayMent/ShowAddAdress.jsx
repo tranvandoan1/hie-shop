@@ -44,9 +44,9 @@ const ShowAddAddress = ({ isModalOpen, setIsModalOpen, infoUsers }) => {
     status: false,
     _id: undefined,
   }); //xóa địa chỉ
-  const [addAdress, setAddAdress] = useState<boolean>(false); //thêm địa chỉ
+  const [addAdress, setAddAdress] = useState(false); //thêm địa chỉ
 
-  const [loading, setLoading] = useState<boolean>(false); //thêm địa chỉ
+  const [loading, setLoading] = useState(false); //thêm địa chỉ
   console.log(city, district, "uploadAdress");
 
   const [showAddAddress, setShowAddAddress] = useState(false);

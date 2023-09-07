@@ -124,7 +124,7 @@ const DetailIndex = () => {
   const [valueImage, setValueImage] = useState(image[0]);
   // @ts-ignore
   const [quantityValue, setQuantityValue] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const [selectHoverImage, setSelectHoverImage] = useState();
   const [selectClassifies, setSelectClassifies] = useState({

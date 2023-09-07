@@ -24,8 +24,8 @@ const { Header, Sider, Content } = Layout;
 
 const Admin = () => {
   const navigator = useNavigate()
-  const [collapsed, setCollapsed] = useState<boolean>(false);
-  const [logoutComfim, setLogouComfim] = useState<boolean>(false)
+  const [collapsed, setCollapsed] = useState(false);
+  const [logoutComfim, setLogouComfim] = useState(false)
   const {
     token: { colorBgContainer },
   } = theme.useToken();

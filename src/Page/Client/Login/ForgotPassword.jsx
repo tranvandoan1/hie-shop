@@ -16,10 +16,10 @@ import OtpEmailSiginUp from "../../../components/OtpEmailSiginUp";
 // @ts-ignore
 const ForgotPassword = () => {
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
     const [comfimOtp, setComfimOtp] = useState({ status: false, otp: '', value: '' });
     // @ts-ignore
-    const [timeClassName, setTimeClassName] = useState<boolean>(false)
+    const [timeClassName, setTimeClassName] = useState(false)
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
