@@ -38,7 +38,7 @@ import Loading from "../../../components/Loading";
 const SignUpScreen = () => {
     let navigator = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [comfimAmin, setComfimAmin] = useState<{ status: boolean, data }>({ status: false, data: undefined });//đăng ký với google thì sẽ hiện comfim hỏi có đăng ký bán hàng không
+    const [comfimAmin, setComfimAmin] = useState({ status: false, data: undefined });//đăng ký với google thì sẽ hiện comfim hỏi có đăng ký bán hàng không
 
     const [OtpEmailSiginUpStatus, setOtpEmailSiginUpStatus] = useState({ status: false, otp: null });
     const [imageUrlAvatar, setImageUrlAvatar] = useState(

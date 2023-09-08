@@ -11,12 +11,16 @@ import { useParams } from "react-router-dom";
 const { TextArea } = Input;
 
 // @ts-ignore
-const Comment = ({ comments,users }) => {
+const Comment = ({ comments, users }) => {
     console.log(comments, 'comments')
     const dispatch = useDispatch()
     const { id } = useParams()
     const [isModalOpenEditComment, setIsModalOpenEditComment] = useState(false);
+    const [imageUrlAvatar, setImageUrlAvatar] = useState(
+        { url: undefined, file: undefined }
+    );
     const [valueComment, setValueComment] = useState();
+    const [loading, setLoading] = useState(false);
     function getTimeAgo(commentTime) {
         // Lấy thời gian hiện tại
         const now = new Date();
@@ -58,6 +62,16 @@ const Comment = ({ comments,users }) => {
         await dispatch(addComments(newComment))
     }
 
+    const uploadImage = (event) => {
+        setLoading(true);
+        const src = URL.createObjectURL(event.target.files[0]);
+        // console.log(src,'src')
+        // setImageUrlAvatar({ url: src, file: file });
+        // setLoading(false);
+        console.log(src, ' src')
+    }
+
+
     return (
         <div className='comment'>
             <h4>đánh giá sản phẩm</h4>
@@ -71,36 +85,39 @@ const Comment = ({ comments,users }) => {
                     <div className='comment-avatar'>
                         <Avatar size={100} src='https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png' />
                     </div>
-                    <TextArea rows={4} placeholder='Hãy để lại đáng giá của bạn' onChange={(e) => setValueComment(e.target.value)} />
-                    {/* <label htmlFor="image-comment" id="image-comment"> 
-                        <input type="file" name="" id="image-comment"  />
-                    </label> */}
-                    <CameraOutlined className='comment-upload-image' id="image-comment" />
+                    <div className="input-comment">
+                        <TextArea rows={4} placeholder='Hãy để lại đáng giá của bạn' onChange={(e) => setValueComment(e.target.value)} />
+                        <Button onClick={() => saveComment()} style={{ marginTop: 10 }}>Bình luận</Button>
+                    </div>
+                    <label for="upload-image" className='comment-upload-image'>
+                        <CameraOutlined />
+                    </label>
+                    <input type="file" id="upload-image" name="image" accept="image/*" onChange={uploadImage} />
+
                 </div>
                 <br></br>
-                <Button onClick={() => saveComment()}>Bình luận</Button>
                 <div className='comment-user'>
                     <h5>đánh giá của khách hàng</h5>
 
                 </div>
 
                 {
-                    comments?.map(item => {
+                    comments?.slice().reverse().map(item => {
                         return (
                             <div className='list-comment-user'>
                                 <div className='list-comment-user-title'>
                                     <div>
                                         <Avatar size={35} src='https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png' style={{ marginRight: 10 }} />
                                         <span>{
-                                            users?.map(itemUser=>{
-                                                if(item.user_id==itemUser._id){
-                                                    return(
+                                            users?.map(itemUser => {
+                                                if (item.user_id == itemUser._id) {
+                                                    return (
                                                         itemUser.name
                                                     )
                                                 }
                                             })
-                                            
-                                            }</span>-<span>{timeAgo}</span>
+
+                                        }</span>-<span>{timeAgo}</span>
                                     </div>
                                     <div>
                                         <EditOutlined className='list-comment-user-edit' />
