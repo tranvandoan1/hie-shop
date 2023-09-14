@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import CommentAPI, { add, upload ,remove} from "../api/CommentAPI";
+import CommentAPI, { add, upload, remove } from "../api/CommentAPI";
 import { getDataUserLoca } from "../app/getDataLoca";
 async function getAll() {
-    const { data: comments } = await CommentAPI.getAll();
+  const { data: comments } = await CommentAPI.getAll();
   const dataComments = comments?.data?.filter((item) => item?.code_shop == getDataUserLoca().code)
   return dataComments
 }
@@ -16,7 +16,6 @@ export const getAllComment = createAsyncThunk(
 export const addComments = createAsyncThunk(
   "comment/addComments",
   async (data) => {
-    console.log(data,'data')
     await add(data);
     return getAll();
   }
@@ -24,9 +23,15 @@ export const addComments = createAsyncThunk(
 export const uploadtComments = createAsyncThunk(
   "comment/uploadtComments",
   async (data) => {
-    console.log(data)
-    const { data: comments } = await upload(data.id, data.dataUploat);
-    return comments;
+    await upload(data);
+    return getAll();
+  }
+);
+export const removeComments = createAsyncThunk(
+  "comment/removeComments",
+  async (data) => {
+    await remove(data);
+    return getAll();
   }
 );
 const commentSlice = createSlice({
@@ -52,6 +57,9 @@ const commentSlice = createSlice({
       state.value = action.payload;
     });
     builder.addCase(uploadtComments.fulfilled, (state, action) => {
+      state.value = action.payload;
+    });
+    builder.addCase(removeComments.fulfilled, (state, action) => {
       state.value = action.payload;
     });
   },

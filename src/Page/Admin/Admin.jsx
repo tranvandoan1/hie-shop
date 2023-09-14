@@ -36,7 +36,7 @@ const Admin = () => {
   // @ts-ignore
 
   const users = useSelector((data) => data.users.value)
-  console.log(users,'users12312123')
+  console.log(users, 'users12312123')
   const user = users?.data?.find((item) => item._id == getDataUserLoca()._id)
   useEffect(() => {
     dispatch(getAllUsers())
@@ -45,6 +45,7 @@ const Admin = () => {
 
     localStorage.removeItem('data')
     localStorage.removeItem('key')
+    localStorage.removeItem("value");
     navigator('/login')
   }
   return (

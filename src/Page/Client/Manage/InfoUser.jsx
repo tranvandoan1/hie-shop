@@ -46,6 +46,11 @@ const InfoUser = () => {
             duration: 2,
             content: users?.message,
         });
+        const avatarWeb = document.getElementById("avatarWeb");
+
+        avatarWeb.href = (getDataUserLoca().avatar == undefined || getDataUserLoca().avatar == null) ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
+            : user.avatar
+
     }, [users]);
     const save = async () => {
         setLoading(true);

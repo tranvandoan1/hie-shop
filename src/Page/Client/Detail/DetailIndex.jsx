@@ -30,32 +30,7 @@ import { getSaveOrderAll } from "../../../features/SaveOrderSlice.js";
 import { getDataUserLoca } from '../../../app/getDataLoca.js'
 import { getAllComment } from "../../../features/CommentSlice.js";
 
-const image = [
-  {
-    id: 1,
-    photo:
-      "https://dongphuchaianh.com/wp-content/uploads/2019/08/nhung-hinh-anh-ao-lop-dep-nhat-01.jpg",
-  },
-  {
-    id: 2,
-    photo:
-      "https://thoitrangmantis.com/wp-content/uploads/2019/01/ao-phong-co-tron-meo-3d1-tieu.jpg",
-  },
-  {
-    id: 3,
-    photo:
-      "https://kabuto.vn/wp-content/uploads/2021/01/mau-hinh-in-ao-thun.jpg",
-  },
-  {
-    id: 4,
-    photo: "https://cf.shopee.vn/file/30096a74df541ada80347d443b378ca4",
-  },
-  {
-    id: 5,
-    photo:
-      "https://down-vn.img.susercontent.com/file/827184990179511bf4d73ef152e6eabc",
-  },
-];
+
 const data = [
   {
     id: 1,
@@ -119,8 +94,7 @@ const DetailIndex = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
-  // @ts-ignore
-  const [valueImage, setValueImage] = useState(image[0]);
+
   // @ts-ignore
   const [quantityValue, setQuantityValue] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -136,7 +110,6 @@ const DetailIndex = () => {
   const saveorders = useSelector((data) => data.saveorders.value);
   const comments = useSelector((data) => data.comments.value);
   const users = useSelector((data) => data.users.value).data
-  console.log(users, 'users')
 
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
@@ -174,7 +147,6 @@ const DetailIndex = () => {
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
-  console.log(selectClassifies, 'ưqds')
   const classifieSelect1 = (item) => {
     if (selectClassifies?.data1?._id == item._id) {
       setSelectClassifies({ data1: undefined, data2: undefined });
@@ -205,7 +177,6 @@ const DetailIndex = () => {
     } else {
       setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
     }
-    console.log(item, '2ewds')
   };
 
   const selectValuePro = (pro) => {

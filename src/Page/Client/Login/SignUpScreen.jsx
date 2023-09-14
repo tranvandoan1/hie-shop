@@ -379,7 +379,8 @@ const SignUpScreen = () => {
 
                                             <Button
                                                 className="signup-google"
-                                                disabled={loading}
+                                                // disabled={loading}
+                                                disabled={true}
                                                 onClick={() => loginGoogle()}
                                             >
                                                 <FcGoogle className="signup-google-icon" />

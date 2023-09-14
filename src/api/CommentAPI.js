@@ -1,4 +1,4 @@
-import { axiosClient } from "./API";
+import { axiosClient, axiosClientMultipart } from "./API";
 
 const CommentAPI = {
   getAll() {
@@ -13,13 +13,13 @@ const CommentAPI = {
 export default CommentAPI;
 export const add = (data) => {
   const url = `/comments-add`;
+  return axiosClientMultipart.post(url, data);
+};
+export const upload = (data) => {
+  const url = `/comments-upload`;
+  return axiosClientMultipart.post(url, data);
+};
+export const remove = (data) => {
+  const url = `/comments-remove`;
   return axiosClient.post(url, data);
-};
-export const upload = (id, data) => {
-  const url = `/comments/${id}`;
-  return axiosClient.put(url, data);
-};
-export const remove = (id) => {
-  const url = `/comments/${id}`;
-  return axiosClient.delete(url);
 };

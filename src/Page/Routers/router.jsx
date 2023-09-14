@@ -31,7 +31,28 @@ import UploadPassword from "../Client/Manage/UploadPassword";
 import ManageCart from "../Client/Manage/ManageCart";
 import DetailCart from "../Client/Manage/DetailCart";
 import ProductsPage from "../Client/Products/ProductsPage";
+import { getDataUserLoca } from "../../app/getDataLoca";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 const Router = () => {
+
+  const users = useSelector((data) => data.users.value)
+
+
+  const user = users?.data?.find((item) => item._id == getDataUserLoca()?._id)
+
+ useEffect(()=>{
+
+  const avatarWeb = document.getElementById("avatarWeb");
+  avatarWeb.href =
+    getDataUserLoca()?.avatar == undefined || getDataUserLoca()?.avatar == null
+      ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
+      : getDataUserLoca().avatar;
+  document.title =
+    getDataUserLoca()?.name == undefined || getDataUserLoca()?.name == null
+      ? "WebSite Bán Hàng"
+      : user?.name;
+ },[users])
   return (
     <BrowserRouter>
       <Routes>
@@ -59,13 +80,20 @@ const Router = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            // <PrivateRouteLogin>
+              <Login />
+            // </PrivateRouteLogin>
+          }
+        />
         <Route
           path="/signup"
           element={
-            // <PrivateRoute>
-            <SignUpScreen />
-            // </PrivateRoute>
+            // <PrivateRouteLogin>
+              <SignUpScreen />
+            // </PrivateRouteLogin>
           }
         />
         <Route

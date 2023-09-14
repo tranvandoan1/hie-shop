@@ -52,6 +52,7 @@ const Header = () => {
     const logout = () => {
         localStorage.removeItem("data");
         localStorage.removeItem("key");
+        localStorage.removeItem("value");
         navigator("/login");
     };
     useEffect(() => {

@@ -20,11 +20,10 @@ import { getAllUser } from '../../../features/UserSlice'
 
 // @ts-ignore
 const Login = () => {
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [showCodeShop, setShowCodeShop] = useState({ status: false, data: undefined });//check xem nếu mà đăng nhập với khách thì nhận mã cửa hàng
     // @ts-ignore
-    const [timeClassName, setTimeClassName] = useState(false)
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
@@ -187,7 +186,7 @@ const Login = () => {
 
                         <Button className="button-google_add" onClick={() => navigator('/signup')}>Tạo tài khoản</Button>
 
-                        <Button className="login-google" onClick={() => loginGoogle()}>
+                        <Button disabled={true} className="login-google" onClick={() => loginGoogle()}>
                             <FcGoogle className="login-google-icon" />
                             <span>Đăng nhập Google</span>
                         </Button>

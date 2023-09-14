@@ -120,6 +120,9 @@ const Categories = () => {
         setIsModalOpenUpload({ status: false, data: undefined })
     }
 
+
+    
+
     return (
         <div>
             {loading == true && <Loading />}

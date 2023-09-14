@@ -1,6 +1,7 @@
-#upload-image{
+#upload-image {
     display: none;
 }
+
 .comment {
     background-color: #fff;
     margin-top: 10px;
@@ -100,7 +101,7 @@
     display: flex;
 }
 
-.image-comment div {
+.image-comment .image-add-comment {
     width: 80px;
     height: 80px;
     position: relative;
@@ -141,4 +142,53 @@
     justify-content: flex-end;
     border-top: 1px solid rgb(185, 185, 185);
     padding-top: 10px;
+}
+
+.image-comment-close {
+    position: absolute;
+    right: -70px;
+    top: -15px;
+    color: red;
+    width: 100%;
+    cursor: pointer;
+}
+
+.edit-comment-photo {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.photo-edit-comment {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+}
+
+.photo-edit-comment img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.edit-comment-input-image{
+    display: flex;
+    align-items: flex-start;
+}
+.edit-comment-image{
+    font-size: 35px;
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.edit-comment-input-image .ck-editor{
+    width: 100% !important;
+}
+#add-image{
+    display: none;
+}
+.input-comment .ck-editor{
+    overflow: hidden !important;
 }
