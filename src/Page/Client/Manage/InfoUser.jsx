@@ -38,7 +38,7 @@ const InfoUser = () => {
         setImageUrlAvatar({ url: src, file: file });
         setLoading(false);
     };
-
+    console.log(getDataUserLoca().avatar, 'getDataUserLoca()')
     useEffect(() => {
         setImageUrlAvatar({ url: user?.avatar, file: undefined });
         users?.status !== 1 && message.open({
@@ -48,8 +48,8 @@ const InfoUser = () => {
         });
         const avatarWeb = document.getElementById("avatarWeb");
 
-        avatarWeb.href = (getDataUserLoca().avatar == undefined || getDataUserLoca().avatar == null) ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
-            : user.avatar
+        // avatarWeb?.href = (getDataUserLoca()?.avatar == undefined || getDataUserLoca().avatar == null) ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
+        //     : user.avatar
 
     }, [users]);
     const save = async () => {

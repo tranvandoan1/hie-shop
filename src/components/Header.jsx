@@ -16,7 +16,7 @@ import { Size } from "../assets/size";
 import { FaUsersCog } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getAllUsers } from "../features/UserSlice";
+import { getUser } from "../features/UserSlice";
 // @ts-ignore
 import { getSaveOrderAll } from "../features/SaveOrderSlice.js";
 import Comfim from "./Comfim.jsx";
@@ -34,10 +34,8 @@ const Header = () => {
     const onSearch = (value) => console.log(value);
 
     // @ts-ignore
-    const users = useSelector((data) => data.users.value);
-    const user = users?.data?.find(
-        (item) => item._id == getDataUserLoca()?._id
-    );
+    const user = useSelector((data) => data.users.value.data);
+ 
     const saveorders = useSelector((data) => data.saveorders.value);
     const newDataSaveOrder = saveorders
         ?.slice()
@@ -56,7 +54,7 @@ const Header = () => {
         navigator("/login");
     };
     useEffect(() => {
-        dispatch(getAllUsers());
+        dispatch(getUser(getDataUserLoca()?._id));
         dispatch(getSaveOrderAll());
     }, []);
     const content = (
@@ -175,7 +173,7 @@ const Header = () => {
         <div className={styles.header}>
             <div className="header-content" id="navbar">
                 <div className={"logo"} onClick={() => navigator("/")}>
-                    {user?.logo == undefined ? (
+                    {user?.avatar == undefined ? (
                         <div
                             style={{
                                 display: "flex",
@@ -191,7 +189,7 @@ const Header = () => {
                             Chưa có logo
                         </div>
                     ) : (
-                        <img src={user?.role == 1 ? user?.avatar : user?.logo} alt="" />
+                        <img src={ user?.avatar} alt="" />
                     )}
                 </div>
                 {/* <div className="header-input">

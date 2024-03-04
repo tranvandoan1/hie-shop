@@ -32,6 +32,16 @@ const SelectShop = ({
     const handleChange = (value) => {
         setSelectShop(users?.find((item) => item._id == value))
     };
+
+    // Filter `option.label` match the user type `input`
+    const filterOption = (input, option) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+
+    const onChange = (value) => {
+        setSelectShop(users?.find((item) => item._id == value))
+    };
+
     return (
         <Modal
             open={isModalOpen}
@@ -44,6 +54,7 @@ const SelectShop = ({
             <div>
                 <h5 style={{ color: 'red' }}>{title}</h5>
                 <h6>{conent}</h6>
+
                 <Select
                     showSearch
                     optionFilterProp="children"
@@ -53,8 +64,10 @@ const SelectShop = ({
                     }}
                     placeholder="Chọn cửa hàng"
                     defaultValue={''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                     optionLabelProp="label"
+                    onChange={onChange}
+                    filterOption={filterOption}
                 >
                     {
                         users?.map((item) => {

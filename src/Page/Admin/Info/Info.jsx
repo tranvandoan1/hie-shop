@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import "./info.css";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { uploadAdmin } from "../../../features/UserSlice";
+import { getUser, uploadAdmin } from "../../../features/UserSlice";
 import Loading from "../../../components/Loading.jsx";
 // @ts-ignore
 import { uploadInfoUser } from '../../../api/Users.js'
@@ -16,14 +16,18 @@ import { getDataUserLoca } from '../../../app/getDataLoca';
 const Info = () => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const users = useSelector((data) => data.users.value)
-  const user = users?.data?.find((item) => item._id == getDataUserLoca()._id)
+  useEffect(()=>{
+  // @ts-ignore
+    dispatch(getUser(getDataUserLoca()?._id));
+
+  },[])
+  const user = useSelector((data) => data.users.value)
   const [loading, setLoading] = useState(false);
   const [imageUrlAvatar, setImageUrlAvatar] = useState(
-    { url: user?.avatar, file: undefined, status: false }
+    { url: user?.data?.avatar, file: undefined, status: false }
   );
   const [imageUrlLogo, setImageUrlLogo] = useState({
-    url: user?.logo,
+    url: user?.data?.logo,
     file: undefined, status: false
   });
   const [values, setValues] = useState({
@@ -45,15 +49,16 @@ const Info = () => {
     setLoading(false);
   };
   useEffect(() => {
-    setImageUrlAvatar({ url: user?.avatar, file: undefined, status: false });
-    setImageUrlLogo({ url: user?.logo, file: undefined, status: false });
-    users?.status !== 1 && message.open({
-      type: users?.status == false ? 'error' : "success",
+    setImageUrlAvatar({ url: user?.data?.avatar, file: undefined, status: false });
+    setImageUrlLogo({ url: user?.data?.logo, file: undefined, status: false });
+    user?.status !== 1 && message.open({
+      type: user?.status == false ? 'error' : "success",
       duration: 2,
-      content: users?.message,
+      content: user?.message,
     });
-  }, [users]);
+  }, [user]);
   const save = async () => {
+    setValues()
     setLoading(true);
     const image = [imageUrlAvatar.file, imageUrlLogo.file];
     const formData = new FormData();
@@ -79,21 +84,21 @@ const Info = () => {
       }
     }
 
-    formData.append("_id", user?._id);
+    formData.append("_id", user?.data?._id);
     for (let i = 0; i < image.length; i++) {
       formData.append("files", image[i]);
     }
     formData.append(
       "name",
-      values?.name == undefined ? user?.name : values.name
+      values?.name == undefined ? user?.data?.name : values.name
     );
     formData.append(
       "email",
-      values?.email == undefined ? user?.email : values.email
+      values?.email == undefined ? user?.data?.email : values.email
     );
     formData.append(
       "phone",
-      values?.phone == undefined ? user?.phone : values.phone
+      values?.phone == undefined ? user?.data?.phone : values.phone
     );
     formData.append("check", check());
     formData.append("imageUrlAvatar", imageUrlAvatar.status);
@@ -104,15 +109,15 @@ const Info = () => {
   return (
     <div>
       {loading == true && <Loading />}
-      <h5>Thông tin người dùng</h5>
+      <h6>Thông tin người dùng</h6>
       <hr />
       <div className="info-user">
-        {user !== undefined ? (
+        {user?.data !== undefined ? (
           <div style={{ width: "50%" }}>
             <div className="info-user-name">
               <span style={{ fontSize: 16 }}>Tên : </span>
               <Input
-                defaultValue={user?.name}
+                defaultValue={user?.data?.name}
                 onChange={(e) =>
                   setValues({
                     name: e.target.value,
@@ -125,7 +130,7 @@ const Info = () => {
             <div className="info-user-email">
               <span style={{ fontSize: 16 }}>Email : </span>
               <Input
-                defaultValue={user?.email}
+                defaultValue={user?.data?.email}
                 disabled
                 onChange={(e) =>
                   setValues({
@@ -139,7 +144,7 @@ const Info = () => {
             <div className="info-user-phone">
               <span style={{ fontSize: 16 }}>Số điện thoại : </span>
               <Input
-                defaultValue={user?.phone}
+                defaultValue={user?.data?.phone}
                 onChange={(e) =>
                   setValues({
                     name: values?.name,
@@ -151,7 +156,7 @@ const Info = () => {
             </div>
             <div className="info-user-phone">
               <span style={{ fontSize: 16 }}>Vai trò : </span>
-              <span>{user?.role == 0 ? "Bán hàng" : "Mua hàng"}</span>
+              <span>{user?.data?.role == 0 ? "Bán hàng" : "Mua hàng"}</span>
             </div>
           </div>
         ) : (
@@ -212,7 +217,7 @@ const Info = () => {
                     <div
                       onClick={() =>
                       (setImageUrlAvatar({
-                        url: user?.avatar,
+                        url: user?.data?.avatar,
                         file: undefined, status: false
 
                       })
@@ -272,7 +277,7 @@ const Info = () => {
                   imageUrlLogo.url !== undefined && (
                     <div
                       onClick={() =>
-                      (setImageUrlLogo({ url: user?.logo, file: undefined, status: false }),
+                      (setImageUrlLogo({ url: user?.data?.logo, file: undefined, status: false }),
                         setImageUrlAvatar({ url: imageUrlAvatar?.url, file: imageUrlAvatar?.file, status: imageUrlAvatar.file == undefined ? false : true }))
                       }
                       className="upload-avatar-close"

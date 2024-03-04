@@ -46,6 +46,15 @@ const ShowValue = ({ data, status, title, callBack, dataClass }) => {
                 </div>
             ),
         },
+        {
+            title: 'Ảnh',
+            key: 'photo',
+            render: (photo, data) => (
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <img src={photo.photo} alt="" style={{ width: 80, height: 80 }} />
+                </div>
+            ),
+        },
     ];
 
     return (

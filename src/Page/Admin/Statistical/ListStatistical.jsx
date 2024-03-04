@@ -14,7 +14,7 @@ import { FaProductHunt, FaOpencart } from "react-icons/fa";
 import { getProductAll } from "../../../features/Products";
 // @ts-ignore
 import { getCategoriAll } from "../../../features/CateSlice";
-const ListStatistical = () => {
+const ListStatistical = ({on}) => {
   const dispatch = useDispatch();
   const orders = useSelector((data) => data.orders.value);
   const products = useSelector((data) => data.products);
@@ -45,23 +45,26 @@ const ListStatistical = () => {
     <div style={{ background: "#fff", flex: 1 }}>
       <React.Fragment>
         <div className={styles.title}>
-          <h5 style={{ display: "flex", alignItems: "center", fontSize: 18 }}>
+          <h6 style={{ display: "flex", alignItems: "center" }}>
             <HddOutlined
               style={{
-                fontSize: 30,
+                fontSize: 20,
                 color: "chocolate",
                 marginRight: 10,
               }}
             />{" "}
             Thống kê
-          </h5>
+          </h6>
         </div>
         <hr style={{ background: "rgb(161, 161, 161)", height: 0.5 }} />
 
         <div className="list">
           <Row>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-              <Link to="/manager/table">
+              <Link to="/admin/categories" onClick={() => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["2"]));
+              }}>
                 <div
                   className={styles.list_cate}
                   style={{ fontSize: 15, height: 50 }}
@@ -83,7 +86,10 @@ const ListStatistical = () => {
               </Link>
             </Col>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-              <Link to="/manager/products">
+              <Link to="/admin/products" onClick={() => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["3"]));
+              }}>
                 <div
                   className={styles.list_cate}
                   style={{ fontSize: 15, height: 50 }}
@@ -105,7 +111,10 @@ const ListStatistical = () => {
               </Link>
             </Col>
             <Col xs={12} sm={4} md={12} lg={8} xl={6}>
-              <Link to="/manager/order">
+              <Link to="/admin/order" onClick={() => {
+                localStorage.removeItem("key");
+                localStorage.setItem("key", JSON.stringify(["4"]));
+              }}>
                 <div
                   className={styles.list_cate}
                   style={{ fontSize: 15, height: 50 }}

@@ -18,8 +18,6 @@ import { messaging } from "../../../firebase/index";
 import Comfim from "../../../components/Comfim";
 import ShowValue from "./ShowValue";
 
-
-
 const Products = () => {
   const dispatch = useDispatch();
   const navigator = useNavigate();
@@ -53,12 +51,12 @@ const Products = () => {
   const [textPro, setTextPro] = useState({ status: false, id: null });
 
   const dataDeleteProduct = async (data) => {
-    setLoading(true)
+    setLoading(true);
     const dataClass = classifies?.value?.filter(
       (item) => item.linked == data.linked
     );
     await dispatch(removeProduct({ product: data, classify: dataClass }));
-    setLoading(false)
+    setLoading(false);
   };
 
   const columns = [
@@ -123,7 +121,6 @@ const Products = () => {
                   >
                     {item.name},
                   </span>
-
                 </div>
               );
             }
@@ -139,9 +136,7 @@ const Products = () => {
           onClick={() => setShowValue({ status: true, data: data })}
           style={{ cursor: "pointer" }}
         >
-
           <EyeOutlined />
-
         </div>
       ),
     },
@@ -198,7 +193,7 @@ const Products = () => {
     <div style={{ overflow: "auto" }}>
       {loading == true && <Loading />}
       <div className="admin-product">
-        <h4>Sản phẩm ({productsValue?.length})</h4>
+        <h6>Sản phẩm ({productsValue?.length})</h6>
         <Button onClick={() => navigator("add")}>Thêm sản phẩm </Button>
       </div>
       <hr />
@@ -351,9 +346,9 @@ const Products = () => {
                           textPro.id == record._id
                             ? record?.description
                             : record?.description.substring(
-                              0,
-                              String(record?.description).length / 10
-                            ) + "...",
+                                0,
+                                String(record?.description).length / 10
+                              ) + "...",
                       }}
                     />
                     <Button

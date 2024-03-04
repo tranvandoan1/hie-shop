@@ -3,11 +3,10 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getAllUsers } from "../../../features/UserSlice";
+import { getUser } from "../../../features/UserSlice";
 // @ts-ignore
 import { addOrder } from "../../../features/Order";
 // @ts-ignore
-import { getInfoUser } from "../../../features/InfoUserSlice";
 import { Button, Col, Row, message } from "antd";
 import ShowAddAddress from "./ShowAddAdress";
 import { PlusOutlined } from "@ant-design/icons";
@@ -23,8 +22,8 @@ const CheckOut = () => {
 
 
     const infoUsers = useSelector((data) => data.infoUsers.value);
-    const users = useSelector((data) => data.users.value)
-    const user = users?.data?.find((item) => item._id == getDataUserLoca()?._id);
+    const user = useSelector((data) => data.users.value.data)
+   
     const userShop = users?.data?.find((item) => item.code == getDataUserLoca()?.code)
 
     const dataAdressUser = infoUsers?.find((item) => item.status == true);
@@ -40,7 +39,8 @@ const CheckOut = () => {
     const [dataOrder, setDataOrder] = useState();
     useEffect(() => {
         setDataOrder(dataOrderLoca);
-        dispatch(getInfoUser());
+        dispatch(getUser(getDataUserLoca()?._id));
+
     }, []);
 
     let sum = 0;

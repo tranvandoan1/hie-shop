@@ -31,6 +31,7 @@
     overflow: hidden;
     cursor: pointer;
     transition: 350ms ease-in 0s;
+    border-radius: 100%;
 }
 
 .logo img {

@@ -261,6 +261,8 @@ const Cart = () => {
     await dispatch(removeSaveOrder({ _id: comfimDelete.data._id }));
     setLoading(false);
     setComfimDelete({ status: false, data: undefined });
+    setSelectOrder(undefined)
+    setSum(0)
   };
 
   const checkOut = () => {

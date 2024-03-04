@@ -33,26 +33,24 @@ import DetailCart from "../Client/Manage/DetailCart";
 import ProductsPage from "../Client/Products/ProductsPage";
 import { getDataUserLoca } from "../../app/getDataLoca";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../features/UserSlice";
 const Router = () => {
+  const dispatch = useDispatch();
 
-  const users = useSelector((data) => data.users.value)
+  const user = useSelector((data) => data.users.value.data)
 
-
-  const user = users?.data?.find((item) => item._id == getDataUserLoca()?._id)
-
- useEffect(()=>{
-
-  const avatarWeb = document.getElementById("avatarWeb");
-  avatarWeb.href =
-    getDataUserLoca()?.avatar == undefined || getDataUserLoca()?.avatar == null
-      ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
-      : getDataUserLoca().avatar;
-  document.title =
-    getDataUserLoca()?.name == undefined || getDataUserLoca()?.name == null
-      ? "WebSite Bán Hàng"
-      : user?.name;
- },[users])
+  useEffect(() => {
+    const avatarWeb = document.getElementById("avatarWeb");
+    avatarWeb.href =
+      getDataUserLoca()?.avatar == undefined || getDataUserLoca()?.avatar == null
+        ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
+        : getDataUserLoca().avatar;
+    document.title =
+      getDataUserLoca()?.name == undefined || getDataUserLoca()?.name == null
+        ? "WebSite Bán Hàng"
+        : user?.name;
+  }, [user])
   return (
     <BrowserRouter>
       <Routes>
@@ -83,16 +81,16 @@ const Router = () => {
         <Route
           path="/login"
           element={
-            // <PrivateRouteLogin>
+            <PrivateRouteLogin>
               <Login />
-            // </PrivateRouteLogin>
+            </PrivateRouteLogin>
           }
         />
         <Route
           path="/signup"
           element={
             // <PrivateRouteLogin>
-              <SignUpScreen />
+            <SignUpScreen />
             // </PrivateRouteLogin>
           }
         />

@@ -23,13 +23,15 @@ import Loading from "../../../components/Loading";
 import Comfim from "../../../components/Comfim";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { getAllUser } from "../../../features/UserSlice";
 const { TextArea } = Input;
 
 // @ts-ignore
 const Comment = ({ comments, users }) => {
+    console.log(comments,'comments')
     const dispatch = useDispatch();
-    const usersAll = useSelector((data) => data.users.value);
-    const user = usersAll?.data?.find(
+
+    const user = users?.find(
         (item) => item._id == getDataUserLoca()?._id
     );
 
@@ -391,7 +393,7 @@ const Comment = ({ comments, users }) => {
                     })}
 
                 <div className="comment-pagination">
-                    <Pagination defaultCurrent={1} total={comments?.length} onChange={(e) => onChangePagination(e)} />
+                    <Pagination defaultCurrent={2} total={comments?.length} onChange={(e) => onChangePagination(e)} />
                 </div>
             </div>
 

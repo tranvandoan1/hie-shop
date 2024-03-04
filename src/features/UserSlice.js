@@ -97,8 +97,8 @@ export const uploadUser = createAsyncThunk(
 export const uploadAdmin = createAsyncThunk(
   "users/uploadAdmin",
   async (data) => {
-    const { data: users } = await uploadInfoAdmin(data);
-    return users;
+    const { data: user } = await uploadInfoAdmin(data);
+    return user;
   }
 );
 
@@ -137,6 +137,7 @@ const userSlice = createSlice({
     });
 
     builder.addCase(getAllUser.fulfilled, (state, action) => {
+      console.log('có vào')
       state.loading = false;
       state.value = action.payload;
     });

@@ -17,7 +17,7 @@ import { FaProductHunt } from "react-icons/fa";
 import Comfim from "../../components/Comfim";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getAllUsers, uploadUser } from '../../features/UserSlice'
+import { getUser, uploadUser } from '../../features/UserSlice'
 // @ts-ignore
 import { getDataUserLoca } from '../../app/getDataLoca';
 const { Header, Sider, Content } = Layout;
@@ -35,11 +35,10 @@ const Admin = () => {
   const dispatch = useDispatch()
   // @ts-ignore
 
-  const users = useSelector((data) => data.users.value)
-  console.log(users, 'users12312123')
-  const user = users?.data?.find((item) => item._id == getDataUserLoca()._id)
+  const user = useSelector((data) => data.users.value.data)
   useEffect(() => {
-    dispatch(getAllUsers())
+    dispatch(getUser(getDataUserLoca()?._id));
+
   }, [])
   const logout = () => {
 
@@ -81,7 +80,7 @@ const Admin = () => {
             {
               key: "1",
               icon: <UserOutlined />,
-              label: "Dashboard",
+              label: "Thống kê",
               itemIcon: <NavLink to="dashboard" />,
               style: { color: "black" },
               onClick: () => {
@@ -215,7 +214,7 @@ const Admin = () => {
             overflow: 'auto'
           }}
         >
-          <Outlet />
+          <Outlet on={()=>console.log('first')} />
         </Content>
       </Layout>
       <Comfim

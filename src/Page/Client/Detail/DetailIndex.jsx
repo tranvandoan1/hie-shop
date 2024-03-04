@@ -27,9 +27,9 @@ import {
 // @ts-ignore
 import { getSaveOrderAll } from "../../../features/SaveOrderSlice.js";
 // @ts-ignore
-import { getDataUserLoca } from '../../../app/getDataLoca.js'
+import { getDataUserLoca } from "../../../app/getDataLoca.js";
 import { getAllComment } from "../../../features/CommentSlice.js";
-
+import { getAllUser } from "../../../features/UserSlice.js";
 
 const data = [
   {
@@ -94,30 +94,29 @@ const DetailIndex = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
-
+  document.title = name
   // @ts-ignore
   const [quantityValue, setQuantityValue] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
-  const [selectHoverImage, setSelectHoverImage] = useState();
+  const [selectHove, setSelectHove] = useState()
   const [selectClassifies, setSelectClassifies] = useState({
-    data1: undefined,
-    data2: undefined,
+    valuePl1: undefined,
+    valuePl2: undefined,
   });
 
   const products = useSelector((data) => data.products);
   const classifies = useSelector((data) => data.classifies);
   const saveorders = useSelector((data) => data.saveorders.value);
   const comments = useSelector((data) => data.comments.value);
-  const users = useSelector((data) => data.users.value).data
-
+  const users = useSelector((data) => data.users.value);
+  console.log(users,'users2e32ew')
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
   const productDetail = productsValue?.find((item) => item._id == id);
   const newProClassifies = classifies?.value?.filter(
     (item) => item.linked == productDetail?.linked
   );
-
   // kiểm tra xem có phân loại 2 không
   const condition =
     productDetail?.name_commodityvalue == undefined ||
@@ -143,39 +142,43 @@ const DetailIndex = () => {
     dispatch(getAllClassifies());
     dispatch(getSaveOrderAll());
     dispatch(getAllComment());
+    dispatch(getAllUser())
+
   }, []);
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
+  // chọn phân loại 1
   const classifieSelect1 = (item) => {
-    if (selectClassifies?.data1?._id == item._id) {
-      setSelectClassifies({ data1: undefined, data2: undefined });
+    setSelectHove(undefined)
+    if (selectClassifies?.valuePl1?._id == item._id) {
+      setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
     } else {
-      setSelectClassifies({ data1: item, data2: undefined });
+      setSelectClassifies({ valuePl1: item, valuePl2: undefined });
     }
+  };
+  // chọn phân loại 2
+  const classifieSelect2 = (item) => {
+    setSelectHove(undefined)
+    if (selectClassifies?.valuePl1 == undefined) {
+      message.warning("Chưa chọn phân loại !");
+    } else {
+      if ((selectClassifies?.valuePl2?._id || selectClassifies?.valuePl2?.id) == (item._id || item.id)) {
+        setSelectClassifies({ valuePl2: undefined, valuePl1: selectClassifies?.valuePl1 });
+      } else {
+        setSelectClassifies({ valuePl2: item, valuePl1: selectClassifies?.valuePl1 });
+      }
+    }
+
   };
 
-  const classifieSelect2 = (item) => {
-    if (selectClassifies?.data2?._id == (item._id || item.id)) {
-      setSelectClassifies({ data2: undefined, data1: selectClassifies.data1 });
-    } else {
-      setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
-    }
-  };
-  // bắt sự kiện click vào ảnh`
-  const selectImage = (item) => {
-    if (selectClassifies?.data2?.id == item.id) {
-      setSelectClassifies({ data2: undefined, data1: selectClassifies.data1 });
-    } else {
-      setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
-    }
-  };
   // bắt sự kiện hove vào ảnh
   const hoverImage = (item) => {
-    if (selectClassifies?.data2?.id == item.id) {
-      setSelectClassifies({ data2: undefined, data1: selectClassifies.data1 });
+    setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
+    if (selectClassifies?.valuePl2?._id == item._id) {
+      setSelectHove(undefined)
     } else {
-      setSelectClassifies({ data2: item, data1: selectClassifies.data1 });
+      setSelectHove(item)
     }
   };
 
@@ -192,73 +195,79 @@ const DetailIndex = () => {
   const saveOrder = async () => {
     if (
       condition
-        ? selectClassifies?.data1 == undefined
-        : selectClassifies?.data1 == undefined &&
-        selectClassifies?.data2 == undefined
+        ? selectClassifies?.valuePl1 == undefined
+        : selectClassifies?.valuePl1 == undefined &&
+        selectClassifies?.valuePl2 == undefined
     ) {
       message.warning("Chưa chọn phân loại !");
     } else {
+      const dk =
+        productDetail?.name_commodityvalue == null ||
+        productDetail?.name_commodityvalue == undefined ||
+        String(productDetail?.name_commodityvalue).length <= 0;
+      // xem sản phẩm trọn có chưa
+      const checkDataSaveOrder = saveorders?.find((item) =>
+        dk
+          ? item.classification == selectClassifies?.valuePl1?.name &&
+          item.user_id == getDataUserLoca()._id &&
+          item.code_shop == getDataUserLoca().code &&
+          item.pro_id == productDetail?._id
 
-      const dk = productDetail?.name_commodityvalue == null || productDetail?.name_commodityvalue == undefined || String(productDetail?.name_commodityvalue).length <= 0
-
-      const checkDataSaveOrder = saveorders?.find(
-        (item) =>
-          dk ?
-            item.classification == selectClassifies?.data1?.name &&
-            item.user_id == getDataUserLoca()._id &&
-            item.code_shop == getDataUserLoca().code &&
-            item.pro_id == productDetail?._id
-            :
-            item.classification == selectClassifies?.data1?.name &&
-            item.commodity_value == selectClassifies?.data2?.name &&
-            item.user_id == getDataUserLoca()._id &&
-            item.code_shop == getDataUserLoca().code &&
-            item.pro_id == productDetail?._id
+          : item.classification == selectClassifies?.valuePl1?.name &&
+          item.commodity_value == selectClassifies?.valuePl2?.name &&
+          item.user_id == getDataUserLoca()._id &&
+          item.code_shop == getDataUserLoca().code &&
+          item.pro_id == productDetail?._id
       );
       if (checkDataSaveOrder == undefined) {
         const newData = {
           code_shop: productDetail.code_shop,
           pro_id: productDetail?._id,
           sale: productDetail?.sale,
-          photo: selectClassifies?.data1?.photo,
+          photo: selectClassifies?.valuePl1?.photo,
           name_pro: productDetail?.name,
           price:
-            selectClassifies?.data2 == undefined
-              ? selectClassifies?.data1?.price
-              : selectClassifies?.data2?.price,
-          classification: selectClassifies?.data1?.name,
+            selectClassifies?.valuePl2 == undefined
+              ? selectClassifies?.valuePl1?.price
+              : selectClassifies?.valuePl2?.price,
+          classification: selectClassifies?.valuePl1?.name,
           commodity_value:
-            selectClassifies?.data2 == undefined
+            selectClassifies?.valuePl2 == undefined
               ? ""
-              : selectClassifies?.data2?.name,
+              : selectClassifies?.valuePl2?.name,
           amount: quantityValue,
           user_id: getDataUserLoca()._id,
         };
         await dispatch(addSaveOrder(newData));
-        setSelectClassifies({ data2: undefined, data1: undefined });
-        setQuantityValue(1)
         message.success("Thêm thành công");
       } else {
-        await dispatch(uploadSaveOrder({ _id: checkDataSaveOrder._id, amount: quantityValue + checkDataSaveOrder.amount }));
-        setQuantityValue(1)
-        setSelectClassifies({ data2: undefined, data1: undefined });
+        await dispatch(
+          uploadSaveOrder({
+            _id: checkDataSaveOrder._id,
+            amount: quantityValue + checkDataSaveOrder.amount,
+          })
+        );
+        setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
         message.success("Sửa thành công");
       }
+      setQuantityValue(1);
+      setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
     }
   };
-
   return (
     <div className="detail">
-      <Header />
+      {/* <Header /> */}
       <div className="detail-pro">
         <div className="product-briefing">
           <div className="product-briefing-info_pro">
             <div className="product-briefing-image">
               <img
                 src={
-                  selectClassifies?.data1 == undefined
-                    ? selectHoverImage == undefined ? productDetail?.photo : selectHoverImage
-                    : selectHoverImage == undefined ? selectClassifies?.data1?.photo : selectHoverImage
+                  selectClassifies?.valuePl1 == undefined
+                    ? selectHove == undefined
+                      ? productDetail?.photo
+                      : selectHove?.photo
+                    : selectClassifies?.valuePl1?.photo
                 }
                 alt=""
               />
@@ -268,8 +277,12 @@ const DetailIndex = () => {
                 return (
                   <div
                     onMouseEnter={() => hoverImage(item)}
-                    onClick={() => selectImage(item)}
-                    style={{ border: "1px solid red", cursor: "pointer" }}
+                    // onClick={() => selectImage(item)}
+                    style={{
+                      border: `1px solid ${item._id == selectHove?._id ? "red" : "#fff"
+                        } `,
+                      cursor: "pointer",
+                    }}
                   >
                     <img src={item.photo} alt="" />
                   </div>
@@ -294,14 +307,14 @@ const DetailIndex = () => {
             <div className="product-briefing-price">
               {productDetail?.sale > 0 && (
                 <div className="product-price_sale" style={{ marginRight: 30 }}>
-                  {selectClassifies?.data1 !== undefined ? (
+                  {selectClassifies?.valuePl1 !== undefined ? (
                     <span className="product-briefing-price_sale">
                       đ{" "}
                       {(condition
-                        ? selectClassifies?.data1?.price
-                        : selectClassifies?.data2?.price == undefined
+                        ? selectClassifies?.valuePl1?.price
+                        : selectClassifies?.valuePl2?.price == undefined
                           ? minPrice
-                          : selectClassifies?.data2?.price
+                          : selectClassifies?.valuePl2?.price
                       )
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
@@ -326,7 +339,7 @@ const DetailIndex = () => {
                 </div>
               )}
               <div className="product-briefing-price-sale">
-                {selectClassifies?.data1 == undefined ? (
+                {selectClassifies?.valuePl1 == undefined ? (
                   <React.Fragment>
                     <span className="product-briefing-prices">
                       đ{" "}
@@ -345,10 +358,10 @@ const DetailIndex = () => {
                       đ{" "}
                       {Math.ceil(
                         (condition
-                          ? selectClassifies?.data1?.price
-                          : selectClassifies?.data2 == undefined
+                          ? selectClassifies?.valuePl1?.price
+                          : selectClassifies?.valuePl2 == undefined
                             ? minPrice
-                            : selectClassifies?.data2?.price) *
+                            : selectClassifies?.valuePl2?.price) *
                         ((100 - productDetail?.sale) / 100)
                       )
                         .toString()
@@ -373,13 +386,13 @@ const DetailIndex = () => {
                     {newProClassifies?.map((item) => {
                       return (
                         <span
-                          className={`value-classify1 ${selectClassifies?.data1?._id == item._id &&
+                          className={`value-classify1 ${selectClassifies?.valuePl1?._id == item._id &&
                             "value-classify1-active"
                             }`}
                           onClick={() => classifieSelect1(item)}
                         >
                           {item.name}
-                          {selectClassifies?.data1?._id == item._id && (
+                          {selectClassifies?.valuePl1?._id == item._id && (
                             <span className="_v">
                               {" "}
                               <i className="fas fa-check"></i>
@@ -396,12 +409,12 @@ const DetailIndex = () => {
                   <div className="classify2">
                     <span>{productDetail?.name_commodityvalue}</span>
                     <div>
-                      {(selectClassifies?.data1 == undefined
+                      {(selectClassifies?.valuePl1 == undefined
                         ? JSON.parse(productDetail?.valueClassify)
-                        : selectClassifies?.data1?.values
+                        : selectClassifies?.valuePl1?.values
                       )?.map((item) => (
                         <span
-                          className={`value-classify2 ${selectClassifies?.data2?.name ==
+                          className={`value-classify2 ${selectClassifies?.valuePl2?.name ==
                             (item.name || item) && "value-classify2-active"
                             }`}
                           onClick={() => {
@@ -409,7 +422,7 @@ const DetailIndex = () => {
                           }}
                         >
                           {item.name || item}
-                          {selectClassifies?.data2?.name == item.name && (
+                          {selectClassifies?.valuePl2?.name == item.name && (
                             <span className="_v">
                               <i className="fas fa-check"></i>
                             </span>
@@ -434,10 +447,10 @@ const DetailIndex = () => {
                     </Button>
                   </div>
                   {(condition
-                    ? selectClassifies?.data1
-                    : selectClassifies?.data2) !== undefined && (
+                    ? selectClassifies?.valuePl1
+                    : selectClassifies?.valuePl2) !== undefined && (
                       <div className="button-quantity_pro">
-                        <span>{selectClassifies?.data2?.quantity} sản phẩm</span>
+                        <span>{selectClassifies?.valuePl2?.quantity} sản phẩm</span>
                       </div>
                     )}
                 </div>
@@ -487,7 +500,7 @@ const DetailIndex = () => {
                 </span>
               </div>
             </div>
-            <Comment comments={comments} users={users}/>
+            <Comment comments={comments} users={users?.data} />
             <br />
             <div className="product-other">
               <h5>sản phẩm khác của shop</h5>

@@ -29,12 +29,11 @@ const List = () => {
   const date = moment().date();
   const month = moment().month();
   const year = moment().year();
-  console.log(check, 'check')
   const list = () => {
     let order = [];
 
     orders?.value.filter((item) => {
-      if (item.user_id == user._id) {
+      if (item.user_id == user?._id) {
         const time = new Date(item.createdAt);
         if (
           check == "today"
