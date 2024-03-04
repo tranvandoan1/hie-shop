@@ -78,14 +78,7 @@ export const getAllUser = createAsyncThunk(
   }
 );
 
-export const getAllUsers = createAsyncThunk(
-  "users/getAllUsers",
-  async () => {
-    const { data: users } = await getAll();
-    console.log(users, 'users')
-    return users
-  }
-);
+
 
 export const uploadUser = createAsyncThunk(
   "users/uploadUser",
@@ -113,6 +106,7 @@ const userSlice = createSlice({
   name: "users",
   initialState: {
     value: [],
+    users: [],
     password: {},
     email: null,
     loading: true
@@ -139,12 +133,9 @@ const userSlice = createSlice({
     builder.addCase(getAllUser.fulfilled, (state, action) => {
       console.log('có vào')
       state.loading = false;
-      state.value = action.payload;
+      state.users = action.payload;
     });
-    builder.addCase(getAllUsers.fulfilled, (state, action) => {
-      state.loading = false;
-      state.value = action.payload;
-    });
+   
     builder.addCase(uploadAdmin.fulfilled, (state, action) => {
       state.loading = false;
       state.value = action.payload;

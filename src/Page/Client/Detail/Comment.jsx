@@ -28,7 +28,7 @@ const { TextArea } = Input;
 
 // @ts-ignore
 const Comment = ({ comments, users }) => {
-    console.log(comments,'comments')
+    console.log(users,'usersdsax')
     const dispatch = useDispatch();
 
     const user = users?.find(
@@ -200,10 +200,10 @@ const Comment = ({ comments, users }) => {
 
 
     }
-    console.log(maxPage, 'maxPage')
-    console.log(minPage, 'minPage')
-    console.log(comments?.length, ' comments?.length')
-    console.log(maxPage, comments?.length, 'maxPage < comments?.length')
+    // console.log(maxPage, 'maxPage')
+    // console.log(minPage, 'minPage')
+    // console.log(comments?.length, ' comments?.length')
+    // console.log(maxPage, comments?.length, 'maxPage < comments?.length')
     return (
         <div className="comment">
             {loading == true && <Loading />}

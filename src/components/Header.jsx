@@ -31,7 +31,7 @@ const Header = () => {
     const [statusMenu, setStatusMenu] = useState(false);
     const [comfimLogOut, setComfimLogOut] = useState(false);
     // @ts-ignore
-    const onSearch = (value) => console.log(value);
+    // const onSearch = (value) => console.log(value);
 
     // @ts-ignore
     const user = useSelector((data) => data.users.value.data);

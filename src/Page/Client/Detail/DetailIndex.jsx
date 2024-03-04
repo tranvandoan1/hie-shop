@@ -109,7 +109,7 @@ const DetailIndex = () => {
   const classifies = useSelector((data) => data.classifies);
   const saveorders = useSelector((data) => data.saveorders.value);
   const comments = useSelector((data) => data.comments.value);
-  const users = useSelector((data) => data.users.value);
+  const users = useSelector((data) => data.users.users);
   console.log(users,'users2e32ew')
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
@@ -256,7 +256,7 @@ const DetailIndex = () => {
   };
   return (
     <div className="detail">
-      {/* <Header /> */}
+      <Header />
       <div className="detail-pro">
         <div className="product-briefing">
           <div className="product-briefing-info_pro">
