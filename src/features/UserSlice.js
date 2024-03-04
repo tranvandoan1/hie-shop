@@ -59,22 +59,34 @@ export const getOtp_Email = (email) => {
   const url = `/get-otp-email`;
   return axiosClient.post(url, email);
 };
+import LZString from "lz-string";
 
-
+function encode(data) {
+  const decodedString = LZString.decompressFromBase64(data);
+  const arr = JSON.parse(decodedString.slice(0, -8));
+  return arr
+}
 export const getUser = createAsyncThunk(
   "users/getUser",
   async (id) => {
-    console.log(id, 'chào nehs')
-    const { data: users } = await getInfoUser(id);
-    return users
+    const { data: user } = await getInfoUser(id);
+    return {
+      message: user.message,
+      status: user.status,
+      data: encode(user.data),
+    }
+
   }
 );
 export const getAllUser = createAsyncThunk(
   "users/getAllUser",
   async () => {
     const { data: users } = await getAll();
-    console.log(users?.data,'users?.data')
-    return users
+    return {
+      message: users.message,
+      status: users.status,
+      data: encode(users.data),
+    }
   }
 );
 
@@ -84,14 +96,22 @@ export const uploadUser = createAsyncThunk(
   "users/uploadUser",
   async (data) => {
     const { data: users } = await uploadInfoUser(data);
-    return users;
+    return  {
+      message: users.message,
+      status: users.status,
+      data: encode(users.data),
+    };
   }
 );
 export const uploadAdmin = createAsyncThunk(
   "users/uploadAdmin",
   async (data) => {
     const { data: user } = await uploadInfoAdmin(data);
-    return user;
+    return  {
+      message: user.message,
+      status: user.status,
+      data: encode(user.data),
+    };
   }
 );
 
@@ -99,7 +119,11 @@ export const uploadEmailUser = createAsyncThunk(
   "users/uploadEmailUser",
   async (data) => {
     const { data: user } = await uploadEmail(data);
-    return user;
+    return {
+      message: user.message,
+      status: user.status,
+      data: encode(user.data),
+    };
   }
 );
 const userSlice = createSlice({
@@ -135,7 +159,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.users = action.payload;
     });
-   
+
     builder.addCase(uploadAdmin.fulfilled, (state, action) => {
       state.loading = false;
       state.value = action.payload;

@@ -35,7 +35,8 @@ const Header = () => {
 
     // @ts-ignore
     const user = useSelector((data) => data.users.value.data);
- 
+    console.log(user, 'e3rewfredweref')
+   
     const saveorders = useSelector((data) => data.saveorders.value);
     const newDataSaveOrder = saveorders
         ?.slice()
@@ -189,7 +190,7 @@ const Header = () => {
                             Chưa có logo
                         </div>
                     ) : (
-                        <img src={ user?.avatar} alt="" />
+                        <img src={user?.avatar} alt="" />
                     )}
                 </div>
                 {/* <div className="header-input">
