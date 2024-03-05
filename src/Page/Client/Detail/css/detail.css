@@ -1,7 +1,6 @@
 .detail {
     background-color: #f5f5f5;
     height: 100%;
-
 }
 
 .detail-pro {
@@ -244,7 +243,7 @@
 
 .button-quantity .button-quantity-input .ant-btn {
     height: 38px;
-    width:40px;
+    width: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -540,7 +539,7 @@
     align-items: center;
 }
 
-.product-loading-image{
+.product-loading-image {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -590,6 +589,10 @@
     }
 
     .classify-button {
+        /* display: none; */
+    }
+
+    .button-add-mobi {
         display: none;
     }
 }
@@ -653,6 +656,55 @@
     .classify-button {
         display: none;
     }
+
+    .button-add-mobi {
+        position: fixed;
+        bottom: 0px;
+        transition: 350ms ease-in 0s;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .button-add-mobi .button-add-pro {
+        padding: 0;
+        width: 50%;
+        background-color: #fff;
+        border-radius: 2px;
+    }
+
+    .button-add-mobi .button-add-buy {
+        margin-left: 5px;
+        width: 50%;
+        border-radius: 2px;
+    }
+    .detail-pro-info{
+        display: block;
+    }
+    .detail-pro-info_left{
+        width: 100%;
+    }
+    .detail-pro-info_right{
+        /* width: 100%; */
+        display: none;
+    }
+    
+    .comment-avatar .ant-avatar{
+        width: 55px !important;
+        height: 55px !important;
+    }
+    .comment-avatar {
+        width: 20% !important;
+    }
+    .input-comment{
+        width: 70% !important;
+    }
+    .comment-upload-image{
+        width: 15% !important;
+        height: 56px !important;
+        width: 56px !important;
+    }
 }
 
 @media screen and (max-width: 320px) {
@@ -665,4 +717,5 @@
         font-weight: 700;
         margin: 0;
     }
+
 }

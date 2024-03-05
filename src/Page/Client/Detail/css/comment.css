@@ -35,6 +35,10 @@
 .comment-avatar {
     width: 15%;
 }
+.comment-avatar .ant-avatar{
+    width: 100px;
+    height: 100px;
+}
 
 .input-comment {
     width: 75%;
@@ -58,7 +62,7 @@
     text-transform: uppercase;
     font-size: 20px;
     border-bottom: 1px solid black;
-    margin-top: 70px;
+    margin-top: 40px;
 }
 
 .comment-user h5 {

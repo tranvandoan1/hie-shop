@@ -27,7 +27,7 @@ const Login = () => {
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
-        // setLoading(true)
+        setLoading(true)
         const { data } = await signinApi(values);
         message.open({
             type: data.status == false ? 'error' : "success",
@@ -55,7 +55,6 @@ const Login = () => {
         }
 
     };
-    console.log(showCodeShop, '32rewrf')
     // @ts-ignore
     const onFinishFailed = (errorInfo) => {
     };

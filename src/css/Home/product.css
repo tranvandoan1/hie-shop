@@ -7,7 +7,9 @@
     padding-bottom: 5px;
     width: 100%;
 }
-
+.show-product .ant-row{
+    margin-right: -5px !important;
+}
 .show-product {
     width: 100%;
     overflow: hidden;
@@ -104,13 +106,13 @@
 
 .products:hover .product-photo {
     transition: 0.4s ease-in;
-    transform: scale(0, 0);
+    /* transform: scale(0, 0); */
 
 }
 
 .products:hover .product-photo1 {
     transition: 0.4s ease-in;
-    transform: scale(1, 1) translateY(-100%);
+    /* transform: scale(1, 1) translateY(-100%); */
 
 }
 
@@ -137,8 +139,9 @@
     -webkit-box-orient: vertical;
     transition: .3s;
     overflow: hidden;
-    margin-top: 20px;
+    margin-top: 5px;
     margin-left: 5px;
+    height: 48px;
 }
 
 .product-price {

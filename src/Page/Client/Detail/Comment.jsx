@@ -216,7 +216,7 @@ const Comment = ({ comments, users }) => {
                 <div className="comment-input">
                     <div className="comment-avatar">
                         <Avatar
-                            size={100}
+                            
                             src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png"
                         />
                     </div>

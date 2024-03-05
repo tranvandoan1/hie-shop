@@ -1,4 +1,4 @@
-import styles from "../../../css/Home/product.module.css";
+import "../../../css/Home/product.css";
 // @ts-ignore
 import Carousel, {
     slidesToShowPlugin,
@@ -64,29 +64,36 @@ const Product = () => {
 
         return proPrice.map((item) => {
             return (
-                <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item}>
+                <Col
+                    xs={12}
+                    sm={8}
+                    md={6}
+                    lg={4}
+                    xl={4}
+                    key={item}
+                    style={{ paddingLeft: 0 }}
+                >
                     <div
-                        className={styles["products"]}
-                        style={{ marginLeft: 10, cursor: 'pointer' }}
+                        className={"products"}
+                        style={{ marginLeft: 10, cursor: "pointer" }}
                         onClick={() =>
                             navigate(`/detail/${item.name.replace(/\s+/g, "-")}/${item._id}`)
                         }
                     >
-                        <div className={styles["product-photo-box"]}>
-                            <div className={styles["product-photo"]}>
+                        <div className={"product-photo-box"}>
+                            <div className={"product-photo"}>
                                 <img src={item.photo} alt="" />
                             </div>
-                            <div className={styles["product-photo1"]}>
+                            <div className={"product-photo1"}>
                                 <img src={item.photo} alt="" />
                             </div>
                         </div>
-                        {
-                            item.sale > 0 &&
-                            <span className={styles["product-sale"]}>-{item.sale}%</span>
-                        }
-                        <div className={styles["product-title"]}>
-                            <span className={styles["product-name"]}>{item.name}</span>
-                            <div className={styles["product-price"]}>
+                        {item.sale > 0 && (
+                            <span className={"product-sale"}>-{item.sale}%</span>
+                        )}
+                        <div className={"product-title"}>
+                            <span className={"product-name"}>{item.name}</span>
+                            <div className={"product-price"}>
                                 <span>{item.values[0]}đ</span>
                                 <span>Đã bán : 30k</span>
                             </div>
@@ -131,22 +138,21 @@ const Product = () => {
 
         return proPrice.map((item) => {
             return (
-                <div className={styles["products"]} style={{ marginLeft: 10 }} key={item}>
-                    <div className={styles["product-photo-box"]}>
-                        <div className={styles["product-photo"]}>
+                <div className={"products"} style={{ margin: "0 2px" }} key={item}>
+                    <div className={"product-photo-box"}>
+                        <div className={"product-photo"}>
                             <img src={item.photo} alt="" />
                         </div>
-                        <div className={styles["product-photo1"]}>
+                        <div className={"product-photo1"}>
                             <img src={item.photo} alt="" />
                         </div>
                     </div>
-                    {
-                        item.sale > 0 &&
-                        <span className={styles["product-sale"]}>-{item.sale}%</span>
-                    }
-                    <div className={styles["product-title"]}>
-                        <span className={styles["product-name"]}>{item.name}</span>
-                        <div className={styles["product-price"]}>
+                    {item.sale > 0 && (
+                        <span className={"product-sale"}>-{item.sale}%</span>
+                    )}
+                    <div className={"product-title"}>
+                        <span className={"product-name"}>{item.name}</span>
+                        <div className={"product-price"}>
                             <span>{item.values[0]}đ</span>
                             <span>Đã bán : 30k</span>
                         </div>
@@ -158,10 +164,10 @@ const Product = () => {
 
     return (
         <div>
-            <div className={styles.list_products}>
+            <div className={"list_products"}>
                 <h4>Sản phẩm nổi bật</h4>
                 <div className="css-library">
-                    <div className={styles["show-product"]}>
+                    <div className={"show-product"}>
                         <Carousel
                             animationSpeed={2000}
                             plugins={[
@@ -176,7 +182,12 @@ const Product = () => {
                                 {
                                     resolve: slidesToShowPlugin,
                                     options: {
-                                        numberOfSlides: 5,
+                                        numberOfSlides:
+                                            window.innerWidth < 480
+                                                ? 2
+                                                : window.innerWidth < 1023 && window.innerWidth > 481
+                                                    ? 4
+                                                    : window.innerWidth > 1024 && 4,
                                     },
                                 },
                             ]}
@@ -186,10 +197,10 @@ const Product = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.list_products}>
+            <div className={"list_products"}>
                 <h4>Sản phẩm của Shop</h4>
                 <div className="css-library">
-                    <div className={styles["show-product"]}>
+                    <div className={"show-product"}>
                         <Row gutter={16}>{ShowHtml(productsValue, classifies?.value)}</Row>
                     </div>
                 </div>

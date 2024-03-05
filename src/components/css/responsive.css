@@ -42,6 +42,9 @@
     .header-menu {
         display: none;
     }
+    .slide-image div {
+        height: 300px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -56,12 +59,15 @@
     }
 
     .logo {
-        width: 70px !important;
-        height: 70px !important;
+        width: 50px !important;
+        height: 50px !important;
         transition: 350ms ease-in 0s;
     }
 
     .header-menu {
         display: none;
+    }
+    .slide-image div {
+        height: 200px;
     }
 }

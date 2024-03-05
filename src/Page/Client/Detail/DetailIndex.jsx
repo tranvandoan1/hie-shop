@@ -94,12 +94,12 @@ const DetailIndex = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
-  document.title = name
+  document.title = name;
   // @ts-ignore
   const [quantityValue, setQuantityValue] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
-  const [selectHove, setSelectHove] = useState()
+  const [selectHove, setSelectHove] = useState();
   const [selectClassifies, setSelectClassifies] = useState({
     valuePl1: undefined,
     valuePl2: undefined,
@@ -110,7 +110,7 @@ const DetailIndex = () => {
   const saveorders = useSelector((data) => data.saveorders.value);
   const comments = useSelector((data) => data.comments.value);
   const users = useSelector((data) => data.users.users);
-  console.log(users,'users2e32ew')
+  console.log(users, "users2e32ew");
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
   const productDetail = productsValue?.find((item) => item._id == id);
@@ -142,15 +142,14 @@ const DetailIndex = () => {
     dispatch(getAllClassifies());
     dispatch(getSaveOrderAll());
     dispatch(getAllComment());
-    dispatch(getAllUser())
-
+    dispatch(getAllUser());
   }, []);
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
   // chọn phân loại 1
   const classifieSelect1 = (item) => {
-    setSelectHove(undefined)
+    setSelectHove(undefined);
     if (selectClassifies?.valuePl1?._id == item._id) {
       setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
     } else {
@@ -159,26 +158,34 @@ const DetailIndex = () => {
   };
   // chọn phân loại 2
   const classifieSelect2 = (item) => {
-    setSelectHove(undefined)
+    setSelectHove(undefined);
     if (selectClassifies?.valuePl1 == undefined) {
       message.warning("Chưa chọn phân loại !");
     } else {
-      if ((selectClassifies?.valuePl2?._id || selectClassifies?.valuePl2?.id) == (item._id || item.id)) {
-        setSelectClassifies({ valuePl2: undefined, valuePl1: selectClassifies?.valuePl1 });
+      if (
+        (selectClassifies?.valuePl2?._id || selectClassifies?.valuePl2?.id) ==
+        (item._id || item.id)
+      ) {
+        setSelectClassifies({
+          valuePl2: undefined,
+          valuePl1: selectClassifies?.valuePl1,
+        });
       } else {
-        setSelectClassifies({ valuePl2: item, valuePl1: selectClassifies?.valuePl1 });
+        setSelectClassifies({
+          valuePl2: item,
+          valuePl1: selectClassifies?.valuePl1,
+        });
       }
     }
-
   };
 
   // bắt sự kiện hove vào ảnh
   const hoverImage = (item) => {
     setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
     if (selectClassifies?.valuePl2?._id == item._id) {
-      setSelectHove(undefined)
+      setSelectHove(undefined);
     } else {
-      setSelectHove(item)
+      setSelectHove(item);
     }
   };
 
@@ -212,7 +219,6 @@ const DetailIndex = () => {
           item.user_id == getDataUserLoca()._id &&
           item.code_shop == getDataUserLoca().code &&
           item.pro_id == productDetail?._id
-
           : item.classification == selectClassifies?.valuePl1?.name &&
           item.commodity_value == selectClassifies?.valuePl2?.name &&
           item.user_id == getDataUserLoca()._id &&
@@ -450,7 +456,9 @@ const DetailIndex = () => {
                     ? selectClassifies?.valuePl1
                     : selectClassifies?.valuePl2) !== undefined && (
                       <div className="button-quantity_pro">
-                        <span>{selectClassifies?.valuePl2?.quantity} sản phẩm</span>
+                        <span>
+                          {selectClassifies?.valuePl2?.quantity} sản phẩm
+                        </span>
                       </div>
                     )}
                 </div>
@@ -552,6 +560,7 @@ const DetailIndex = () => {
           </div>
         </div>
       </div>
+
       <Comfim
         title="Xóa bình luận"
         conent="Bạn có muốn xóa bình luận này không ?"
@@ -559,7 +568,17 @@ const DetailIndex = () => {
         btnReject={() => setIsModalOpen(false)}
         isModalOpen={isModalOpen}
       />
+
       <Footer />
+      {/* button mobi */}
+      <div className="button-add-mobi">
+        <button className="button-add-pro" onClick={() => saveOrder()}>
+          <BsCartPlus /> <span>Thêm sản phẩm</span>
+        </button>
+        <button className="button-add-buy" onClick={() => setIsModalOpen(true)}>
+          Mua ngay
+        </button>
+      </div>
     </div>
   );
 };
