@@ -31,7 +31,7 @@ const ForgotPassword = () => {
             content: data.message,
         });
         setLoading(false)
-        setComfimOtp({ status: true, otp: data.otp, data: values })
+        setComfimOtp({ status: data.status, otp: data.otp, data: values })
     };
     // @ts-ignore
     const onFinishFailed = (errorInfo) => {

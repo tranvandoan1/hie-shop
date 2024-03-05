@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosClient, axiosClientMultipart } from "../api/API";
+import LZString from "lz-string";
 
 
 export const getAll = () => {
@@ -30,6 +31,7 @@ export const signinApi = (user) => {
   const url = `/signin`;
   return axiosClient.post(url, user)
 };
+// chưa dùng
 export const uploadInfoUser = (data) => {
   const url = `/upload-user`;
   return axiosClientMultipart.post(url, data);
@@ -47,6 +49,8 @@ export const getInfoUser = (id) => {
   const url = `/get-user/${id}`;
   return axiosClient.get(url);
 };
+// chưa dùng
+
 export const checkEmailUpload = (email) => {
   const url = `/check-email-upload`;
   return axiosClient.post(url, email);
@@ -59,7 +63,6 @@ export const getOtp_Email = (email) => {
   const url = `/get-otp-email`;
   return axiosClient.post(url, email);
 };
-import LZString from "lz-string";
 
 function encode(data) {
   const decodedString = LZString.decompressFromBase64(data);

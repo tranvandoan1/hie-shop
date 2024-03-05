@@ -10,14 +10,14 @@ import { signInWithPopup } from "firebase/auth";
 // @ts-ignore
 import { auth, providerGoogle } from '../../../firebase/index';
 // @ts-ignore
-import { signinApi } from '../../../api/Users';
+import { selectShop, signinApi } from '../../../api/Users';
 import Loading from "../../../components/Loading";
 import SelectShop from "../../../components/SelectShop";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getAllUser } from '../../../features/UserSlice'
+import { getAll, getAllUser } from '../../../features/UserSlice'
 
-
+import LZString from 'lz-string'
 // @ts-ignore
 const Login = () => {
     const [form] = Form.useForm();
@@ -27,7 +27,7 @@ const Login = () => {
     const navigator = useNavigate()
     // @ts-ignore
     const onFinish = async (values) => {
-        setLoading(true)
+        // setLoading(true)
         const { data } = await signinApi(values);
         message.open({
             type: data.status == false ? 'error' : "success",
@@ -36,41 +36,44 @@ const Login = () => {
         });
         data.status == false && setLoading(false)
         if (data.user.role == 0) {
-            const jsonString = JSON.stringify({
+            const dataEn = {
                 token: data.token,
                 data: data.user
-            });
-            localStorage.setItem("data", btoa(unescape(encodeURIComponent(jsonString))));
+            };
 
+            localStorage.setItem("data", LZString.compressToBase64(JSON.stringify(dataEn)));
             navigator('/home')
             setLoading(false)
         } else {
-            setShowCodeShop({ status: true, data: data })
+
+            const dataUser = await selectShop({ check: 1, token: data.token })
+            const decodedString = LZString.decompressFromBase64(dataUser.data.data);
+            const arr = JSON.parse(decodedString.slice(0, -8));
+            setShowCodeShop({ status: true, data: data, user: arr })
             setLoading(false)
 
         }
 
     };
+    console.log(showCodeShop, '32rewrf')
     // @ts-ignore
     const onFinishFailed = (errorInfo) => {
     };
 
     const sigin = (e) => {
-        const jsonString = JSON.stringify({
+
+        const dataEn = {
             token: showCodeShop?.data?.token,
             data: { ...showCodeShop?.data.user, code: e.code, shop: e.email }
-        });
+        }
 
-        localStorage.setItem("data", btoa(unescape(encodeURIComponent(jsonString))));
+        localStorage.setItem("data", LZString.compressToBase64(JSON.stringify(dataEn)));
         navigator('/home')
     };
 
-    const dispatch = useDispatch()
-    const users = useSelector((data) => data.users.value).data
-    const userRoleAdmin = users?.filter((item) => item.role == 0)
-    useEffect(() => {
-        dispatch(getAllUser())
-    }, [])
+
+    const userRoleAdmin = []
+
     // đăng nhập bằng google
     const loginGoogle = async () => {
         form.resetFields();
@@ -206,8 +209,8 @@ const Login = () => {
                     isModalOpen={showCodeShop.status}
                     cancelText="Hủy"
                     okText="Chọn"
-                    code={showCodeShop.status}
-                    users={userRoleAdmin}
+                    code={showCodeShop?.status}
+                    users={showCodeShop?.user}
                 />
             }
 

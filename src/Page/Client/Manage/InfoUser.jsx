@@ -17,14 +17,11 @@ import { getDataUserLoca } from '../../../app/getDataLoca';
 const InfoUser = () => {
     const dispatch = useDispatch();
     // @ts-ignore
-    const users = useSelector((data) => data.users.value)
+    const user = useSelector((data) => data.users.value)
 
-
-    const user = users?.data?.find((item) => item._id == getDataUserLoca()?._id)
-    console.log(users, 'us123123ers21')
     const [loading, setLoading] = useState(false);
     const [imageUrlAvatar, setImageUrlAvatar] = useState(
-        { url: user?.avatar, file: undefined }
+        { url: user?.data?.avatar, file: undefined }
     );
 
     const [values, setValues] = useState({
@@ -38,39 +35,39 @@ const InfoUser = () => {
         setImageUrlAvatar({ url: src, file: file });
         setLoading(false);
     };
-    console.log(getDataUserLoca().avatar, 'getDataUserLoca()')
     useEffect(() => {
-        setImageUrlAvatar({ url: user?.avatar, file: undefined });
-        users?.status !== 1 && message.open({
-            type: users?.status == false ? 'error' : "success",
+        setImageUrlAvatar({ url: user?.data?.avatar, file: undefined });
+        user?.status !== 1 && message.open({
+            type: user?.status == false ? 'error' : "success",
             duration: 2,
-            content: users?.message,
+            content: user?.message,
         });
         const avatarWeb = document.getElementById("avatarWeb");
 
         // avatarWeb?.href = (getDataUserLoca()?.avatar == undefined || getDataUserLoca().avatar == null) ? "https://png.pngtree.com/png-vector/20190805/ourlarge/pngtree-account-avatar-user-abstract-circle-background-flat-color-icon-png-image_1650938.jpg"
         //     : user.avatar
 
-    }, [users]);
+    }, [user]);
+    console.log(imageUrlAvatar,'3ewrfd')
     const save = async () => {
         setLoading(true);
         const formData = new FormData();
-        formData.append("_id", user?._id);
+        formData.append("_id", user?.data?._id);
         formData.append("files", imageUrlAvatar.file);
         formData.append(
             "name",
-            values?.name == undefined ? user?.name : values.name
+            values?.name == undefined ? user?.data?.name : values.name
         );
         formData.append(
             "email",
-            values?.email == undefined ? user?.email : values.email
+            values?.email == undefined ? user?.data?.email : values.email
         );
         formData.append(
             "phone",
-            values?.phone == undefined ? user?.phone : values.phone
+            values?.phone == undefined ? user?.data?.phone : values.phone
         );
         formData.append(
-            "image_id", user.image_id
+            "image_id", user?.data?.image_id
         );
         await dispatch(uploadUser(formData));
         setLoading(false);
@@ -81,12 +78,12 @@ const InfoUser = () => {
             <h5>Hồ sơ của tôi</h5>
             <hr />
             <div className="info-user">
-                {users?.data !== undefined ? (
+                {user?.data !== undefined ? (
                     <div style={{ width: "50%" }}>
                         <div className="info-user-name">
                             <span style={{ fontSize: 16 }}>Tên : </span>
                             <Input
-                                defaultValue={user?.name}
+                                defaultValue={user?.data?.name}
                                 onChange={(e) =>
                                     setValues({
                                         name: e.target.value,
@@ -99,7 +96,7 @@ const InfoUser = () => {
                         <div className="info-user-email">
                             <span style={{ fontSize: 16 }}>Email : </span>
                             <Input
-                                defaultValue={user?.email}
+                                defaultValue={user?.data?.email}
                                 disabled
                                 onChange={(e) =>
                                     setValues({
@@ -113,7 +110,7 @@ const InfoUser = () => {
                         <div className="info-user-phone">
                             <span style={{ fontSize: 16 }}>Số điện thoại : </span>
                             <Input
-                                defaultValue={user?.phone}
+                                defaultValue={user?.data?.phone}
                                 onChange={(e) =>
                                     setValues({
                                         name: values?.name,
@@ -125,7 +122,7 @@ const InfoUser = () => {
                         </div>
                         <div className="info-user-phone">
                             <span style={{ fontSize: 16 }}>Vai trò : </span>
-                            <span>{user?.role == 0 ? "Bán hàng" : "Mua hàng"}</span>
+                            <span>{user?.data?.role == 0 ? "Bán hàng" : "Mua hàng"}</span>
                         </div>
                     </div>
                 ) : (
@@ -186,7 +183,7 @@ const InfoUser = () => {
                                         <div
                                             onClick={() =>
                                                 setImageUrlAvatar({
-                                                    url: user?.avatar,
+                                                    url: user?.data?.avatar,
                                                     file: undefined
 
                                                 })

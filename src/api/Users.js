@@ -21,6 +21,10 @@ const UserAPI = {
     },
 };
 export default UserAPI;
+export const selectShop = (user) => {
+    const url = `/select-shop`;
+    return axiosClient.post(url, user)
+};
 export const signupApi = (user) => {
     console.log('chào rồi')
     const url = `/signup`;
@@ -43,6 +47,7 @@ export const getInfoUser = (id) => {
     const url = `/get-user/${id}`;
     return axiosClient.get(url);
 };
+// chưa dùng
 export const checkEmailUpload = (email) => {
     const url = `/check-email-upload`;
     return axiosClient.post(url, email);

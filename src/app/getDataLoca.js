@@ -1,6 +1,10 @@
+import LZString from "lz-string";
 export const getDataUserLoca = () => {
   //lấy data user từ loca
-  const dataLoace = atob(localStorage.getItem('data'));
-  const decodedDataLoace = localStorage.getItem('data') == null ? null : JSON.parse(dataLoace).data;
-  return decodedDataLoace
-}
+  const decodedDataLoace =
+    localStorage.getItem("data") == null
+      ? null
+      : JSON.parse(LZString.decompressFromBase64(localStorage.getItem("data")))
+        .data;
+  return decodedDataLoace;
+};
