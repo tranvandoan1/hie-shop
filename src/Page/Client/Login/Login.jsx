@@ -63,15 +63,13 @@ const Login = () => {
 
         const dataEn = {
             token: showCodeShop?.data?.token,
-            data: { ...showCodeShop?.data.user, code: e.code, shop: e.email }
+            data: { ...showCodeShop?.data.user, code: e.code }
         }
-
         localStorage.setItem("data", LZString.compressToBase64(JSON.stringify(dataEn)));
         navigator('/home')
     };
 
 
-    const userRoleAdmin = []
 
     // đăng nhập bằng google
     const loginGoogle = async () => {

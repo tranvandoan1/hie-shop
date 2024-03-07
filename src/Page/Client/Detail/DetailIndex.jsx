@@ -5,7 +5,7 @@ import Header from "../../../components/Header.jsx";
 import "@brainhubeu/react-carousel/lib/style.css";
 import "./css/detail.css";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { Button, Col, Input, Rate, Row, message } from "antd";
+import { Button, Col, Input, Modal, Rate, Row, message } from "antd";
 import { BsCartPlus } from "react-icons/bs";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import Footer from "../../../components/Footer.jsx";
@@ -30,6 +30,7 @@ import { getSaveOrderAll } from "../../../features/SaveOrderSlice.js";
 import { getDataUserLoca } from "../../../app/getDataLoca.js";
 import { getAllComment } from "../../../features/CommentSlice.js";
 import { getAllUser } from "../../../features/UserSlice.js";
+import LZString from "lz-string";
 
 const data = [
   {
@@ -91,13 +92,19 @@ const data = [
 ];
 // @ts-ignore
 const DetailIndex = () => {
+  
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
-  document.title = name;
+  // @ts-ignore
+  document.title = name;//set tên title
+
+  const decodedString = localStorage.getItem('data') == null ? '' : JSON.parse(LZString.decompressFromBase64(localStorage.getItem('data')));
+
   // @ts-ignore
   const [quantityValue, setQuantityValue] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [onModalAddCart, setOnModalAddCart] = useState(false);
   // @ts-ignore
   const [selectHove, setSelectHove] = useState();
   const [selectClassifies, setSelectClassifies] = useState({
@@ -110,7 +117,6 @@ const DetailIndex = () => {
   const saveorders = useSelector((data) => data.saveorders.value);
   const comments = useSelector((data) => data.comments.value);
   const users = useSelector((data) => data.users.users);
-  console.log(users, "users2e32ew");
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
   const productDetail = productsValue?.find((item) => item._id == id);
@@ -122,7 +128,6 @@ const DetailIndex = () => {
     productDetail?.name_commodityvalue == undefined ||
     productDetail?.name_commodityvalue == null ||
     String(productDetail?.name_commodityvalue).length <= 0;
-
   // lọc giá trị phân loại
   const dataPrice = [];
   newProClassifies?.map((item) => {
@@ -142,7 +147,7 @@ const DetailIndex = () => {
     dispatch(getAllClassifies());
     dispatch(getSaveOrderAll());
     dispatch(getAllComment());
-    dispatch(getAllUser());
+    dispatch(getAllUser({ check: 2, token: decodedString?.token }));
   }, []);
   useEffect(() => {
     window.scroll(0, 0);
@@ -201,10 +206,10 @@ const DetailIndex = () => {
 
   const saveOrder = async () => {
     if (
-      condition
+      condition == true
         ? selectClassifies?.valuePl1 == undefined
-        : selectClassifies?.valuePl1 == undefined &&
-        selectClassifies?.valuePl2 == undefined
+        : (selectClassifies?.valuePl1 == undefined ||
+          selectClassifies?.valuePl2 == undefined)
     ) {
       message.warning("Chưa chọn phân loại !");
     } else {
@@ -256,15 +261,25 @@ const DetailIndex = () => {
         setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
         message.success("Sửa thành công");
       }
+      setOnModalAddCart(false)
       setQuantityValue(1);
       setSelectClassifies({ valuePl1: undefined, valuePl2: undefined });
     }
   };
+
+  const handleOk = () => {
+    setOnModalAddCart(false);
+  };
+  const handleCancel = () => {
+    setOnModalAddCart(false);
+  };
+
   return (
     <div className="detail">
       <Header />
       <div className="detail-pro">
         <div className="product-briefing">
+          
           <div className="product-briefing-info_pro">
             <div className="product-briefing-image">
               <img
@@ -477,6 +492,7 @@ const DetailIndex = () => {
               </div>
             </div>
           </div>
+
         </div>
         <br />
         <div className="detail-pro-info">
@@ -508,14 +524,14 @@ const DetailIndex = () => {
                 </span>
               </div>
             </div>
-            <Comment comments={comments} users={users?.data} />
+            <Comment comments={comments} users={users?.data}/>
             <br />
             <div className="product-other">
               <h5>sản phẩm khác của shop</h5>
-              <Row gutter={16}>
+              <Row >
                 {data.map((item) => {
                   return (
-                    <Col xs={12} sm={8} md={6} lg={4} xl={6}>
+                    <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item}>
                       <div className="product_other">
                         <div className="product-other-photo">
                           <img src={item.image} alt="" />
@@ -542,7 +558,7 @@ const DetailIndex = () => {
           <div className="detail-pro-info_right">
             {data.map((item) => {
               return (
-                <div className="product-hot">
+                <div className="product-hot" key={item}>
                   <div className="product-hot-photo">
                     <img src={item.image} alt="" />
                   </div>
@@ -572,13 +588,111 @@ const DetailIndex = () => {
       <Footer />
       {/* button mobi */}
       <div className="button-add-mobi">
-        <button className="button-add-pro" onClick={() => saveOrder()}>
+        <button className="button-add-pro" onClick={() => setOnModalAddCart(true)}>
           <BsCartPlus /> <span>Thêm sản phẩm</span>
         </button>
         <button className="button-add-buy" onClick={() => setIsModalOpen(true)}>
           Mua ngay
         </button>
       </div>
+
+      <div className="modal-add-cart">
+        <Modal title="Thêm sản phẩm" open={onModalAddCart} footer={false} onOk={handleOk} onCancel={handleCancel}>
+          <div className="classify-button-mobile">
+            <div className="product-briefing-classify">
+              <div className="classify1">
+                <span>{productDetail?.name_classification}</span>
+                <div>
+                  {newProClassifies?.map((item) => {
+                    return (
+                      <span
+                        className={`value-classify1 ${selectClassifies?.valuePl1?._id == item._id &&
+                          "value-classify1-active"
+                          }`}
+                        onClick={() => classifieSelect1(item)}
+                      >
+                        {item.name}
+                        {selectClassifies?.valuePl1?._id == item._id && (
+                          <span className="_v">
+                            {" "}
+                            <i className="fas fa-check"></i>
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            {condition ? null : (
+              <div className="product-briefing-classify">
+                <div className="classify2">
+                  <span>{productDetail?.name_commodityvalue}</span>
+                  <div>
+                    {(selectClassifies?.valuePl1 == undefined
+                      ? JSON.parse(productDetail?.valueClassify)
+                      : selectClassifies?.valuePl1?.values
+                    )?.map((item) => (
+                      <span
+                        className={`value-classify2 ${selectClassifies?.valuePl2?.name ==
+                          (item.name || item) && "value-classify2-active"
+                          }`}
+                        onClick={() => {
+                          classifieSelect2(item);
+                        }}
+                      >
+                        {item.name || item}
+                        {selectClassifies?.valuePl2?.name == item.name && (
+                          <span className="_v">
+                            <i className="fas fa-check"></i>
+                          </span>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="quantity">
+              <span>Số lượng</span>
+              <div className="button-quantity">
+                <div className="button-quantity-input">
+                  <Button onClick={() => selectValuePro("reduce")}>
+                    <MinusOutlined />
+                  </Button>
+                  <Input value={quantityValue} />
+                  <Button onClick={() => selectValuePro("increase")}>
+                    <PlusOutlined />
+                  </Button>
+                </div>
+                {(condition
+                  ? selectClassifies?.valuePl1
+                  : selectClassifies?.valuePl2) !== undefined && (
+                    <div className="button-quantity_pro">
+                      <span>
+                        {selectClassifies?.valuePl2?.quantity} sản phẩm
+                      </span>
+                    </div>
+                  )}
+              </div>
+            </div>
+
+            <div className="button-add">
+              <button className="button-add-pro" onClick={() => saveOrder()}>
+                <BsCartPlus /> <span>Thêm sản phẩm</span>
+              </button>
+              <button
+                className="button-add-buy"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Mua ngay
+              </button>
+            </div>
+          </div>
+        </Modal>
+      </div>
+
     </div>
   );
 };

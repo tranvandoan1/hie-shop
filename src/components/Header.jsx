@@ -36,7 +36,7 @@ const Header = () => {
     // @ts-ignore
     const user = useSelector((data) => data.users.value.data);
     console.log(user, 'e3rewfredweref')
-   
+
     const saveorders = useSelector((data) => data.saveorders.value);
     const newDataSaveOrder = saveorders
         ?.slice()
@@ -239,17 +239,26 @@ const Header = () => {
                 </div>
 
                 {sizeWindonw?.width <= 480 ? (
-                    statusMenu == false ? (
-                        <MenuUnfoldOutlined
-                            style={{ fontSize: 25, cursor: "pointer" }}
-                            onClick={() => setStatusMenu(!statusMenu)}
-                        />
-                    ) : (
-                        <MenuFoldOutlined
-                            style={{ fontSize: 25, cursor: "pointer" }}
-                            onClick={() => setStatusMenu(!statusMenu)}
-                        />
-                    )
+                    <div className="cart-menu-mobi">
+
+                        <Badge count={saveorders?.length} onClick={() => navigator("/cart")}>
+                            <ShoppingCartOutlined className={styles.icon} />
+                        </Badge>
+                        {
+                            statusMenu == false ? (
+                                <MenuUnfoldOutlined
+                                    style={{ fontSize: 25, cursor: "pointer" }}
+                                    onClick={() => setStatusMenu(!statusMenu)}
+                                />
+                            ) : (
+                                <MenuFoldOutlined
+                                    style={{ fontSize: 25, cursor: "pointer" }}
+                                    onClick={() => setStatusMenu(!statusMenu)}
+                                />
+                            )
+                        }
+                    </div>
+
                 ) : (
                     renderUserCart()
                 )}

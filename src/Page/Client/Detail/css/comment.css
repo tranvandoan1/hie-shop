@@ -39,7 +39,9 @@
     width: 100px;
     height: 100px;
 }
-
+.input-comment .ck-content{
+    height: 200px;
+}
 .input-comment {
     width: 75%;
 }
@@ -80,15 +82,6 @@
     justify-content: space-between;
 }
 
-.list-comment-user-title span:nth-child(2) {
-    font-size: 16px;
-}
-
-.list-comment-user-title span:nth-child(3) {
-    font-size: 14px;
-    font-style: italic;
-    color: #979797;
-}
 
 .list-comment-user-edit {
     color: #17ff02;
@@ -195,4 +188,15 @@
 }
 .input-comment .ck-editor{
     overflow: hidden !important;
+}
+.info-user-comment{
+    display: flex;
+}
+
+.name-user-time span:nth-child(2),.name-user-time span:nth-child(3){
+    font-size: 13px;
+    color: #691eff;
+    font-style: italic;
+    font-weight: 600;
+    opacity: .7;
 }

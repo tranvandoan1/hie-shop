@@ -94,7 +94,8 @@ const Product = () => {
                         <div className={"product-title"}>
                             <span className={"product-name"}>{item.name}</span>
                             <div className={"product-price"}>
-                                <span>{item.values[0]}đ</span>
+                                <span>{item.values[0]?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
                                 <span>Đã bán : 30k</span>
                             </div>
                         </div>
@@ -153,7 +154,8 @@ const Product = () => {
                     <div className={"product-title"}>
                         <span className={"product-name"}>{item.name}</span>
                         <div className={"product-price"}>
-                            <span>{item.values[0]}đ</span>
+                            <span>{item.values[0]?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
                             <span>Đã bán : 30k</span>
                         </div>
                     </div>
@@ -187,7 +189,7 @@ const Product = () => {
                                                 ? 2
                                                 : window.innerWidth < 1023 && window.innerWidth > 481
                                                     ? 4
-                                                    : window.innerWidth > 1024 && 4,
+                                                    : window.innerWidth > 1024 && 6,
                                     },
                                 },
                             ]}

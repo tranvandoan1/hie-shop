@@ -9,7 +9,7 @@ import {
     EyeOutlined,
 } from "@ant-design/icons";
 import EditComment from "../../../components/EditComment";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment } from "../../../features/Classifies";
 import {
@@ -28,31 +28,46 @@ const { TextArea } = Input;
 
 // @ts-ignore
 const Comment = ({ comments, users }) => {
-    console.log(users,'usersdsax')
     const dispatch = useDispatch();
-
-    const user = users?.find(
-        (item) => item._id == getDataUserLoca()?._id
-    );
+    const user = users?.find((item) => item._id == getDataUserLoca()?._id);
 
     const { id } = useParams();
-    const [isModalOpenEditComment, setIsModalOpenEditComment] = useState(false);
-    const [comfimRemoveComment, setComfimRemoveComment] = useState({
-        status: false,
-        data: undefined,
-    });
-    const [selectEditComment, setSelectEditComment] = useState({
-        status: false,
-        data: undefined,
-    });
-    const [valueEditComment, setValueEditComment] = useState();
-    const [selectPhotoComment, setSelectPhotoComment] = useState();
-    const [imageUrlAvatar, setImageUrlAvatar] = useState([]);
-    const [imageUrlAvatarEdit, setImageUrlAvatarEdit] = useState();
-    const [valueComment, setValueComment] = useState();
-    const [loading, setLoading] = useState(false);
-    const [minPage, setMinPage] = useState(0);
-    const [maxPage, setMaxPage] = useState(3);
+
+    const [state, setState] = useReducer(
+        (state, newState) => ({
+            ...state,
+            ...newState,
+        }),
+        {
+            isModalOpenEditComment: false,
+            comfimRemoveComment: {
+                status: false,
+                data: undefined,
+            },
+            selectEditComment: {
+                status: false,
+                data: undefined,
+            },
+            valueEditComment: undefined,
+            selectPhotoComment: undefined,
+            imageUrlAvatar: [],
+            imageUrlAvatarEdit: [],
+            valueComment: undefined,
+            loading: false,
+            commentsRender: [],
+            pageSpacing: Math.ceil(comments?.length / 5),
+        }
+    );
+
+    useEffect(() => {
+        setState({
+            currentPage: 1,
+            commentsRender: comments
+                ?.slice()
+                .reverse()
+                .slice(0, 5),
+        });
+    }, [comments]);
     function getTimeAgo(time) {
         const commentTime = new Date(time);
 
@@ -81,76 +96,89 @@ const Comment = ({ comments, users }) => {
     // Sử dụng hàm getTimeAgo để tính thời gian như "vừa bình luận", "1 giây trước", "1 giờ trước",...
 
     const saveComment = async () => {
-        setLoading(true);
-
+        setState({ loading: true });
         const formData = new FormData();
-        for (let i = 0; i < imageUrlAvatar?.length; i++) {
-            formData.append("files", imageUrlAvatar[i].file);
+        for (let i = 0; i < state.imageUrlAvatar?.length; i++) {
+            formData.append("files", state.imageUrlAvatar[i].file);
         }
-        formData.append("comment", JSON.stringify(valueComment));
+        formData.append("comment", JSON.stringify(state.valueComment));
         formData.append("user_id", getDataUserLoca()._id);
-        formData.append("code_shop", getDataUserLoca().code);
+        formData.append("code_shop", getDataUserLoca().code); //mã code cmt theo shop
         formData.append("pro_id", id);
         await dispatch(addComments(formData));
-        setImageUrlAvatar([]);
-        setValueComment(undefined);
-        setLoading(false);
+        setState({
+            imageUrlAvatar: [],
+            valueComment: undefined,
+            loading: false,
+        });
     };
 
     // thêm ảnh comment add
     const addImage = (event) => {
-        setLoading(true);
+        setState({ loading: true });
         const src = URL.createObjectURL(event.target.files[0]);
-        setImageUrlAvatar([
-            ...imageUrlAvatar,
-            { url: src, file: event.target.files[0], id: Math.random() },
-        ]);
-        setLoading(false);
+        setState({
+            imageUrlAvatar: [
+                ...state.imageUrlAvatar,
+                { url: src, file: event.target.files[0], id: Math.random() },
+            ],
+            loading: false,
+        });
     };
     const removeImageAdd = (e) => {
-        const newImage = imageUrlAvatar?.filter((item) => item.id !== e.id);
-        setImageUrlAvatar(newImage);
+        const newImage = state.imageUrlAvatar?.filter((item) => item.id !== e.id);
+        setState({
+            imageUrlAvatar: newImage,
+        });
     };
     // thêm ảnh comment upload
     const uploadImage = (event) => {
-        setLoading(true);
-        const src = URL.createObjectURL(event.target.files[0]);
-        setImageUrlAvatarEdit([
-            ...imageUrlAvatarEdit,
-            {
-                url: src,
-                file: event.target.files[0],
-                image_id: Math.random(),
-                status: false,
-            },
-        ]);
-        setLoading(false);
+        setState({ loading: true });
 
+        const src = URL.createObjectURL(event.target.files[0]);
+
+        setState({
+            imageUrlAvatarEdit: [
+                ...state.imageUrlAvatarEdit,
+                {
+                    url: src,
+                    file: event.target.files[0],
+                    image_id: Math.random(),
+                    status: false,
+                },
+            ],
+            loading: false,
+        });
     };
 
     const removeImageEdit = (e) => {
         const newData = [];
-        imageUrlAvatarEdit?.map((item) => {
+        state.imageUrlAvatarEdit?.map((item) => {
             if (item.image_id == e.image_id) {
                 newData.push({ ...item, status: !item.status });
             } else {
                 newData.push(item);
             }
         });
-        setImageUrlAvatarEdit(newData);
+        setState({
+            imageUrlAvatarEdit: newData,
+        });
     };
     const deleteComment = async () => {
-        setLoading(true);
-        await dispatch(removeComments(comfimRemoveComment.data));
-        setLoading(false);
-        setComfimRemoveComment({ status: false, data: undefined });
+        setState({ loading: true });
+        await dispatch(removeComments(state.comfimRemoveComment.data));
+
+        setState({
+            comfimRemoveComment: { status: false, data: undefined },
+            loading: false,
+        });
     };
 
     // thay đổi bình luận
     const handleOk = async () => {
-        setLoading(true);
+        setState({ loading: true });
         const image = [];
-        imageUrlAvatarEdit?.map((item) => {
+        state.imageUrlAvatarEdit?.map((item) => {
             if (item.url !== undefined) {
                 if (item.status == false) {
                     image.push({ ...item, check: "add" }); //thêm ẩnh
@@ -164,49 +192,47 @@ const Comment = ({ comments, users }) => {
             }
         });
         const formData = new FormData();
-        formData.append("_id", selectEditComment?.data?._id);
-        formData.append("value", JSON.stringify(valueEditComment));
+        formData.append("_id", state.selectEditComment?.data?._id);
+        formData.append("value", JSON.stringify(state.valueEditComment));
         formData.append("image", JSON.stringify(image));
         for (let i = 0; i < image.length; i++) {
             formData.append("files", image[i].file);
         }
         await dispatch(uploadtComments(formData));
-        setSelectEditComment({ status: false, data: undefined });
-        setImageUrlAvatarEdit();
-        setValueEditComment();
-        setLoading(false);
+
+        setState({
+            selectEditComment: { status: false, data: undefined },
+            imageUrlAvatarEdit: [],
+            valueEditComment: [],
+            loading: false,
+        });
     };
     const handleCancel = () => {
-        setSelectEditComment({ status: false, data: undefined });
-        setValueEditComment(undefined);
+        setState({
+            selectEditComment: { status: false, data: undefined },
+            valueEditComment: undefined,
+        });
     };
     const editorConfig = {
         toolbar: false, // ẩn header
     };
 
-
     const onChangePagination = (e) => {
-        if (minPage == 0) {
 
-        } else if (maxPage < 10) {
-            console.log('3ewds')
-
-            setMinPage(minPage + 3)
-            setMaxPage(maxPage + 3)
-        } else {
-            setMinPage(minPage)
-            setMaxPage(maxPage)
+        function paginate(array, page_size, page_number) {
+            return array.slice((page_number - 1) * page_size, page_number * page_size);
         }
+        // Lấy dữ liệu cho trang cần hiển thị
+        const paginatedItems = paginate(comments?.slice().reverse(), 5, e);
+        setState({
+            commentsRender: paginatedItems,
+        });
 
+    };
 
-    }
-    // console.log(maxPage, 'maxPage')
-    // console.log(minPage, 'minPage')
-    // console.log(comments?.length, ' comments?.length')
-    // console.log(maxPage, comments?.length, 'maxPage < comments?.length')
     return (
         <div className="comment">
-            {loading == true && <Loading />}
+            {state.loading == true && <Loading />}
             <h4>đánh giá sản phẩm</h4>
             <div className="comment-list">
                 <div className="comment-name">
@@ -215,21 +241,18 @@ const Comment = ({ comments, users }) => {
                 </div>
                 <div className="comment-input">
                     <div className="comment-avatar">
-                        <Avatar
-                            
-                            src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png"
-                        />
+                        <Avatar src="https://d1kwj86ddez2oj.cloudfront.net/20012022/LyI7mmcKHBzRnwUhxCWvbMkiJEVEtRPWIusualKm.png" />
                     </div>
                     <div className="input-comment">
                         <CKEditor
                             editor={ClassicEditor}
                             placeholder="Hãy để lại đáng giá của bạn"
-                            data={valueComment == undefined ? "" : valueComment}
+                            data={state.valueComment == undefined ? "" : state.valueComment}
                             // @ts-ignore
                             onChange={(event, editor) => {
                                 const data = editor.getData();
                                 startTransition(() => {
-                                    setValueComment(data);
+                                    setState({ valueComment: data });
                                 });
                             }}
                             config={editorConfig}
@@ -237,7 +260,8 @@ const Comment = ({ comments, users }) => {
 
                         <Button
                             disabled={
-                                String(valueComment).length <= 0 || valueComment == undefined
+                                String(state.valueComment).length <= 0 ||
+                                    state.valueComment == undefined
                                     ? true
                                     : false
                             }
@@ -259,9 +283,9 @@ const Comment = ({ comments, users }) => {
                     />
                 </div>
 
-                {imageUrlAvatar?.length > 0 && (
+                {state.imageUrlAvatar?.length > 0 && (
                     <div className="image-comment" style={{ marginTop: 20 }}>
-                        {imageUrlAvatar?.map((item) => {
+                        {state.imageUrlAvatar?.map((item) => {
                             return (
                                 <div style={{ position: "relative", borderRadius: 3 }}>
                                     <div className="image-add-comment">
@@ -286,120 +310,154 @@ const Comment = ({ comments, users }) => {
                     <h5>đánh giá của khách hàng</h5>
                 </div>
 
-                {comments
-                    ?.slice()
-                    .reverse()
-                    .map((item) => {
-                        return (
-                            <div className="list-comment-user">
-                                <div className="list-comment-user-title">
-                                    {users?.map((itemUser) => {
-                                        if (item.user_id == itemUser._id) {
-                                            return (
-                                                <div>
-                                                    <Avatar
-                                                        size={35}
-                                                        src={itemUser.avatar}
-                                                        style={{ marginRight: 10 }}
-                                                    />
-                                                    <span>{itemUser.name}</span>-
-                                                    <span>{getTimeAgo(item.updatedAt)}</span>
+                {state.commentsRender?.map((item) => {
+                    const timeCreatedAt = new Date(item.createdAt);
+                    const timeUpdatedAt = new Date(item.updatedAt);
+                    return (
+                        <div className="list-comment-user">
+                            <div className="list-comment-user-title">
+                                {users?.map((itemUser) => {
+                                    if (item.user_id == itemUser._id) {
+                                        return (
+                                            <div className="info-user-comment">
+                                                <Avatar
+                                                    size={35}
+                                                    src={itemUser.avatar}
+                                                    style={{ marginRight: 10 }}
+                                                />
+
+                                                <div className="name-user-time">
+                                                    <div className="user-time">
+                                                        <span>{itemUser.name}</span>-
+                                                        <span>{getTimeAgo(item.createdAt)}</span>
+                                                    </div>
+
+                                                    {itemUser.code == getDataUserLoca().code && (
+                                                        <span>Tác giả</span>
+                                                    )}
+
+                                                    {/* so sáng xem cmt có chỉnh sửa ko */}
+
+                                                    {(timeCreatedAt.getHours() !==
+                                                        timeUpdatedAt.getHours() ||
+                                                        timeCreatedAt.getSeconds() !==
+                                                        timeUpdatedAt.getSeconds() ||
+                                                        timeCreatedAt.getMilliseconds() !==
+                                                        timeUpdatedAt.getMilliseconds() ||
+                                                        timeCreatedAt.getFullYear() !==
+                                                        timeUpdatedAt.getFullYear() ||
+                                                        timeCreatedAt.getMonth() + 1 !==
+                                                        timeUpdatedAt.getMonth() + 1 ||
+                                                        timeCreatedAt.getDate() !==
+                                                        timeUpdatedAt.getDate()) && <span>Đã sửa</span>}
                                                 </div>
-                                            );
-                                        }
-                                    })}
-                                    {
-                                        getDataUserLoca()?._id == item.user_id ? (
-                                            <div>
-                                                <EditOutlined
-                                                    className="list-comment-user-edit"
-                                                    onClick={() => {
-                                                        setSelectEditComment({
-                                                            status: true,
-                                                            data: {
-                                                                ...item,
-                                                                user_name: users?.find(
-                                                                    (itemUser) => itemUser._id == item.user_id
-                                                                )?.name,
-                                                            },
-                                                        });
-                                                        setValueEditComment(JSON.parse(item.comment));
-                                                        const newImage = [];
-                                                        item?.photo?.map((item) =>
-                                                            newImage.push({ ...item, status: false })
-                                                        );
-                                                        setImageUrlAvatarEdit(newImage);
-                                                    }}
-                                                />
-                                                <DeleteOutlined
-                                                    className="list-comment-user-delete"
-                                                    onClick={() =>
-                                                        setComfimRemoveComment({ status: true, data: item })
-                                                    }
-                                                />
                                             </div>
-                                        ) : getDataUserLoca()?.role == 0 ?
-                                            <DeleteOutlined
-                                                className="list-comment-user-delete"
-                                                onClick={() =>
-                                                    setComfimRemoveComment({ status: true, data: item })
-                                                }
-                                            />
-                                            : (
-                                                ""
-                                            )}
-                                </div>
-                                <div style={{ padding: 10 }}>
-                                    <p
-                                        className="show-comment-user"
-                                        dangerouslySetInnerHTML={{
-                                            __html: JSON.parse(item.comment),
-                                        }}
+                                        );
+                                    }
+                                })}
+                                {getDataUserLoca()?._id == item.user_id ? (
+                                    <div>
+                                        <EditOutlined
+                                            className="list-comment-user-edit"
+                                            onClick={() => {
+                                                const newImage = [];
+                                                item?.photo?.map((item) =>
+                                                    newImage.push({ ...item, status: false })
+                                                );
+                                                setState({
+                                                    selectEditComment: {
+                                                        status: true,
+                                                        data: {
+                                                            ...item,
+                                                            user_name: users?.find(
+                                                                (itemUser) => itemUser._id == item.user_id
+                                                            )?.name,
+                                                        },
+                                                    },
+                                                    valueEditComment: JSON.parse(item.comment),
+                                                    imageUrlAvatarEdit: newImage,
+                                                });
+                                            }}
+                                        />
+                                        <DeleteOutlined
+                                            className="list-comment-user-delete"
+                                            onClick={() =>
+                                                setState({
+                                                    comfimRemoveComment: { status: true, data: item },
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                ) : getDataUserLoca()?.role == 0 ? (
+                                    <DeleteOutlined
+                                        className="list-comment-user-delete"
+                                        onClick={() =>
+                                            setState({
+                                                comfimRemoveComment: { status: true, data: item },
+                                            })
+                                        }
                                     />
-                                    {item.photo.length > 0 && (
-                                        <div className="image-comment">
-                                            {item.photo.map((itemPhoto) => {
-                                                return (
-                                                    <div
-                                                        className="image-add-comment"
-                                                        onClick={() =>
-                                                            setSelectPhotoComment(
-                                                                selectPhotoComment?._id == item._id &&
-                                                                    selectPhotoComment?.image_id ==
+                                ) : (
+                                    ""
+                                )}
+                            </div>
+                            <div style={{ padding: 10 }}>
+                                <p
+                                    className="show-comment-user"
+                                    dangerouslySetInnerHTML={{
+                                        __html: JSON.parse(item.comment),
+                                    }}
+                                />
+                                {item.photo.length > 0 && (
+                                    <div className="image-comment">
+                                        {item.photo.map((itemPhoto) => {
+                                            return (
+                                                <div
+                                                    className="image-add-comment"
+                                                    onClick={() =>
+                                                        setState({
+                                                            selectPhotoComment:
+                                                                state.selectPhotoComment?._id == item._id &&
+                                                                    state.selectPhotoComment?.image_id ==
                                                                     itemPhoto.image_id
                                                                     ? undefined
                                                                     : {
                                                                         _id: item._id,
                                                                         photo: itemPhoto.photo,
                                                                         image_id: itemPhoto.image_id,
-                                                                    }
-                                                            )
-                                                        }
-                                                    >
-                                                        <img src={itemPhoto.photo} alt="" />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                    {selectPhotoComment?._id == item._id && (
-                                        <div className="image-comment-view">
-                                            <img src={selectPhotoComment.photo} alt="" />
-                                        </div>
-                                    )}
-                                </div>
+                                                                    },
+                                                        })
+                                                    }
+                                                >
+                                                    <img src={itemPhoto.photo} alt="" />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                                {state.selectPhotoComment?._id == item._id && (
+                                    <div className="image-comment-view">
+                                        <img src={state.selectPhotoComment.photo} alt="" />
+                                    </div>
+                                )}
                             </div>
-                        );
-                    })}
+                        </div>
+                    );
+                })}
 
                 <div className="comment-pagination">
-                    <Pagination defaultCurrent={2} total={comments?.length} onChange={(e) => onChangePagination(e)} />
+                    <Pagination
+                        defaultCurrent={state.currentPage}
+                        total={comments?.length}
+                        pageSize={Math.ceil(comments?.length / 5)}
+                        onChange={(e) => onChangePagination(e)}
+                    />
                 </div>
             </div>
 
             <Modal
                 title="Sửa bình luận"
-                open={selectEditComment?.status}
+                open={state.selectEditComment?.status}
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
@@ -410,12 +468,12 @@ const Comment = ({ comments, users }) => {
                     <div className="edit-comment-input-image">
                         <CKEditor
                             editor={ClassicEditor}
-                            data={valueEditComment}
+                            data={state.valueEditComment}
                             // @ts-ignore
                             onChange={(event, editor) => {
                                 const data = editor.getData();
                                 startTransition(() => {
-                                    setValueEditComment(data);
+                                    setState({ valueEditComment: data });
                                 });
                             }}
                             className="input-edit-comment"
@@ -441,7 +499,7 @@ const Comment = ({ comments, users }) => {
                                 onChange: (current, prev) => null,
                             }}
                         >
-                            {imageUrlAvatarEdit?.map((item) => {
+                            {state.imageUrlAvatarEdit?.map((item) => {
                                 return (
                                     <div style={{ position: "relative" }}>
                                         <div className="photo-edit-comment">
@@ -471,10 +529,10 @@ const Comment = ({ comments, users }) => {
             <EditComment
                 title="Sửa bình luận"
                 conent="Xóa sản phẩm"
-                btnComfim={() => setIsModalOpenEditComment(false)}
-                btnReject={() => setIsModalOpenEditComment(false)}
+                btnComfim={() => setState({ isModalOpenEditComment: false })}
+                btnReject={() => setState({ isModalOpenEditComment: false })}
                 data=""
-                isModalOpen={isModalOpenEditComment}
+                isModalOpen={state.isModalOpenEditComment}
             />
             <Comfim
                 title="Xóa bình luận"
@@ -483,9 +541,9 @@ const Comment = ({ comments, users }) => {
                     deleteComment();
                 }}
                 btnReject={() =>
-                    setComfimRemoveComment({ status: false, data: undefined })
+                    setState({ comfimRemoveComment: { status: false, data: undefined } })
                 }
-                isModalOpen={comfimRemoveComment?.status}
+                isModalOpen={state.comfimRemoveComment?.status}
             />
         </div>
     );

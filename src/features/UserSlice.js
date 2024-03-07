@@ -3,10 +3,10 @@ import { axiosClient, axiosClientMultipart } from "../api/API";
 import LZString from "lz-string";
 
 
-export const getAll = () => {
-
+export const getAll = (user) => {
   const url = `/get-user-all`;
-  return axiosClient.get(url);
+  return axiosClient.post(url, user)
+
 }
 
 export const signOut = () => {
@@ -83,8 +83,9 @@ export const getUser = createAsyncThunk(
 );
 export const getAllUser = createAsyncThunk(
   "users/getAllUser",
-  async () => {
-    const { data: users } = await getAll();
+  async (user) => {
+    const { data: users } = await getAll(user);
+    console.log(users,'23ewusers')
     return {
       message: users.message,
       status: users.status,

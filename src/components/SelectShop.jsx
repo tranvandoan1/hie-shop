@@ -29,9 +29,6 @@ const SelectShop = ({
         btnReject();
     };
 
-    const handleChange = (value) => {
-        setSelectShop(users?.find((item) => item._id == value))
-    };
 
     // Filter `option.label` match the user type `input`
     const filterOption = (input, option) =>
