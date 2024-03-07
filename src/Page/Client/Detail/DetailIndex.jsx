@@ -5,7 +5,7 @@ import Header from "../../../components/Header.jsx";
 import "@brainhubeu/react-carousel/lib/style.css";
 import "./css/detail.css";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { Button, Col, Input, Modal, Rate, Row, message } from "antd";
+import { Button, Col, Input, Modal, Rate, Row, Statistic, message } from "antd";
 import { BsCartPlus } from "react-icons/bs";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import Footer from "../../../components/Footer.jsx";
@@ -16,8 +16,6 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
 import { getProductAll } from "../../../features/Products.js";
-// @ts-ignore
-import { getAllClassifies } from "../../../features/Classifies.js";
 // @ts-ignore
 import {
   addSaveOrder,
@@ -31,7 +29,7 @@ import { getDataUserLoca } from "../../../app/getDataLoca.js";
 import { getAllComment } from "../../../features/CommentSlice.js";
 import { getAllUser } from "../../../features/UserSlice.js";
 import LZString from "lz-string";
-
+const { Countdown } = Statistic;
 const data = [
   {
     id: 1,
@@ -92,7 +90,7 @@ const data = [
 ];
 // @ts-ignore
 const DetailIndex = () => {
-  
+
   const dispatch = useDispatch();
   // @ts-ignore
   const { id, name } = useParams();
@@ -117,12 +115,17 @@ const DetailIndex = () => {
   const saveorders = useSelector((data) => data.saveorders.value);
   const comments = useSelector((data) => data.comments.value);
   const users = useSelector((data) => data.users.users);
+
+
+  const commentPro = comments.filter(item => item.pro_id == id)
+
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
   const productDetail = productsValue?.find((item) => item._id == id);
   const newProClassifies = classifies?.value?.filter(
     (item) => item.linked == productDetail?.linked
   );
+  const productShop=products?.value?.filter(item=>item.code_shop==getDataUserLoca().code)
   // kiểm tra xem có phân loại 2 không
   const condition =
     productDetail?.name_commodityvalue == undefined ||
@@ -144,7 +147,6 @@ const DetailIndex = () => {
 
   useEffect(() => {
     dispatch(getProductAll());
-    dispatch(getAllClassifies());
     dispatch(getSaveOrderAll());
     dispatch(getAllComment());
     dispatch(getAllUser({ check: 2, token: decodedString?.token }));
@@ -273,13 +275,18 @@ const DetailIndex = () => {
   const handleCancel = () => {
     setOnModalAddCart(false);
   };
-
+  // const onChange = (val) => {
+  //   if (val <= 1) {
+  //   console.log('first')
+  //   }
+  // }
   return (
     <div className="detail">
       <Header />
+      {/* <Countdown title="Countdown" format="mm:ss" value={Date.now() + 10 * 1000} onChange={onChange} /> */}
       <div className="detail-pro">
         <div className="product-briefing">
-          
+
           <div className="product-briefing-info_pro">
             <div className="product-briefing-image">
               <img
@@ -498,19 +505,6 @@ const DetailIndex = () => {
         <div className="detail-pro-info">
           <div className="detail-pro-info_left">
             <div className="detail-pro-info_left_1">
-              {/* <h4>chi tiết sản phẩm</h4>
-              <div className="detail-pro-info-cate">
-                <span>danh mục</span>
-                <span>quần áo đẹp</span>
-              </div>
-              <div className="detail-pro-info-warehouse">
-                <span>Kho hàng</span>
-                <span>quần áo đẹp</span>
-              </div>
-              <div className="detail-pro-info-sent-from">
-                <span>Gửi từ</span>
-                <span>Hà nội</span>
-              </div> */}
 
               <h4>mô tả sản phẩm</h4>
               <div className="product-description">
@@ -524,17 +518,17 @@ const DetailIndex = () => {
                 </span>
               </div>
             </div>
-            <Comment comments={comments} users={users?.data}/>
+            <Comment comments={commentPro} users={users?.data} />
             <br />
             <div className="product-other">
               <h5>sản phẩm khác của shop</h5>
               <Row >
-                {data.map((item) => {
+                {productShop.map((item) => {
                   return (
-                    <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item}>
+                    <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item} style={{padding:3}}>
                       <div className="product_other">
                         <div className="product-other-photo">
-                          <img src={item.image} alt="" />
+                          <img src={item.photo} alt="" />
                         </div>
                         <span className="product-other-sale">
                           -{item.sale}%

@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // @ts-ignore
-import { getProductAll } from "../../../features/Products";
+import { getProductAll, uploadProductView } from "../../../features/Products";
 // @ts-ignore
 import { getAllClassifies } from "../../../features/Classifies";
 
@@ -20,14 +20,28 @@ const Product = () => {
     const products = useSelector((data) => data.products);
     const productsValue = products?.value;
 
+
     const classifies = useSelector((data) => data.classifies);
     // @ts-ignore
     const [loading, setLoading] = useState(false);
+    const proView = [...productsValue]
+
+    proView?.sort((a, b) => b.sold - a.sold);
 
     useEffect(() => {
         dispatch(getProductAll());
         dispatch(getAllClassifies());
     }, []);
+
+
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000) + 'm';
+        } else if (num >= 1000) {
+            return (num / 1000) + 'k';
+        }
+        return num;
+    }
 
     const ShowHtml = (product, classify) => {
         const proPrice = [];
@@ -76,8 +90,9 @@ const Product = () => {
                     <div
                         className={"products"}
                         style={{ marginLeft: 10, cursor: "pointer" }}
-                        onClick={() =>
+                        onClick={() => {
                             navigate(`/detail/${item.name.replace(/\s+/g, "-")}/${item._id}`)
+                        }
                         }
                     >
                         <div className={"product-photo-box"}>
@@ -95,8 +110,8 @@ const Product = () => {
                             <span className={"product-name"}>{item.name}</span>
                             <div className={"product-price"}>
                                 <span>{item.values[0]?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
-                                <span>Đã bán : 30k</span>
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
+                                <span>Đã bán : {formatNumber(item.sold)}</span>
                             </div>
                         </div>
                     </div>
@@ -107,7 +122,7 @@ const Product = () => {
     const ShowHtmlOutstanding = (product, classify) => {
         const proPrice = [];
 
-        product?.map((itemPro) => {
+        proView?.map((itemPro) => {
             const classifyPrice1 = [];
             const classifyPrice2 = [];
             classify?.map((itemData) => {
@@ -155,7 +170,7 @@ const Product = () => {
                         <span className={"product-name"}>{item.name}</span>
                         <div className={"product-price"}>
                             <span>{item.values[0]?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
                             <span>Đã bán : 30k</span>
                         </div>
                     </div>

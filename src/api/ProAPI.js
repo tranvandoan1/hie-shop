@@ -18,6 +18,10 @@ export const uploadPro = (data) => {
   const url = `/product-upload`;
   return axiosClientMultipart.post(url, data);
 };
+export const uploadProView = (data) => {
+  const url = `/product-upload-view`;
+  return axiosClient.post(url, data);
+};
 export const removePro = (id) => {
   const url = `/products-remove`;
   return axiosClient.post(url, id);

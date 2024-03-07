@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addPro, getAllPro, getPro, removePro, removesPro, uploadPro } from './../api/ProAPI';
+import { addPro, getAllPro, getPro, removePro, removesPro, uploadPro, uploadProView } from './../api/ProAPI';
 import { getDataUserLoca } from "../app/getDataLoca";
 
 async function getAll() {
@@ -33,6 +33,15 @@ export const uploadProduct = createAsyncThunk(
   "products/uploadProduct",
   async (data) => {
     await uploadPro(data);
+    return getAll();
+
+  }
+);
+export const uploadProductView = createAsyncThunk(
+  "products/uploadProductView",
+  async (data) => {
+    console.log(data,'22efd')
+    await uploadProView(data);
     return getAll();
 
   }
@@ -80,17 +89,18 @@ const productSlice = createSlice({
     builder.addCase(removeProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.value = action.payload;
-      console.log('2e312')
     });
     builder.addCase(removeProducts.fulfilled, (state, action) => {
       state.loading = false;
       state.value = action.payload;
-      console.log('2e312')
+    });
+    builder.addCase(uploadProductView.fulfilled, (state, action) => {
+      state.loading = false;
+      state.value = action.payload;
     });
     builder.addCase(uploadProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.value = action.payload;
-      console.log('2e312')
     });
   },
 });

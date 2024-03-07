@@ -3,7 +3,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getUser } from "../../../features/UserSlice";
+import { getAllUser, getUser } from "../../../features/UserSlice";
 // @ts-ignore
 import { addOrder } from "../../../features/Order";
 // @ts-ignore
@@ -15,17 +15,16 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 // @ts-ignore
 import { getDataUserLoca } from '../../../app/getDataLoca';
+import LZString from 'lz-string';
 
 const CheckOut = () => {
     const dispatch = useDispatch();
     const navigator = useNavigate();
-
+    const decodedString = localStorage.getItem('data') == null ? '' : JSON.parse(LZString.decompressFromBase64(localStorage.getItem('data')));
 
     const infoUsers = useSelector((data) => data.infoUsers.value);
-    const user = useSelector((data) => data.users.value.data)
-   
+    const users = useSelector((data) => data.users.users)
     const userShop = users?.data?.find((item) => item.code == getDataUserLoca()?.code)
-
     const dataAdressUser = infoUsers?.find((item) => item.status == true);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,14 +32,12 @@ const CheckOut = () => {
 
     // @ts-ignore
     const dataOrderLoca = JSON.parse(localStorage.getItem("order"));
-    console.log(dataOrderLoca, 'dataOrderLoca')
 
 
     const [dataOrder, setDataOrder] = useState();
     useEffect(() => {
         setDataOrder(dataOrderLoca);
-        dispatch(getUser(getDataUserLoca()?._id));
-
+        dispatch(getAllUser({ check: 2, token: decodedString?.token }));
     }, []);
 
     let sum = 0;
@@ -94,6 +91,8 @@ const CheckOut = () => {
         }
 
     };
+
+    console.log(dataOrder, 'dataOrder')
     return (
         <div style={{ background: "#e8e8e8" }}>
             {loading == true && <Loading />}
@@ -163,7 +162,7 @@ const CheckOut = () => {
                                     style={{ marginTop: index == 0 ? 0 : 10 }}
                                 >
                                     <Row>
-                                        <Col xs={12} sm={4} md={12} lg={8} xl={6}>
+                                        <Col xs={3} sm={4} md={12} lg={8} xl={4}>
                                             {" "}
                                             <div className="pay-pro-logo">
                                                 <img src={item?.photo} alt="" />
@@ -174,28 +173,29 @@ const CheckOut = () => {
                                             sm={4}
                                             md={12}
                                             lg={8}
-                                            xl={8}
-                                            style={{ textAlign: "center" }}
+                                            xl={10}
+                                            style={{ textAlign: "left" }}
                                         >
                                             {" "}
-                                            <span>{item.name_pro}</span>
+                                            <span style={{ fontSize: 18 }}>{item.name_pro}</span><br />
+                                            <span style={{ fontSize: 15, opacity: .7, fontStyle: 'italic' }}>{item.classification}</span>,
+                                            <span style={{ fontSize: 15, opacity: .7, fontStyle: 'italic' }}>{item.commodity_value}</span>
                                         </Col>
                                         <Col
-                                            xs={12}
+                                            xs={5}
                                             sm={4}
                                             md={12}
                                             lg={8}
                                             xl={6}
                                             style={{ textAlign: "center" }}
                                         >
-                                            <div>
+                                            <div className="pay-price-pro">
                                                 <span style={{ color: "red", fontWeight: "500" }}>
                                                     {Math.ceil(item.price * ((100 - item?.sale) / 100))
                                                         .toString()
                                                         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                                                     đ
                                                 </span>
-                                                <br />
                                                 <span
                                                     style={{
                                                         color: "rgb(174, 174, 174)",
@@ -210,7 +210,7 @@ const CheckOut = () => {
                                             </div>
                                         </Col>
                                         <Col
-                                            xs={12}
+                                            xs={3}
                                             sm={4}
                                             md={12}
                                             lg={8}
@@ -218,7 +218,7 @@ const CheckOut = () => {
                                             style={{ textAlign: "center", fontWeight: "500" }}
                                         >
                                             {" "}
-                                            <span>{item.amount}</span>
+                                            <span>x{item.amount}</span>
                                         </Col>
                                     </Row>
                                 </div>

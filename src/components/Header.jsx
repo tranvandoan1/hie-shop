@@ -140,11 +140,13 @@ const Header = () => {
 
     const renderUserCart = () => (
         <div className={styles.iconleft}>
-            <div className="icon-search-cart" onClick={() => navigator("/cart")}>
+            <div className="icon-search-cart" >
                 <SearchOutlined
+                    onClick={() => navigator("/")}
                     style={{ fontSize: 25, cursor: "pointer", marginRight: 10 }}
                 />
                 <Popover
+                    onClick={() => navigator("/cart")}
                     content={renderSaveOrder}
                     title={
                         saveorders?.length > 0 ? "Sản phẩm đã thêm" : "Chưa có sản phẩm"
