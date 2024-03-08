@@ -18,16 +18,19 @@ import {
     uploadtComments,
 } from "../../../features/CommentSlice";
 import { getDataUserLoca } from "../../../app/getDataLoca";
-import { json, useParams } from "react-router-dom";
+import { json, useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import Comfim from "../../../components/Comfim";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ModalEditComment from "./ModalEditComment";
 const { TextArea } = Input;
 
 // @ts-ignore
 const Comment = ({ comments, users }) => {
-    console.log(comments,'comments')
+    console.log(comments, "comments");
+    const navigator = useNavigate();
+
     const dispatch = useDispatch();
     const user = users?.find((item) => item._id == getDataUserLoca()?._id);
 
@@ -62,10 +65,7 @@ const Comment = ({ comments, users }) => {
     useEffect(() => {
         setState({
             currentPage: 1,
-            commentsRender: comments
-                ?.slice()
-                .reverse()
-                .slice(0, 5),
+            commentsRender: comments?.slice().reverse().slice(0, 5),
         });
     }, [comments]);
     function getTimeAgo(time) {
@@ -131,39 +131,9 @@ const Comment = ({ comments, users }) => {
             imageUrlAvatar: newImage,
         });
     };
-    // thêm ảnh comment upload
-    const uploadImage = (event) => {
-        setState({ loading: true });
 
-        const src = URL.createObjectURL(event.target.files[0]);
 
-        setState({
-            imageUrlAvatarEdit: [
-                ...state.imageUrlAvatarEdit,
-                {
-                    url: src,
-                    file: event.target.files[0],
-                    image_id: Math.random(),
-                    status: false,
-                },
-            ],
-            loading: false,
-        });
-    };
 
-    const removeImageEdit = (e) => {
-        const newData = [];
-        state.imageUrlAvatarEdit?.map((item) => {
-            if (item.image_id == e.image_id) {
-                newData.push({ ...item, status: !item.status });
-            } else {
-                newData.push(item);
-            }
-        });
-        setState({
-            imageUrlAvatarEdit: newData,
-        });
-    };
     const deleteComment = async () => {
         setState({ loading: true });
         await dispatch(removeComments(state.comfimRemoveComment.data));
@@ -175,7 +145,7 @@ const Comment = ({ comments, users }) => {
     };
 
     // thay đổi bình luận
-    const handleOk = async () => {
+    const handleOk = async (e) => {
         setState({ loading: true });
         const image = [];
         state.imageUrlAvatarEdit?.map((item) => {
@@ -193,7 +163,7 @@ const Comment = ({ comments, users }) => {
         });
         const formData = new FormData();
         formData.append("_id", state.selectEditComment?.data?._id);
-        formData.append("value", JSON.stringify(state.valueEditComment));
+        formData.append("value", JSON.stringify(e));
         formData.append("image", JSON.stringify(image));
         for (let i = 0; i < image.length; i++) {
             formData.append("files", image[i].file);
@@ -207,27 +177,23 @@ const Comment = ({ comments, users }) => {
             loading: false,
         });
     };
-    const handleCancel = () => {
-        setState({
-            selectEditComment: { status: false, data: undefined },
-            valueEditComment: undefined,
-        });
-    };
+
     const editorConfig = {
         toolbar: false, // ẩn header
     };
 
     const onChangePagination = (e) => {
-
         function paginate(array, page_size, page_number) {
-            return array.slice((page_number - 1) * page_size, page_number * page_size);
+            return array.slice(
+                (page_number - 1) * page_size,
+                page_number * page_size
+            );
         }
         // Lấy dữ liệu cho trang cần hiển thị
         const paginatedItems = paginate(comments?.slice().reverse(), 5, e);
         setState({
             commentsRender: paginatedItems,
         });
-
     };
 
     return (
@@ -442,90 +408,43 @@ const Comment = ({ comments, users }) => {
                                 )}
                             </div>
                         </div>
-                    )
-
+                    );
                 })}
 
                 <div className="comment-pagination">
-                    <Pagination
-                        defaultCurrent={state.currentPage}
-                        total={comments?.length}
-                        pageSize={Math.ceil(comments?.length /5)}
-                        onChange={(e) => onChangePagination(e)}
-                    />
+                    {
+                        window.innerWidth <= 480 ?
+                            <span className="showAll-comment"
+                                onClick={() => navigator(`comment-detail`)}
+                            >Xem tất cả</span>
+                            :
+                            <Pagination
+                                defaultCurrent={state.currentPage}
+                                total={comments?.length}
+                                pageSize={Math.ceil(comments?.length / 5)}
+                                onChange={(e) => onChangePagination(e)}
+                            />
+                    }
+
                 </div>
             </div>
 
-            <Modal
-                title="Sửa bình luận"
+            <ModalEditComment
                 open={state.selectEditComment?.status}
-                onOk={handleOk}
-                onCancel={handleCancel}
-            >
-                <hr />
-
-                <div>
-                    {/* <h6>Bình luận</h6> */}
-                    <div className="edit-comment-input-image">
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={state.valueEditComment}
-                            // @ts-ignore
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                startTransition(() => {
-                                    setState({ valueEditComment: data });
-                                });
-                            }}
-                            className="input-edit-comment"
-                            config={editorConfig}
-                        />
-
-                        <label for="upload-image" className="edit-comment-image">
-                            <CameraOutlined />
-                        </label>
-                        <input
-                            type="file"
-                            id="upload-image"
-                            name="image"
-                            accept="image/*"
-                            onChange={uploadImage}
-                        />
-                    </div>
-                    <br />
-                    <br />
-                    <div className="edit-comment-photo">
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => null,
-                            }}
-                        >
-                            {state.imageUrlAvatarEdit?.map((item) => {
-                                return (
-                                    <div style={{ position: "relative" }}>
-                                        <div className="photo-edit-comment">
-                                            <Image width={"100%"} src={item.photo || item.url} />
-                                        </div>
-
-                                        <div
-                                            onClick={() => {
-                                                removeImageEdit(item);
-                                            }}
-                                            className="image-comment-close"
-                                        >
-                                            {item.status == true ? (
-                                                <EyeInvisibleOutlined style={{ fontSize: 17 }} />
-                                            ) : (
-                                                <EyeOutlined style={{ fontSize: 17 }} />
-                                            )}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </Image.PreviewGroup>
-                    </div>
-                </div>
-            </Modal>
+                handleCancel={() =>
+                    setState({
+                        selectEditComment: { status: false, data: undefined },
+                    })
+                }
+                imageUrlAvatarEdit={state.imageUrlAvatarEdit}
+                uploadImage={(e) => {
+                    setState({
+                        imageUrlAvatarEdit: e
+                    })
+                }}
+                valueEditComment={state.valueEditComment}
+                handleOk={(e) => handleOk(e)}
+            />
 
             <EditComment
                 title="Sửa bình luận"

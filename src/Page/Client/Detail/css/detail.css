@@ -550,19 +550,22 @@
     align-items: center;
     height: 100%;
 }
-.product-description .image{
+
+.product-description .image {
     width: 100%;
     height: 300px;
     position: relative;
     overflow: hidden;
 }
-.product-description .image img{
+
+.product-description .image img {
     position: absolute;
     top: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
+
 @media (min-width:1200px) {
     .modal-add-cart {
         display: none;
@@ -744,12 +747,14 @@
     .comment-upload-image {
         font-size: 30px !important;
     }
-    .product-description{
+
+    .product-description {
         width: 100%;
         /* height: 300px; */
         position: relative;
         overflow: hidden;
     }
+
     /* .product-description  img{
         position: absolute;
         top: 0;
@@ -757,22 +762,30 @@
         height: 100%;
         object-fit: contain;
     } */
-    .button-add .button-add-pro{
+    .button-add .button-add-pro {
         font-size: 15px;
         padding: 5px 10px;
         width: 60%;
     }
-    .button-add .button-add-buy{
+
+    .button-add .button-add-buy {
         font-size: 15px;
         padding: 5px 10px;
         width: 40%;
         margin-left: 10px;
     }
-    .button-quantity{
+
+    .button-quantity {
         display: block;
     }
-    .comment-avatar{
+
+    .comment-avatar {
         display: none;
+    }
+
+    .show-comment-detail .list-comment-user {
+        padding: 5px 10px;
+        margin: 5px 0;
     }
 }
 
@@ -786,23 +799,27 @@
         font-weight: 700;
         margin: 0;
     }
+
     .comment-upload-image {
         font-size: 20px !important;
     }
-    .product-description .image{
+
+    .product-description .image {
         width: 100%;
         height: 200px;
         position: relative;
         overflow: hidden;
     }
-    .product-description .image img{
+
+    .product-description .image img {
         position: absolute;
         top: 0;
         width: 100%;
         height: 100%;
         object-fit: contain;
     }
-    .comment-avatar{
+
+    .comment-avatar {
         display: none;
     }
 }

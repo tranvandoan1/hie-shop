@@ -35,6 +35,7 @@ import { getDataUserLoca } from "../../app/getDataLoca";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../features/UserSlice";
+import CommentMobile from "../Client/Detail/CommentMobile";
 const Router = () => {
   const dispatch = useDispatch();
 
@@ -100,6 +101,12 @@ const Router = () => {
             <PrivateRoute>
               <DetailIndex />
             </PrivateRoute>
+          }
+        />
+        <Route
+          path="/detail/:name/:id/comment-detail"
+          element={
+              <CommentMobile />
           }
         />
         <Route path="cart" element={<Cart />} />

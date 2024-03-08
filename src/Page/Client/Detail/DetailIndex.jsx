@@ -150,10 +150,9 @@ const DetailIndex = () => {
     dispatch(getSaveOrderAll());
     dispatch(getAllComment());
     dispatch(getAllUser({ check: 2, token: decodedString?.token }));
-  }, []);
-  useEffect(() => {
     window.scroll(0, 0);
   }, []);
+
   // chọn phân loại 1
   const classifieSelect1 = (item) => {
     setSelectHove(undefined);
