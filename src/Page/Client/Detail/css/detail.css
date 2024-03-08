@@ -565,7 +565,12 @@
     height: 100%;
     object-fit: contain;
 }
-
+.comment-pagination .ant-pagination{
+    display: block;
+}
+.comment-pagination>span{
+    display: none;
+}
 @media (min-width:1200px) {
     .modal-add-cart {
         display: none;
@@ -786,6 +791,12 @@
     .show-comment-detail .list-comment-user {
         padding: 5px 10px;
         margin: 5px 0;
+    }
+    .comment-pagination .ant-pagination{
+        display: none;
+    }
+    .comment-pagination>span{
+        display: block;
     }
 }
 

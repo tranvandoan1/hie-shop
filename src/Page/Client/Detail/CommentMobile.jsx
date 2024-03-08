@@ -4,6 +4,7 @@ import { Avatar, Button, Input, Modal, Pagination, Image, Badge, message, Skelet
 import {
 
     ArrowLeftOutlined,
+    ArrowUpOutlined,
     DeleteOutlined,
     EditOutlined,
     ShoppingCartOutlined,
@@ -34,6 +35,7 @@ const CommentMobile = () => {
     const saveorders = useSelector((data) => data.saveorders.value);
     console.log(users, 'users')
     const { id, name } = useParams();
+    document.title = name;//set tên title
 
     const [state, setState] = useReducer(
         (state, newState) => ({
@@ -86,7 +88,7 @@ const CommentMobile = () => {
             return `${diffInDays} ngày trước`;
         }
     }
-
+    // @ts-ignore
     const decodedString = localStorage.getItem('data') == null ? '' : JSON.parse(LZString.decompressFromBase64(localStorage.getItem('data')));
     const [cudent, setCudent] = useState(4)
     const [loading, setLoading] = useState(false)
@@ -100,6 +102,7 @@ const CommentMobile = () => {
     }, []);
 
     console.log(comments, 'commentPro')
+    console.log(decodedString, 'decodedString')
 
 
 
@@ -151,38 +154,11 @@ const CommentMobile = () => {
     };
 
 
-    const observer = useRef();
-
-    // const lastItemRef = useCallback((node) => {
-    //     //         setLoading(true)
-    //     //         console.log(observer.current, 'node')
-    //     // if (observer.current) observer.current.disconnect();
-
-    //     // observer.current = new IntersectionObserver((entries) => {
-    //     //     if (entries[0].isIntersecting) {
-    //     //         console.log('Đã lướt xem hết 20 item');
-    //     //         const time = setInterval(() => {
-    //     //             setCudent((prevCount) => prevCount + 1);
-    //     //         }, 5000);
-    //     //         setInterval(() => {
-    //     //             clearInterval(time)
-    //     //             setLoading(false)
-    //     //         }, 5200);
-    //     //         // Thực hiện các hành động mong muốn khi lướt xem hết 20 item ở đây
-    //     //     }
-    //     // });
-
-    //     // if (node) observer.current.observe(node);
-    // }, []);
-    // console.log(cudent, 'cudent')
-    // console.log((comments?.filter(item => item.pro_id == id).slice(0, cudent)),'(comments?.filter(item => item.pro_id == id).slice(0, cudent))')
-    // const [items, setItems] = useState([...Array(20).keys()]);
-    const fetchMoreData = () => {
-        console.log('first')
-        // Fetch more data here
-        setTimeout(() => {
-            setCudent(prevCount => prevCount + 1);
-        }, 5000);
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     };
 
     return (
@@ -196,151 +172,8 @@ const CommentMobile = () => {
                 </Badge>
             </div>
             <div className='list-comment-mobile'>
-                <InfiniteScroll
-                    dataLength={cudent}
-                    next={fetchMoreData}
-                    hasMore={true}
-                    loader={<h4>Loading...</h4>}
-                    pullDownToRefreshThreshold={5}
-                    endMessage={<p>No more items</p>}
-                >
-                    {comments.map((item, index) => {
-                        const timeCreatedAt = new Date(item.createdAt);
-                        const timeUpdatedAt = new Date(item.updatedAt);
-                        return (
-                            <div className="list-comment-user" >
-                                {index + 1}
-                                <div className="list-comment-user-title">
-                                    {users?.data?.map((itemUser) => {
-                                        if (item.user_id == itemUser._id) {
-                                            return (
-                                                <div className="info-user-comment">
-                                                    <Avatar
-                                                        size={35}
-                                                        src={itemUser.avatar}
-                                                        style={{ marginRight: 10 }}
-                                                    />
 
-                                                    <div className="name-user-time">
-                                                        <div className="user-time">
-                                                            <span>{itemUser.name}</span>-
-                                                            <span>{getTimeAgo(item.createdAt)}</span>
-                                                        </div>
-
-                                                        {itemUser.code == getDataUserLoca().code && (
-                                                            <span>Tác giả</span>
-                                                        )}
-
-                                                        {/* so sáng xem cmt có chỉnh sửa ko */}
-
-                                                        {(timeCreatedAt.getHours() !==
-                                                            timeUpdatedAt.getHours() ||
-                                                            timeCreatedAt.getSeconds() !==
-                                                            timeUpdatedAt.getSeconds() ||
-                                                            timeCreatedAt.getMilliseconds() !==
-                                                            timeUpdatedAt.getMilliseconds() ||
-                                                            timeCreatedAt.getFullYear() !==
-                                                            timeUpdatedAt.getFullYear() ||
-                                                            timeCreatedAt.getMonth() + 1 !==
-                                                            timeUpdatedAt.getMonth() + 1 ||
-                                                            timeCreatedAt.getDate() !==
-                                                            timeUpdatedAt.getDate()) && <span>Đã sửa</span>}
-                                                    </div>
-                                                </div>
-                                            );
-                                        }
-                                    })}
-                                    {getDataUserLoca()?._id == item.user_id ? (
-                                        <div>
-                                            <EditOutlined
-                                                className="list-comment-user-edit"
-                                                onClick={() => {
-                                                    const newImage = [];
-                                                    item?.photo?.map((item) =>
-                                                        newImage.push({ ...item, status: false })
-                                                    );
-                                                    setState({
-                                                        selectEditComment: {
-                                                            status: true,
-                                                            data: {
-                                                                ...item,
-                                                                user_name: users?.data?.find(
-                                                                    (itemUser) => itemUser._id == item.user_id
-                                                                )?.name,
-                                                            },
-                                                        },
-                                                        valueEditComment: JSON.parse(item.comment),
-                                                        imageUrlAvatarEdit: newImage,
-                                                    });
-                                                }}
-                                            />
-                                            <DeleteOutlined
-                                                className="list-comment-user-delete"
-                                                onClick={() =>
-                                                    setState({
-                                                        comfimRemoveComment: { status: true, data: item },
-                                                    })
-                                                }
-                                            />
-                                        </div>
-                                    ) : getDataUserLoca()?.role == 0 ? (
-                                        <DeleteOutlined
-                                            className="list-comment-user-delete"
-                                            onClick={() =>
-                                                setState({
-                                                    comfimRemoveComment: { status: true, data: item },
-                                                })
-                                            }
-                                        />
-                                    ) : (
-                                        ""
-                                    )}
-                                </div>
-                                <div style={{ padding: 10 }}>
-                                    <p
-                                        className="show-comment-user"
-                                        dangerouslySetInnerHTML={{
-                                            __html: JSON.parse(item.comment),
-                                        }}
-                                    />
-                                    {item.photo.length > 0 && (
-                                        <div className="image-comment">
-                                            {item.photo.map((itemPhoto) => {
-                                                return (
-                                                    <div
-                                                        className="image-add-comment"
-                                                        onClick={() =>
-                                                            setState({
-                                                                selectPhotoComment:
-                                                                    state.selectPhotoComment?._id == item._id &&
-                                                                        state.selectPhotoComment?.image_id ==
-                                                                        itemPhoto.image_id
-                                                                        ? undefined
-                                                                        : {
-                                                                            _id: item._id,
-                                                                            photo: itemPhoto.photo,
-                                                                            image_id: itemPhoto.image_id,
-                                                                        },
-                                                            })
-                                                        }
-                                                    >
-                                                        <img src={itemPhoto.photo} alt="" />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                    {state.selectPhotoComment?._id == item._id && (
-                                        <div className="image-comment-view">
-                                            <img src={state.selectPhotoComment.photo} alt="" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </InfiniteScroll>
-                {/* {(comments?.filter(item => item.pro_id == id).slice(0, cudent))?.map((item, index) => {
+                {comments?.slice().reverse().map((item, index) => {
                     const timeCreatedAt = new Date(item.createdAt);
                     const timeUpdatedAt = new Date(item.updatedAt);
                     return (
@@ -367,7 +200,7 @@ const CommentMobile = () => {
                                                         <span>Tác giả</span>
                                                     )}
 
-                                                    {/* so sáng xem cmt có chỉnh sửa ko *
+                                                    {/* so sáng xem cmt có chỉnh sửa ko */}
 
                                                     {(timeCreatedAt.getHours() !==
                                                         timeUpdatedAt.getHours() ||
@@ -474,7 +307,8 @@ const CommentMobile = () => {
                             </div>
                         </div>
                     );
-                })} */}
+                })}
+
             </div>
             {
                 loading == true &&
@@ -515,6 +349,8 @@ const CommentMobile = () => {
                 }
                 isModalOpen={state.comfimRemoveComment?.status}
             />
+
+            <Button className='arrowUpOutlined' onClick={()=>scrollToTop()}><ArrowUpOutlined /></Button>
         </div>
     )
 }

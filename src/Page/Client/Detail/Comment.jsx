@@ -62,12 +62,12 @@ const Comment = ({ comments, users }) => {
         }
     );
 
-    useEffect(() => {
-        setState({
-            currentPage: 1,
-            commentsRender: comments?.slice().reverse().slice(0, 5),
-        });
-    }, [comments]);
+    // useEffect(() => {
+    //     setState({
+    //         currentPage: 1,
+    //         commentsRender: comments?.slice().reverse().slice(0, 5),
+    //     });
+    // }, [comments]);
     function getTimeAgo(time) {
         const commentTime = new Date(time);
 
@@ -412,19 +412,16 @@ const Comment = ({ comments, users }) => {
                 })}
 
                 <div className="comment-pagination">
-                    {
-                        window.innerWidth <= 480 ?
-                            <span className="showAll-comment"
-                                onClick={() => navigator(`comment-detail`)}
-                            >Xem tất cả</span>
-                            :
-                            <Pagination
-                                defaultCurrent={state.currentPage}
-                                total={comments?.length}
-                                pageSize={Math.ceil(comments?.length / 5)}
-                                onChange={(e) => onChangePagination(e)}
-                            />
-                    }
+
+                    <span className="showAll-comment"
+                        onClick={() => navigator(`comment-detail`)}
+                    >Xem tất cả</span>
+                    <Pagination
+                        defaultCurrent={state.currentPage}
+                        total={comments?.length}
+                        pageSize={Math.ceil(comments?.length / 5)}
+                        onChange={(e) => onChangePagination(e)}
+                    />
 
                 </div>
             </div>
