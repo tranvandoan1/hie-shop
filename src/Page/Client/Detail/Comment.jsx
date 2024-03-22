@@ -28,7 +28,6 @@ const { TextArea } = Input;
 
 // @ts-ignore
 const Comment = ({ comments, users }) => {
-    console.log(comments, "comments");
     const navigator = useNavigate();
 
     const dispatch = useDispatch();
@@ -178,10 +177,7 @@ const Comment = ({ comments, users }) => {
         });
     };
 
-    const editorConfig = {
-        toolbar: false, // ẩn header
-    };
-
+   
     const onChangePagination = (e) => {
         function paginate(array, page_size, page_number) {
             return array.slice(
@@ -195,7 +191,16 @@ const Comment = ({ comments, users }) => {
             commentsRender: paginatedItems,
         });
     };
-
+    ClassicEditor.create(
+        document.querySelector( '#editor' ),
+        {
+            placeholder: 'Type the content here!'
+        }
+    ).then( editor => {
+        console.log( editor );
+    } ).catch( error => {
+        console.error( error );
+    } );
     return (
         <div className="comment">
             {state.loading == true && <Loading />}
@@ -212,7 +217,6 @@ const Comment = ({ comments, users }) => {
                     <div className="input-comment">
                         <CKEditor
                             editor={ClassicEditor}
-                            placeholder="Hãy để lại đáng giá của bạn"
                             data={state.valueComment == undefined ? "" : state.valueComment}
                             // @ts-ignore
                             onChange={(event, editor) => {
@@ -221,7 +225,10 @@ const Comment = ({ comments, users }) => {
                                     setState({ valueComment: data });
                                 });
                             }}
-                            config={editorConfig}
+                            config={{
+                                toolbar: false, // ẩn header
+                                placeholder:'Hãy để lại đáng giá của bạn...'
+                            }}
                         />
 
                         <Button
@@ -276,7 +283,7 @@ const Comment = ({ comments, users }) => {
                     <h5>đánh giá của khách hàng</h5>
                 </div>
 
-                {state.commentsRender?.map((item) => {
+                {comments?.slice()?.reverse()?.map((item) => {
                     const timeCreatedAt = new Date(item.createdAt);
                     const timeUpdatedAt = new Date(item.updatedAt);
                     return (

@@ -18,14 +18,11 @@ const ProductsPage = () => {
   const dispatch = useDispatch();
   const navigator = useNavigate()
   const categories = useSelector((data) => data.categories.value);
-  const users = useSelector((data) => data.users.value);
+  const user = useSelector((data) => data.users.value);
   const products = useSelector((data) => data.products);
   const productsValue = products?.value;
-
   const classifies = useSelector((data) => data.classifies);
-  const user = users?.data?.find(
-    (item) => item.code == getDataUserLoca()?.code
-  );
+  
 
   const [selectCategori, setSelectCategori] = useState()
   const newDataPro = productsValue?.filter((item) => item.cate_id == selectCategori)
@@ -134,8 +131,6 @@ const ProductsPage = () => {
           </div>
           <div className="product-list">
             <Row gutter={16}>
-              {ShowHtml(newDataPro?.length <= 0 ? productsValue : newDataPro, classifies?.value)}
-              {ShowHtml(newDataPro?.length <= 0 ? productsValue : newDataPro, classifies?.value)}
               {ShowHtml(newDataPro?.length <= 0 ? productsValue : newDataPro, classifies?.value)}
             </Row>
 

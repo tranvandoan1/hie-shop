@@ -121,11 +121,14 @@ const DetailIndex = () => {
 
   // lấy sản phẩm được chọn
   const productsValue = products?.value;
+  const proView = [...productsValue]
+
+  proView?.sort((a, b) => b.sold - a.sold);
   const productDetail = productsValue?.find((item) => item._id == id);
   const newProClassifies = classifies?.value?.filter(
     (item) => item.linked == productDetail?.linked
   );
-  const productShop=products?.value?.filter(item=>item.code_shop==getDataUserLoca().code)
+  const productShop = products?.value?.filter(item => item.code_shop == getDataUserLoca().code)
   // kiểm tra xem có phân loại 2 không
   const condition =
     productDetail?.name_commodityvalue == undefined ||
@@ -524,7 +527,7 @@ const DetailIndex = () => {
               <Row >
                 {productShop.map((item) => {
                   return (
-                    <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item} style={{padding:3}}>
+                    <Col xs={12} sm={8} md={6} lg={4} xl={6} key={item} style={{ padding: 3 }}>
                       <div className="product_other">
                         <div className="product-other-photo">
                           <img src={item.photo} alt="" />
@@ -549,11 +552,11 @@ const DetailIndex = () => {
             </div>
           </div>
           <div className="detail-pro-info_right">
-            {data.map((item) => {
+            {proView.map((item) => {
               return (
                 <div className="product-hot" key={item}>
                   <div className="product-hot-photo">
-                    <img src={item.image} alt="" />
+                    <img src={item.photo} alt="" />
                   </div>
                   <span className="product-hot-sale">-{item.sale}%</span>
                   <div className="product-hot-title">

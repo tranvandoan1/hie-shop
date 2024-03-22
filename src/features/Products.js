@@ -106,3 +106,8 @@ const productSlice = createSlice({
 });
 export default productSlice.reducer;
 
+// export const fetchProductData = () => (dispatch) => {
+//     socket.on('productAdded', (product) => {
+//         dispatch(getProductAll(product));
+//     });
+// };

@@ -3,6 +3,10 @@ import LZString from 'lz-string'
 const decodedString =localStorage.getItem('data')==null?'': JSON.parse(LZString.decompressFromBase64(localStorage.getItem('data')));
 console.log(decodedString,'e3fewrefd')
 
+
+
+
+
 // console.log(decodedString,'decodedString2e32rr')
 export const axiosClient = axios.create({
     baseURL: "https://hieshop-backend.onrender.com/api",
