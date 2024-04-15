@@ -9,8 +9,8 @@ console.log(decodedString,'e3fewrefd')
 
 // console.log(decodedString,'decodedString2e32rr')
 export const axiosClient = axios.create({
-    baseURL: "https://hieshop-backend.onrender.com/api",
-    // baseURL: "http://localhost:1991/api",
+    // baseURL: "https://hieshop-backend.onrender.com/api",
+    baseURL: "http://localhost:1991/api",
     headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${decodedString?.token}`
@@ -19,8 +19,8 @@ export const axiosClient = axios.create({
 
 // dành cho form data
 const axiosClientMultipart = axios.create({
-    baseURL: 'https://hieshop-backend.onrender.com/api',
-    // baseURL: "http://localhost:1991/api",
+    // baseURL: 'https://hieshop-backend.onrender.com/api',
+    baseURL: "http://localhost:1991/api",
 });
 
 axiosClientMultipart.interceptors.request.use((req) => {

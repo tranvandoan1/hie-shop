@@ -282,6 +282,66 @@ const DetailIndex = () => {
   //   console.log('first')
   //   }
   // }
+
+  const ShowHtml = (product, classify) => {
+    const proPrice = [];
+
+    product?.map((itemPro) => {
+      const classifyPrice1 = [];
+      const classifyPrice2 = [];
+      classify?.map((itemData) => {
+        if (itemData?.linked == itemPro.linked) {
+          if (
+            itemData?.values == undefined ||
+            itemData?.values == null ||
+            itemData?.values?.length <= 0
+          ) {
+            classifyPrice2.push(itemData.price);
+          } else {
+            itemData?.values?.map((itemPrice) =>
+              classifyPrice1.push(itemPrice.price)
+            );
+          }
+        }
+      });
+      proPrice.push({
+        ...itemPro,
+        values: [...classifyPrice2, ...classifyPrice1],
+      });
+    });
+
+    for (let i = 0; i < proPrice.length; i++) {
+      const minPrice = Math.min.apply(Math, proPrice[i].values);
+      const maxPrice = Math.max.apply(Math, proPrice[i].values);
+      proPrice[i].values = [minPrice, maxPrice];
+    }
+
+    return proPrice.map((item) => {
+      return (
+
+        <div className="product-hot" key={item} onClick={() => {
+          navigate(`/detail/${item.name.replace(/\s+/g, "-")}/${item._id}`)
+        }}>
+          <div className="product-hot-photo">
+            <img src={item.photo} alt="" />
+          </div>
+          <span className="product-hot-sale">-{item.sale}%</span>
+          <div className="product-hot-title">
+            <span className="product-hot-name">{item.name}</span>
+            <div className="product-hot-price">
+              <span>{item.values[0]?.toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ</span>
+              <span>Đã bán : 30k</span>
+            </div>
+          </div>
+        </div>
+
+
+      );
+    });
+  };
+
+
   return (
     <div className="detail">
       <Header />
@@ -552,23 +612,7 @@ const DetailIndex = () => {
             </div>
           </div>
           <div className="detail-pro-info_right">
-            {proView.map((item) => {
-              return (
-                <div className="product-hot" key={item}>
-                  <div className="product-hot-photo">
-                    <img src={item.photo} alt="" />
-                  </div>
-                  <span className="product-hot-sale">-{item.sale}%</span>
-                  <div className="product-hot-title">
-                    <span className="product-hot-name">{item.name}</span>
-                    <div className="product-hot-price">
-                      <span>{item.price}đ</span>
-                      <span>Đã bán : 30k</span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {ShowHtml(proView, classifies?.value)}
           </div>
         </div>
       </div>
